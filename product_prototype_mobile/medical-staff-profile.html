@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>我的</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --arcoblue-6: #165DFF; --arcoblue-1: #E8F3FF;
+            --text-1: #1D2129; --text-2: #4E5969; --text-3: #86909C; --text-4: #C9CDD4;
+            --bg-1: #F2F3F5; --bg-2: #FFFFFF; --border: #E5E6EB;
+            --radius-medium: 8px; --radius-large: 12px;
+            --font-size-caption: 12px; --font-size-body-1: 14px; --font-size-title-1: 16px; --font-size-title-2: 18px;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif; background: var(--bg-1); min-height: 100vh; padding-bottom: calc(86px + env(safe-area-inset-bottom, 0px)); }
+        
+        /* 导航栏 */
+        .navbar { background: linear-gradient(135deg, var(--arcoblue-6) 0%, #4080FF 100%); padding: 44px 16px 0; position: sticky; top: 0; z-index: 100; }
+        .navbar-content { display: flex; align-items: center; justify-content: center; padding-bottom: 16px; position: relative; }
+        .navbar-title { font-size: var(--font-size-title-2); font-weight: 600; color: white; }
+        .back-btn { position: absolute; left: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; cursor: pointer; }
+        
+        /* 用户信息卡片 */
+        .user-card { background: var(--bg-2); margin: 12px 16px; border-radius: var(--radius-large); padding: 20px; display: flex; align-items: center; gap: 16px; }
+        .user-avatar { width: 64px; height: 64px; border-radius: 50%; background: var(--arcoblue-1); display: flex; align-items: center; justify-content: center; font-size: 32px; color: var(--arcoblue-6); flex-shrink: 0; }
+        .user-info { flex: 1; }
+        .user-name-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+        .user-name { font-size: var(--font-size-title-1); font-weight: 600; color: var(--text-1); }
+        .user-account { font-size: var(--font-size-caption); color: var(--text-3); }
+        .user-type { font-size: var(--font-size-caption); color: var(--arcoblue-6); background: var(--arcoblue-1); padding: 2px 8px; border-radius: 4px; }
+        
+        /* 机构信息 */
+        .org-card { background: var(--bg-2); margin: 0 16px 12px; border-radius: var(--radius-large); padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
+        .org-icon { width: 40px; height: 40px; border-radius: var(--radius-medium); background: var(--arcoblue-1); display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--arcoblue-6); }
+        .org-info { flex: 1; }
+        .org-label { font-size: var(--font-size-caption); color: var(--text-3); margin-bottom: 2px; }
+        .org-name { font-size: var(--font-size-body-1); color: var(--text-1); font-weight: 500; }
+        
+        /* 功能列表 */
+        .menu-list { background: var(--bg-2); margin: 0 16px; border-radius: var(--radius-large); overflow: hidden; }
+        .menu-item { display: flex; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--border); cursor: pointer; }
+        .menu-item:last-child { border-bottom: none; }
+        .menu-icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 18px; color: var(--arcoblue-6); }
+        .menu-text { flex: 1; font-size: var(--font-size-body-1); color: var(--text-1); }
+        .menu-arrow { color: var(--text-4); font-size: 14px; }
+        
+        /* 底部导航 */
+        .tabbar { position: fixed; left: 50%; bottom: 0; transform: translateX(-50%); z-index: 100; width: 100%; min-height: calc(72px + env(safe-area-inset-bottom, 0px)); padding: 8px 14px calc(8px + env(safe-area-inset-bottom, 0px)); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); background: rgba(255, 255, 255, 0.96); border-top: 1px solid rgba(118, 140, 165, 0.16); box-shadow: 0 -10px 28px rgba(55, 83, 116, 0.08); backdrop-filter: blur(14px); }
+        .tabbar-item { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; border: 0; background: transparent; color: #8c8f94; font: 500 12px/1 -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif; cursor: pointer; }
+        .tabbar-item i { font-size: 22px; }
+        .tabbar-item.active { color: var(--arcoblue-6); font-weight: 700; }
+        .tabbar-badge { position: absolute; top: 1px; right: calc(50% - 26px); min-width: 20px; height: 20px; border-radius: 999px; background: #ff3749; color: #fff; border: 2px solid #fff; font-size: 12px; display: flex; align-items: center; justify-content: center; padding: 0 5px; font-weight: 800; }
+        
+        /* Toast 提示 */
+        .toast { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.7); color: white; padding: 12px 24px; border-radius: 8px; font-size: 14px; z-index: 1000; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+        .toast.show { opacity: 1; }
+/* 首页风格统一覆盖 */
+body {
+    color: #0f1f33;
+    background:
+        radial-gradient(circle at 82% 2%, rgba(181, 213, 255, 0.8) 0 110px, transparent 220px),
+        linear-gradient(180deg, #d9ebff 0%, #f4faff 28%, #f7fbff 68%, #ffffff 100%) !important;
+    -webkit-font-smoothing: antialiased;
+}
+
+.navbar {
+    position: sticky;
+    top: 0;
+    overflow: hidden;
+    background: rgba(217, 235, 255, 0.82) !important;
+    border-bottom: 1px solid rgba(118, 140, 165, 0.12);
+    box-shadow: 0 10px 26px rgba(60, 101, 145, 0.08);
+    backdrop-filter: blur(14px);
+}
+
+.navbar::before {
+    content: "";
+    position: absolute;
+    top: -58px;
+    right: -34px;
+    width: 170px;
+    height: 150px;
+    border-radius: 34px;
+    background: linear-gradient(135deg, rgba(67, 142, 255, 0.2), rgba(255, 255, 255, 0.06));
+    transform: rotate(-12deg);
+    pointer-events: none;
+}
+
+.navbar-content,
+.navbar-title,
+.back-btn,
+.search-btn,
+.navbar-count {
+    position: relative;
+    z-index: 1;
+}
+
+.navbar-title,
+.back-btn,
+.search-btn,
+.navbar-count {
+    color: #0f1f33 !important;
+}
+
+.navbar-title {
+    font-weight: 800 !important;
+}
+
+.tabs,
+.search-section,
+.stats-bar,
+.page-container,
+.session-list,
+.system-list {
+    background: transparent !important;
+}
+
+.tab-item.active {
+    color: #2f7af6 !important;
+}
+
+.tab-item.active::after {
+    background: #2f7af6 !important;
+}
+
+.patient-card,
+.user-card,
+.org-card,
+.menu-list,
+.info-card,
+.detail-card,
+.record-card,
+.task-card,
+.anomaly-card,
+.form-card,
+.card,
+.section-card,
+.profile-card,
+.health-card,
+.content-card,
+.result-item,
+.empty-icon,
+.modal-content {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border: 1px solid rgba(123, 147, 176, 0.14) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12) !important;
+    backdrop-filter: blur(12px);
+}
+
+.session-item,
+.system-item,
+.menu-item,
+.list-item,
+.record-item,
+.info-row {
+    border-color: rgba(119, 140, 166, 0.18) !important;
+}
+
+.search-box,
+.search-input-wrapper,
+input,
+select,
+textarea {
+    border-color: rgba(122, 150, 184, 0.13) !important;
+    box-shadow: inset 0 0 0 1px rgba(122, 150, 184, 0.08);
+}
+
+.action-btn.primary,
+.submit-btn,
+.filter-btn.confirm,
+.modal-btn.confirm,
+.login-btn,
+.code-btn:not(:disabled) {
+    background: linear-gradient(145deg, #4b9bff, #2f7af6) !important;
+    color: #fff !important;
+    border: 0 !important;
+    box-shadow: 0 8px 16px rgba(45, 101, 170, 0.13);
+}
+
+.action-btn,
+.filter-btn.reset,
+.modal-btn.cancel,
+.popup-option,
+.phone-btn,
+.call-btn {
+    border-color: rgba(123, 147, 176, 0.14) !important;
+}
+
+.toast,
+.arco-toast {
+    background: rgba(12, 20, 34, 0.82) !important;
+    border-radius: 8px !important;
+}
+/* 首页风格补充覆盖 */
+.info-section,
+.info-list,
+.app-section,
+.form-section,
+.form-item,
+.filter-section,
+.disease-card,
+.indicator-item,
+.quick-action-item {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border: 1px solid rgba(123, 147, 176, 0.14) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12) !important;
+    backdrop-filter: blur(12px);
+}
+
+.patient-list,
+.task-list,
+.record-list,
+.search-results {
+    position: relative;
+    z-index: 1;
+}
+
+.action-btn,
+.submit-btn,
+.code-btn,
+.filter-btn,
+.modal-btn,
+.phone-btn,
+.call-btn {
+    border-radius: 10px !important;
+    font-weight: 700;
+}
+
+.navbar + .tabs,
+.tabs {
+    border-bottom-color: rgba(118, 140, 165, 0.16) !important;
+    backdrop-filter: blur(10px);
+}
+
+
+/* 全局顶部与查询框统一 */
+.navbar {
+    position: sticky !important;
+    top: 0 !important;
+    min-height: 92px;
+    padding: 44px 16px 12px !important;
+    z-index: 100 !important;
+}
+
+.navbar-content {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 36px;
+    padding-bottom: 0 !important;
+}
+
+.navbar-content .back-btn {
+    position: absolute !important;
+    left: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    margin: 0 !important;
+    z-index: 2 !important;
+}
+
+.navbar > .back-btn {
+    position: absolute !important;
+    left: 16px !important;
+    bottom: 12px !important;
+    margin: 0 !important;
+    z-index: 2 !important;
+}
+
+.navbar-title,
+.navbar-content .navbar-title,
+.navbar > .navbar-title {
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: calc(100% - 128px) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: center !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+    z-index: 1 !important;
+}
+
+.navbar > .navbar-title {
+    top: auto !important;
+    bottom: 19px !important;
+    transform: translateX(-50%) !important;
+}
+
+.search-btn,
+.navbar-count {
+    position: absolute !important;
+    right: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    margin: 0 !important;
+    z-index: 2 !important;
+}
+
+.navbar > .search-btn,
+.navbar > .navbar-count {
+    right: 16px !important;
+    top: auto !important;
+    bottom: 12px !important;
+    transform: none !important;
+}
+
+.search-section,
+.filter-section,
+.search-header {
+    background: transparent !important;
+}
+
+.search-box,
+.search-input-wrapper {
+    min-height: 52px !important;
+    height: 52px !important;
+    border: 0 !important;
+    border-radius: 24px !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    box-shadow: inset 0 0 0 1px rgba(122, 150, 184, 0.13), 0 10px 28px rgba(85, 127, 174, 0.1) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 13px !important;
+    padding: 0 20px !important;
+}
+
+.search-box i,
+.search-input-wrapper i {
+    color: #5f6d7d !important;
+    font-size: 20px !important;
+    flex: 0 0 auto;
+}
+
+.search-box input,
+.search-input-wrapper input {
+    width: 100% !important;
+    flex: 1 1 auto !important;
+    min-width: 0;
+    border: 0 !important;
+    outline: 0 !important;
+    color: #29384b !important;
+    font-size: 16px !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    font-family: var(--font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif) !important;
+}
+
+.search-box input::placeholder,
+.search-input-wrapper input::placeholder {
+    color: #a0a8b1 !important;
+}
+
+    </style>
+</head>
+<body>
+    <!-- Toast 容器 -->
+    <div class="toast" id="toast"></div>
+
+    <!-- 导航栏 -->
+    <div class="navbar">
+        <div class="navbar-content">
+            <div class="back-btn" onclick="goBack()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <h1 class="navbar-title">我的</h1>
+        </div>
+    </div>
+
+    <!-- 用户信息卡片 -->
+    <div class="user-card">
+        <div class="user-avatar">
+            <i class="fas fa-user-md"></i>
+        </div>
+        <div class="user-info">
+            <div class="user-name-row">
+                <span class="user-name">张医生</span>
+                <span class="user-type">基层医生</span>
+            </div>
+            <div class="user-account">zhangys123</div>
+        </div>
+    </div>
+
+    <!-- 机构信息 -->
+    <div class="org-card">
+        <div class="org-icon">
+            <i class="fas fa-hospital"></i>
+        </div>
+        <div class="org-info">
+            <div class="org-label">所属机构</div>
+            <div class="org-name">杭州市西湖区社区卫生服务中心</div>
+        </div>
+    </div>
+
+    <!-- 功能列表 -->
+    <div class="menu-list">
+        <div class="menu-item" onclick="goToPersonalInfo()">
+            <div class="menu-icon">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <span class="menu-text">个人资料</span>
+            <i class="fas fa-chevron-right menu-arrow"></i>
+        </div>
+    </div>
+
+    <!-- 底部导航 -->
+    <nav class="tabbar">
+        <button class="tabbar-item" type="button" onclick="goToPage('home')">
+            <i class="fas fa-house"></i>
+            <span>首页</span>
+        </button>
+        <button class="tabbar-item" type="button" onclick="goToPage('message')">
+            <i class="fas fa-comment-dots"></i>
+            <span>消息</span>
+            <span class="tabbar-badge">12</span>
+        </button>
+        <button class="tabbar-item active" type="button" onclick="goToPage('profile')">
+            <i class="fas fa-user"></i>
+            <span>我的</span>
+        </button>
+    </nav>
+
+    <script>
+        // Toast 提示函数
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 1500);
+        }
+
+        // 返回上一页
+        function goBack() {
+            window.history.back();
+        }
+
+        // 进入个人资料页面
+        function goToPersonalInfo() {
+            window.location.href = 'medical-staff-personal-info.html';
+        }
+
+        // 底部导航跳转
+        function goToPage(page) {
+            if (page === 'home') {
+                window.location.href = 'medical-staff-home.html';
+            } else if (page === 'message') {
+                window.location.href = 'medical-staff-message-center.html';
+            } else if (page === 'profile') {
+                // 当前页面
+            }
+        }
+    </script>
+</body>
+</html>

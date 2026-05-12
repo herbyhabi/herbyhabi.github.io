@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>医护登录 </title>
+    <link rel="stylesheet" href="https://unpkg.com/@arco-design/mobile-react/dist/arco.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --arcoblue-1: #E8F3FF;
+            --arcoblue-2: #BEDAFF;
+            --arcoblue-3: #94BFFF;
+            --arcoblue-4: #6AA1FF;
+            --arcoblue-5: #4080FF;
+            --arcoblue-6: #165DFF;
+            --arcoblue-7: #0E42D2;
+            --arcoblue-8: #072CA6;
+            --arcoblue-9: #031A6E;
+            --arcoblue-10: #000F4D;
+
+            --primary-color: var(--arcoblue-6);
+            --primary-light: var(--arcoblue-1);
+            --primary-dark: var(--arcoblue-7);
+
+            --gray-1: #F7F8FA;
+            --gray-2: #F2F3F5;
+            --gray-3: #E5E6EB;
+            --gray-4: #C9CDD4;
+            --gray-5: #A9AEB8;
+            --gray-6: #86909C;
+            --gray-7: #6B7785;
+            --gray-8: #4E5969;
+            --gray-9: #272E3B;
+            --gray-10: #1D2129;
+            --gray-11: #14171A;
+            --gray-12: #0D0E10;
+
+            --green-6: #00B42A;
+            --orange-6: #FF7D00;
+            --red-6: #F53F3F;
+
+            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --font-size-body-1: 13px;
+            --font-size-body-2: 14px;
+            --font-size-body-3: 16px;
+            --font-size-title-1: 18px;
+            --font-size-title-2: 20px;
+            --font-size-title-3: 24px;
+
+            --border-radius-small: 4px;
+            --border-radius-medium: 8px;
+            --border-radius-large: 12px;
+            --border-radius-xlarge: 16px;
+
+            --spacing-1: 4px;
+            --spacing-2: 8px;
+            --spacing-3: 12px;
+            --spacing-4: 16px;
+            --spacing-5: 20px;
+            --spacing-6: 24px;
+            --spacing-7: 28px;
+            --spacing-8: 32px;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: linear-gradient(160deg, var(--arcoblue-6) 0%, var(--arcoblue-5) 40%, var(--arcoblue-4) 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+            color: var(--gray-10);
+        }
+
+        /* ===== 背景装饰 ===== */
+        .bg-decoration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-decoration::before {
+            content: '';
+            position: absolute;
+            top: -15%;
+            right: -25%;
+            width: 360px;
+            height: 360px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            animation: floatBubble 7s ease-in-out infinite;
+        }
+
+        .bg-decoration::after {
+            content: '';
+            position: absolute;
+            bottom: 15%;
+            left: -15%;
+            width: 260px;
+            height: 260px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 50%;
+            animation: floatBubble 9s ease-in-out infinite reverse;
+        }
+
+        @keyframes floatBubble {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-18px) scale(1.04); }
+        }
+
+        /* ===== 状态栏 ===== */
+        .status-bar {
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 var(--spacing-5);
+            color: rgba(255, 255, 255, 0.95);
+            font-size: var(--font-size-body-2);
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+
+        .status-bar .time {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .status-bar .icons {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        /* ===== 头部区域 ===== */
+        .header-section {
+            padding: 36px var(--spacing-8) 56px;
+            text-align: center;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            width: 72px;
+            height: 72px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--border-radius-xlarge);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--spacing-6);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            animation: logoEnter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes logoEnter {
+            0% { transform: scale(0.6); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .logo i {
+            font-size: 36px;
+            color: var(--arcoblue-6);
+        }
+
+        .app-name {
+            font-size: var(--font-size-title-3);
+            font-weight: 600;
+            margin-bottom: var(--spacing-2);
+            letter-spacing: 0.5px;
+        }
+
+        .app-slogan {
+            font-size: var(--font-size-body-1);
+            opacity: 0.85;
+            letter-spacing: 1px;
+        }
+
+        /* ===== 登录表单区域 ===== */
+        .login-container {
+            flex: 1;
+            background: #fff;
+            border-radius: var(--border-radius-xlarge) var(--border-radius-xlarge) 0 0;
+            padding: var(--spacing-8) var(--spacing-6);
+            position: relative;
+            z-index: 1;
+            animation: cardSlideUp 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @keyframes cardSlideUp {
+            from { transform: translateY(40px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .login-title {
+            font-size: var(--font-size-title-2);
+            font-weight: 600;
+            color: var(--gray-10);
+            margin-bottom: var(--spacing-2);
+            text-align: center;
+        }
+
+        .login-subtitle {
+            font-size: var(--font-size-body-2);
+            color: var(--gray-6);
+            text-align: center;
+            margin-bottom: var(--spacing-8);
+        }
+
+        /* ===== Arco Design 风格输入框 ===== */
+        .input-group {
+            margin-bottom: var(--spacing-5);
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: var(--gray-1);
+            border-radius: var(--border-radius-medium);
+            border: 1.5px solid transparent;
+            transition: all 0.2s ease;
+            height: 48px;
+        }
+
+        .input-wrapper:focus-within {
+            background: #fff;
+            border-color: var(--arcoblue-6);
+            box-shadow: 0 0 0 3px rgba(22, 93, 255, 0.1);
+        }
+
+        .input-wrapper.error {
+            border-color: var(--red-6);
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(245, 63, 63, 0.1);
+        }
+
+        .input-wrapper .icon {
+            width: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-5);
+            font-size: 16px;
+            flex-shrink: 0;
+            transition: color 0.2s;
+        }
+
+        .input-wrapper:focus-within .icon {
+            color: var(--arcoblue-6);
+        }
+
+        .input-wrapper.error .icon {
+            color: var(--red-6);
+        }
+
+        .input-wrapper input {
+            flex: 1;
+            border: none;
+            outline: none;
+            background: transparent;
+            padding: 0 var(--spacing-3) 0 0;
+            font-size: var(--font-size-body-3);
+            color: var(--gray-10);
+            font-family: var(--font-family);
+            height: 100%;
+        }
+
+        .input-wrapper input::placeholder {
+            color: var(--gray-5);
+        }
+
+        .toggle-password {
+            width: 44px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-5);
+            cursor: pointer;
+            transition: color 0.2s;
+            flex-shrink: 0;
+        }
+
+        .toggle-password:active {
+            color: var(--arcoblue-6);
+        }
+
+        .error-message {
+            font-size: var(--font-size-body-1);
+            color: var(--red-6);
+            margin-top: var(--spacing-1);
+            padding-left: var(--spacing-1);
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: errorShake 0.35s ease;
+        }
+
+        @keyframes errorShake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-4px); }
+            40% { transform: translateX(4px); }
+            60% { transform: translateX(-3px); }
+            80% { transform: translateX(3px); }
+        }
+
+        /* ===== Arco Design 风格登录按钮 ===== */
+        .login-btn {
+            width: 100%;
+            height: 48px;
+            background: var(--arcoblue-6);
+            color: #fff;
+            border: none;
+            border-radius: var(--border-radius-medium);
+            font-size: var(--font-size-body-3);
+            font-weight: 500;
+            font-family: var(--font-family);
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: var(--spacing-7);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-2);
+        }
+
+        .login-btn:active {
+            opacity: 0.85;
+            transform: scale(0.98);
+        }
+
+        .login-btn:disabled {
+            background: var(--gray-4);
+            cursor: not-allowed;
+            transform: none;
+            opacity: 1;
+        }
+
+        .login-btn .btn-loading {
+            display: none;
+        }
+
+        .login-btn.loading-state .btn-loading {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-2);
+        }
+
+        .login-btn.loading-state .btn-text {
+            display: none;
+        }
+
+        .loading-spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== 底部版权 ===== */
+        .footer {
+            text-align: center;
+            padding: var(--spacing-5) var(--spacing-6) var(--spacing-8);
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== Arco Design 风格底部弹出弹窗 (Popup) ===== */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+        }
+
+        .popup-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup-content {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #fff;
+            border-radius: var(--border-radius-xlarge) var(--border-radius-xlarge) 0 0;
+            padding: var(--spacing-6) var(--spacing-6);
+            z-index: 1001;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .popup-overlay.show .popup-content {
+            transform: translateY(0);
+        }
+
+        /* 弹窗顶部拖拽指示条 */
+        .popup-indicator {
+            width: 36px;
+            height: 4px;
+            background: var(--gray-4);
+            border-radius: 2px;
+            margin: 0 auto var(--spacing-5);
+        }
+
+        .popup-header {
+            text-align: center;
+            margin-bottom: var(--spacing-6);
+        }
+
+        .popup-title {
+            font-size: var(--font-size-title-1);
+            font-weight: 600;
+            color: var(--gray-10);
+            margin-bottom: var(--spacing-1);
+        }
+
+        .popup-subtitle {
+            font-size: var(--font-size-body-1);
+            color: var(--gray-6);
+        }
+
+        /* ===== 工作台列表 ===== */
+        .workbench-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-3);
+        }
+
+        .workbench-item {
+            display: flex;
+            align-items: center;
+            padding: var(--spacing-4);
+            background: var(--gray-1);
+            border-radius: var(--border-radius-large);
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1.5px solid transparent;
+        }
+
+        .workbench-item:active {
+            background: var(--arcoblue-1);
+            border-color: var(--arcoblue-6);
+            transform: scale(0.98);
+        }
+
+        .workbench-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--border-radius-medium);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: var(--spacing-4);
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .workbench-item.specialist .workbench-icon {
+            background: var(--arcoblue-1);
+            color: var(--arcoblue-6);
+        }
+
+        .workbench-item.public-health .workbench-icon {
+            background: #E8FFEA;
+            color: var(--green-6);
+        }
+
+        .workbench-item.operation .workbench-icon {
+            background: #FFF3E8;
+            color: var(--orange-6);
+        }
+
+        .workbench-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .workbench-name {
+            font-size: var(--font-size-body-3);
+            font-weight: 500;
+            color: var(--gray-10);
+            margin-bottom: 2px;
+        }
+
+        .workbench-desc {
+            font-size: var(--font-size-body-1);
+            color: var(--gray-6);
+        }
+
+        .workbench-arrow {
+            color: var(--gray-5);
+            font-size: 14px;
+            flex-shrink: 0;
+            margin-left: var(--spacing-2);
+        }
+
+        /* 弹窗取消按钮 */
+        .popup-cancel {
+            margin-top: var(--spacing-4);
+            width: 100%;
+            height: 44px;
+            background: transparent;
+            border: 1px solid var(--gray-3);
+            border-radius: var(--border-radius-medium);
+            font-size: var(--font-size-body-3);
+            color: var(--gray-8);
+            cursor: pointer;
+            font-family: var(--font-family);
+            transition: all 0.2s;
+        }
+
+        .popup-cancel:active {
+            background: var(--gray-1);
+        }
+
+        /* ===== Arco Design 风格 Toast ===== */
+        .arco-toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.85);
+            background: rgba(29, 33, 41, 0.75);
+            color: #fff;
+            padding: var(--spacing-3) var(--spacing-5);
+            border-radius: var(--border-radius-medium);
+            font-size: var(--font-size-body-2);
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            text-align: center;
+            max-width: 70%;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        .arco-toast.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .arco-toast .toast-icon {
+            display: block;
+            font-size: 28px;
+            margin-bottom: var(--spacing-2);
+        }
+
+        .arco-toast .toast-text {
+            display: block;
+            line-height: 1.5;
+        }
+
+        /* ===== 安全区域适配 ===== */
+        @supports (padding-bottom: env(safe-area-inset-bottom)) {
+            .login-container {
+                padding-bottom: calc(var(--spacing-8) + env(safe-area-inset-bottom));
+            }
+            .footer {
+                padding-bottom: calc(var(--spacing-8) + env(safe-area-inset-bottom));
+            }
+            .popup-content {
+                padding-bottom: calc(var(--spacing-6) + env(safe-area-inset-bottom));
+            }
+        }
+
+        /* 首页风格统一覆盖 */
+        body {
+            background:
+                radial-gradient(circle at 82% 2%, rgba(181, 213, 255, 0.86) 0 110px, transparent 220px),
+                linear-gradient(180deg, #d9ebff 0%, #f4faff 28%, #f7fbff 68%, #ffffff 100%) !important;
+            color: #0f1f33;
+        }
+
+        .bg-decoration::before {
+            top: 72px;
+            right: -22px;
+            width: 210px;
+            height: 178px;
+            border-radius: 36px;
+            background: linear-gradient(135deg, rgba(67, 142, 255, 0.22), rgba(255, 255, 255, 0.05));
+            transform: rotate(-12deg);
+            animation: none;
+        }
+
+        .bg-decoration::after {
+            display: none;
+        }
+
+        .status-bar,
+        .header-section {
+            color: #0f1f33;
+        }
+
+        .header-section {
+            padding-bottom: 34px;
+        }
+
+        .logo,
+        .login-container,
+        .popup-content,
+        .workbench-item {
+            background: rgba(255, 255, 255, 0.92) !important;
+            border: 1px solid rgba(123, 147, 176, 0.14);
+            box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12);
+            backdrop-filter: blur(12px);
+        }
+
+        .login-container {
+            margin: 0 15px 20px;
+            border-radius: 16px;
+            flex: 0 0 auto;
+        }
+
+        .input-wrapper {
+            background: rgba(246, 249, 253, 0.9);
+            border-color: rgba(122, 150, 184, 0.13);
+        }
+
+        .login-btn {
+            background: linear-gradient(145deg, #4b9bff, #2f7af6) !important;
+            border-radius: 10px;
+            font-weight: 700;
+            box-shadow: 0 8px 16px rgba(45, 101, 170, 0.13);
+        }
+
+        .footer {
+            color: #7f8a98;
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景装饰 -->
+    <div class="bg-decoration"></div>
+
+    <!-- 状态栏 -->
+    <div class="status-bar">
+        <span class="time">9:41</span>
+        <div class="icons">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+
+    <!-- 头部区域 -->
+    <div class="header-section">
+        <div class="logo">
+            <i class="fas fa-user-md"></i>
+        </div>
+        <h1 class="app-name">医护工作台</h1>
+        <p class="app-slogan">智慧医疗 · 守护健康</p>
+    </div>
+
+    <!-- 登录表单 -->
+    <div class="login-container">
+        <h2 class="login-title">欢迎登录</h2>
+        <p class="login-subtitle">请输入您的账号和密码</p>
+
+        <form id="loginForm">
+            <!-- 账号输入 -->
+            <div class="input-group">
+                <div class="input-wrapper" id="accountWrapper">
+                    <div class="icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <input
+                        type="text"
+                        id="account"
+                        placeholder="请输入账号/手机号"
+                        autocomplete="username"
+                    >
+                </div>
+                <div class="error-message" id="accountError">请输入账号</div>
+            </div>
+
+            <!-- 密码输入 -->
+            <div class="input-group">
+                <div class="input-wrapper" id="passwordWrapper">
+                    <div class="icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="请输入密码"
+                        autocomplete="current-password"
+                    >
+                    <div class="toggle-password" id="togglePassword">
+                        <i class="fas fa-eye-slash"></i>
+                    </div>
+                </div>
+                <div class="error-message" id="passwordError">请输入密码</div>
+            </div>
+
+            <!-- 登录按钮 -->
+            <button type="submit" class="login-btn" id="loginBtn">
+                <span class="btn-loading">
+                    <span class="loading-spinner"></span>
+                    登录中...
+                </span>
+                <span class="btn-text">登 录</span>
+            </button>
+        </form>
+    </div>
+
+    <!-- 底部版权 -->
+    <div class="footer">
+        <p>&copy; 2024 智慧医疗平台 版权所有</p>
+    </div>
+
+    <!-- 工作台选择弹窗 (Arco Design Popup 风格 - 底部弹出) -->
+    <div class="popup-overlay" id="workbenchPopup">
+        <div class="popup-content">
+            <div class="popup-indicator"></div>
+            <div class="popup-header">
+                <h3 class="popup-title">选择工作台</h3>
+                <p class="popup-subtitle">请选择您要进入的工作台</p>
+            </div>
+            <div class="workbench-list">
+                <div class="workbench-item specialist" onclick="selectWorkbench('specialist')">
+                    <div class="workbench-icon">
+                        <i class="fas fa-stethoscope"></i>
+                    </div>
+                    <div class="workbench-info">
+                        <div class="workbench-name">专科慢病</div>
+                        <div class="workbench-desc">专科医生慢病管理工作台</div>
+                    </div>
+                    <i class="fas fa-chevron-right workbench-arrow"></i>
+                </div>
+                <div class="workbench-item public-health" onclick="selectWorkbench('public-health')">
+                    <div class="workbench-icon">
+                        <i class="fas fa-hospital"></i>
+                    </div>
+                    <div class="workbench-info">
+                        <div class="workbench-name">公卫慢病</div>
+                        <div class="workbench-desc">基层公卫慢病管理工作台</div>
+                    </div>
+                    <i class="fas fa-chevron-right workbench-arrow"></i>
+                </div>
+            </div>
+            <button class="popup-cancel" onclick="closeWorkbenchPopup()">取消</button>
+        </div>
+    </div>
+
+    <!-- Arco Design 风格 Toast -->
+    <div class="arco-toast" id="arcoToast">
+        <i class="toast-icon fas fa-check-circle"></i>
+        <span class="toast-text"></span>
+    </div>
+
+    <script>
+        // 获取DOM元素
+        const loginForm = document.getElementById('loginForm');
+        const accountInput = document.getElementById('account');
+        const passwordInput = document.getElementById('password');
+        const accountWrapper = document.getElementById('accountWrapper');
+        const passwordWrapper = document.getElementById('passwordWrapper');
+        const accountError = document.getElementById('accountError');
+        const passwordError = document.getElementById('passwordError');
+        const togglePassword = document.getElementById('togglePassword');
+        const loginBtn = document.getElementById('loginBtn');
+        const workbenchPopup = document.getElementById('workbenchPopup');
+        const arcoToast = document.getElementById('arcoToast');
+
+        // 切换密码显示/隐藏
+        togglePassword.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            togglePassword.innerHTML = type === 'password'
+                ? '<i class="fas fa-eye-slash"></i>'
+                : '<i class="fas fa-eye"></i>';
+        });
+
+        // 清除错误状态
+        accountInput.addEventListener('input', () => {
+            accountWrapper.classList.remove('error');
+            accountError.classList.remove('show');
+        });
+
+        passwordInput.addEventListener('input', () => {
+            passwordWrapper.classList.remove('error');
+            passwordError.classList.remove('show');
+        });
+
+        // 表单提交
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            let hasError = false;
+
+            // 验证账号
+            if (!accountInput.value.trim()) {
+                accountWrapper.classList.add('error');
+                accountError.classList.add('show');
+                hasError = true;
+            }
+
+            // 验证密码
+            if (!passwordInput.value.trim()) {
+                passwordWrapper.classList.add('error');
+                passwordError.classList.add('show');
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            // 开始登录
+            loginBtn.classList.add('loading-state');
+            loginBtn.disabled = true;
+
+            // 模拟1.5秒登录请求
+            setTimeout(() => {
+                loginBtn.classList.remove('loading-state');
+                loginBtn.disabled = false;
+
+                // 标记已登录
+                localStorage.setItem('isLoggedIn', 'true');
+
+                // 显示工作台选择弹窗
+                showWorkbenchPopup();
+            }, 1500);
+        });
+
+        // 显示工作台选择弹窗
+        function showWorkbenchPopup() {
+            workbenchPopup.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 关闭工作台选择弹窗
+        function closeWorkbenchPopup() {
+            workbenchPopup.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        // 选择工作台
+        function selectWorkbench(type) {
+            const workbenchNames = {
+                'specialist': '专科慢病',
+                'public-health': '公卫慢病',
+                'operation': '运营平台'
+            };
+
+            // 保存选择的工作台
+            localStorage.setItem('selectedWorkbench', type);
+            localStorage.setItem('workbenchName', workbenchNames[type]);
+
+            showToast(`正在进入${workbenchNames[type]}...`);
+
+            // 延迟跳转到首页
+            setTimeout(() => {
+                window.location.href = 'medical-staff-home.html';
+            }, 1000);
+        }
+
+        // 点击遮罩关闭弹窗
+        workbenchPopup.addEventListener('click', (e) => {
+            if (e.target === workbenchPopup) {
+                closeWorkbenchPopup();
+            }
+        });
+
+        // Arco Design 风格 Toast 提示
+        let toastTimer = null;
+        function showToast(message, icon) {
+            if (toastTimer) {
+                clearTimeout(toastTimer);
+                arcoToast.classList.remove('show');
+            }
+
+            const iconEl = arcoToast.querySelector('.toast-icon');
+            const textEl = arcoToast.querySelector('.toast-text');
+
+            iconEl.className = 'toast-icon fas ' + (icon || 'fa-check-circle');
+            textEl.textContent = message;
+
+            // 触发重绘后显示
+            requestAnimationFrame(() => {
+                arcoToast.classList.add('show');
+            });
+
+            toastTimer = setTimeout(() => {
+                arcoToast.classList.remove('show');
+                toastTimer = null;
+            }, 2000);
+        }
+
+        // 更新状态栏时间
+        function updateTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            document.querySelector('.status-bar .time').textContent = `${hours}:${minutes}`;
+        }
+        updateTime();
+        setInterval(updateTime, 60000);
+    </script>
+</body>
+</html>

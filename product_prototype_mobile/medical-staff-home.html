@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>医护首页</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary: #2f7af6;
+            --primary-deep: #1761de;
+            --green: #67b850;
+            --orange: #ff7b23;
+            --red: #ff3f4c;
+            --teal: #25c6bb;
+            --purple: #8157ee;
+            --text-strong: #0f1f33;
+            --text-main: #29384b;
+            --text-muted: #7f8a98;
+            --line: rgba(119, 140, 166, 0.18);
+            --card: rgba(255, 255, 255, 0.92);
+            --shadow: 0 12px 32px rgba(60, 101, 145, 0.12);
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+        }
+
+        html {
+            min-height: 100%;
+            background: #eef7ff;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: var(--font-family);
+            color: var(--text-strong);
+            background:
+                radial-gradient(circle at 82% 2%, rgba(181, 213, 255, 0.95) 0 110px, transparent 220px),
+                linear-gradient(180deg, #d9ebff 0%, #f4faff 28%, #f7fbff 68%, #ffffff 100%);
+            -webkit-font-smoothing: antialiased;
+            padding-bottom: calc(86px + env(safe-area-inset-bottom, 0px));
+            overflow-x: hidden;
+        }
+
+        .page {
+            width: 100%;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page::before {
+            content: "";
+            position: absolute;
+            top: 72px;
+            right: -22px;
+            width: 210px;
+            height: 178px;
+            background:
+                radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.65) 0 18px, transparent 20px),
+                linear-gradient(135deg, rgba(67, 142, 255, 0.22), rgba(255, 255, 255, 0.05));
+            border-radius: 36px;
+            transform: rotate(-12deg);
+            opacity: 0.72;
+            pointer-events: none;
+        }
+
+        .page::after {
+            content: "+";
+            position: absolute;
+            top: 76px;
+            right: 142px;
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.24);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 42px;
+            line-height: 54px;
+            text-align: center;
+            font-weight: 800;
+            pointer-events: none;
+        }
+
+        .status-bar {
+            height: 44px;
+            padding: 0 34px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #061425;
+            font-size: 15px;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+        }
+
+        .status-bar .icons {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 14px;
+        }
+
+        .hero {
+            position: relative;
+            z-index: 2;
+            padding: 18px 20px 0;
+        }
+
+        .profile-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+        }
+
+        .doctor-profile {
+            display: flex;
+            align-items: center;
+            min-width: 0;
+            gap: 16px;
+        }
+
+        .avatar {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            background: linear-gradient(180deg, #f8fbff 0%, #e8f2ff 100%);
+            border: 3px solid rgba(255, 255, 255, 0.96);
+            box-shadow: 0 8px 22px rgba(42, 111, 200, 0.15);
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            flex: 0 0 auto;
+            cursor: pointer;
+        }
+
+        .avatar i {
+            color: var(--primary);
+            font-size: 34px;
+        }
+
+        .doctor-copy {
+            min-width: 0;
+        }
+
+        .doctor-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-strong);
+            font-size: 25px;
+            line-height: 1.1;
+            font-weight: 800;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .doctor-name i {
+            color: #3d526b;
+            font-size: 17px;
+        }
+
+        .doctor-role {
+            margin-top: 10px;
+            color: #536171;
+            font-size: 14px;
+            line-height: 1.2;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .doctor-role .workbench-prefix {
+            color: #7f8a98;
+            font-weight: 500;
+        }
+
+        .doctor-role .workbench-name {
+            color: #334155;
+            font-weight: 700;
+        }
+
+        .doctor-role i {
+            color: #6b7b8f;
+            font-size: 12px;
+        }
+
+        .message-entry {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 7px;
+            color: #0f1f33;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            flex: 0 0 auto;
+        }
+
+        .message-icon {
+            position: relative;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.86);
+            display: grid;
+            place-items: center;
+            box-shadow: 0 8px 18px rgba(58, 116, 180, 0.11);
+        }
+
+        .message-icon i {
+            font-size: 23px;
+            color: #111827;
+        }
+
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -8px;
+            min-width: 24px;
+            height: 24px;
+            padding: 0 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 999px;
+            background: #ff3749;
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            font-size: 13px;
+            line-height: 1;
+            font-weight: 800;
+        }
+
+        .search-section {
+            margin-top: 30px;
+        }
+
+        .search-box {
+            height: 52px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.96);
+            box-shadow: inset 0 0 0 1px rgba(122, 150, 184, 0.13), 0 10px 28px rgba(85, 127, 174, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 0 20px;
+            cursor: pointer;
+        }
+
+        .search-box i {
+            color: #5f6d7d;
+            font-size: 20px;
+        }
+
+        .search-box input {
+            width: 100%;
+            border: 0;
+            outline: 0;
+            color: var(--text-main);
+            font-size: 16px;
+            background: transparent;
+            font-family: var(--font-family);
+        }
+
+        .search-box input::placeholder {
+            color: #a0a8b1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 3;
+            padding: 24px 15px 20px;
+        }
+
+        .section-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 0 5px 13px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            line-height: 1;
+            font-weight: 800;
+            color: #0d1b2d;
+        }
+
+        .section-all {
+            border: 0;
+            background: transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: #8993a1;
+            font: 500 14px/1 var(--font-family);
+            cursor: pointer;
+        }
+
+        .section-all i {
+            font-size: 13px;
+        }
+
+        .panel {
+            background: var(--card);
+            border: 1px solid rgba(123, 147, 176, 0.14);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+        }
+
+        .todo-panel {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            margin-bottom: 28px;
+        }
+
+        .todo-item {
+            min-height: 150px;
+            padding: 22px 16px 18px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .todo-item + .todo-item,
+        .patient-metric + .patient-metric {
+            border-left: 1px solid var(--line);
+        }
+
+        .todo-top {
+            min-height: 38px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-right: 10px;
+        }
+
+        .mini-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            flex: 0 0 auto;
+        }
+
+        .mini-icon i {
+            font-size: 18px;
+        }
+
+        .blue .mini-icon,
+        .managed .metric-icon {
+            background: linear-gradient(145deg, #eaf3ff, #d9e8ff);
+            color: var(--primary);
+        }
+
+        .green .mini-icon {
+            background: linear-gradient(145deg, #eff9ec, #e3f4df);
+            color: var(--green);
+        }
+
+        .orange .mini-icon {
+            background: linear-gradient(145deg, #fff2e7, #ffe5d1);
+            color: var(--orange);
+        }
+
+        .red .metric-icon {
+            background: linear-gradient(145deg, #fff0f2, #ffe4e8);
+            color: var(--red);
+        }
+
+        .todo-name {
+            color: #0d1b2d;
+            font-size: 15px;
+            line-height: 1.2;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .metric-value {
+            margin-top: 21px;
+            display: flex;
+            align-items: baseline;
+            gap: 7px;
+        }
+
+        .metric-value strong {
+            font-size: 36px;
+            line-height: 0.95;
+            font-weight: 800;
+        }
+
+        .metric-value span {
+            color: #7c8795;
+            font-size: 15px;
+        }
+
+        .blue .metric-value strong,
+        .managed .metric-value strong {
+            color: var(--primary);
+        }
+
+        .green .metric-value strong {
+            color: var(--green);
+        }
+
+        .orange .metric-value strong {
+            color: var(--orange);
+        }
+
+        .red .metric-value strong {
+            color: var(--red);
+        }
+
+        .metric-label {
+            margin-top: 16px;
+            color: #7c8795;
+            font-size: 15px;
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+
+        .card-arrow {
+            position: absolute;
+            right: 16px;
+            top: 67px;
+            color: #697789;
+            font-size: 16px;
+        }
+
+        .patient-panel {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            min-height: 127px;
+            margin-bottom: 28px;
+        }
+
+        .patient-metric {
+            position: relative;
+            display: grid;
+            grid-template-columns: 62px minmax(0, 1fr) 16px;
+            align-items: center;
+            gap: 13px;
+            padding: 22px 14px;
+            cursor: pointer;
+        }
+
+        .metric-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+        }
+
+        .metric-icon i {
+            font-size: 28px;
+        }
+
+        .patient-title {
+            color: #0d1b2d;
+            font-size: 16px;
+            line-height: 1.15;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .patient-metric .metric-value {
+            margin-top: 14px;
+            gap: 6px;
+        }
+
+        .patient-metric .metric-value strong {
+            font-size: 33px;
+        }
+
+        .patient-metric .metric-label {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .quick-panel {
+            padding: 22px 12px 18px;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            row-gap: 18px;
+            margin-bottom: 6px;
+        }
+
+        .quick-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 72px;
+            height: 72px;
+            justify-self: center;
+            min-width: 0;
+            border: 0;
+            background: transparent;
+            color: var(--text-main);
+            font: 500 14px/1.2 var(--font-family);
+            cursor: pointer;
+        }
+
+        .quick-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            box-shadow: 0 8px 16px rgba(45, 101, 170, 0.13);
+        }
+
+        .quick-icon i {
+            font-size: 22px;
+        }
+
+        .quick-item span:not(.quick-icon) {
+            width: 100%;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .bg-teal { background: linear-gradient(145deg, #20cdbd, #20b8af); }
+        .bg-blue { background: linear-gradient(145deg, #4b9bff, #2f7af6); }
+        .bg-orange { background: linear-gradient(145deg, #ffa751, #ff8a33); }
+        .bg-purple { background: linear-gradient(145deg, #9364f4, #754fe6); }
+        .bg-green { background: linear-gradient(145deg, #38ce6b, #24a951); }
+        .bg-indigo { background: linear-gradient(145deg, #628cf6, #4672e9); }
+        .bg-cyan { background: linear-gradient(145deg, #31c8cd, #21aebb); }
+        .bg-gray { background: linear-gradient(145deg, #a8b5c9, #8998ad); }
+
+        .tabbar {
+            position: fixed;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            z-index: 100;
+            width: 100%;
+            min-height: calc(72px + env(safe-area-inset-bottom, 0px));
+            padding: 8px 14px calc(8px + env(safe-area-inset-bottom, 0px));
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            background: rgba(255, 255, 255, 0.96);
+            border-top: 1px solid rgba(118, 140, 165, 0.16);
+            box-shadow: 0 -10px 28px rgba(55, 83, 116, 0.08);
+            backdrop-filter: blur(14px);
+        }
+
+        .tabbar-item {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            border: 0;
+            background: transparent;
+            color: #8c8f94;
+            font: 500 12px/1 var(--font-family);
+            cursor: pointer;
+        }
+
+        .tabbar-item i {
+            font-size: 22px;
+        }
+
+        .tabbar-item.active {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .tabbar-badge {
+            position: absolute;
+            top: 1px;
+            right: calc(50% - 26px);
+            min-width: 20px;
+            height: 20px;
+            border-radius: 999px;
+            background: #ff3749;
+            color: #fff;
+            border: 2px solid #fff;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5px;
+            font-weight: 800;
+        }
+
+        .popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+            z-index: 1000;
+        }
+
+        .popup-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup-content {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(123, 147, 176, 0.14);
+            border-radius: 16px 16px 0 0;
+            box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 24px 24px calc(24px + env(safe-area-inset-bottom, 0px));
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            max-height: 70vh;
+            overflow-y: auto;
+            z-index: 1001;
+        }
+
+        .popup-overlay.show .popup-content {
+            transform: translateY(0);
+        }
+
+        .popup-indicator {
+            width: 36px;
+            height: 4px;
+            background: #c9cdd4;
+            border-radius: 2px;
+            margin: 0 auto 20px;
+        }
+
+        .popup-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .popup-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-strong);
+            margin-bottom: 4px;
+        }
+
+        .popup-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .workbench-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .workbench-item {
+            width: 100%;
+            border: 1.5px solid transparent;
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 12px;
+            box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .workbench-item:active {
+            background: #e8f3ff;
+            border-color: #165dff;
+            transform: scale(0.98);
+        }
+
+        .workbench-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .workbench-item.specialist .workbench-icon {
+            background: #e8f3ff;
+            color: #165dff;
+        }
+
+        .workbench-item.public-health .workbench-icon {
+            background: #e8ffea;
+            color: #00b42a;
+        }
+
+        .workbench-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .popup-content .workbench-name {
+            font-size: 16px;
+            font-weight: 500;
+            color: #1d2129;
+            margin-bottom: 2px;
+        }
+
+        .workbench-desc {
+            font-size: 13px;
+            color: #86909c;
+        }
+
+        .workbench-arrow {
+            color: #a9aeb8;
+            font-size: 14px;
+            flex-shrink: 0;
+            margin-left: 8px;
+        }
+
+        .popup-cancel {
+            margin-top: 16px;
+            width: 100%;
+            height: 44px;
+            background: transparent;
+            border: 1px solid #e5e6eb;
+            border-radius: 8px;
+            font: 400 16px/1 var(--font-family);
+            color: #4e5969;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .popup-cancel:active {
+            background: #f7f8fa;
+        }
+
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 80;
+            padding: 10px 18px;
+            border-radius: 8px;
+            color: #fff;
+            background: rgba(12, 20, 34, 0.82);
+            font-size: 14px;
+            pointer-events: none;
+        }
+
+        button:active,
+        .avatar:active,
+        .doctor-name:active,
+        .doctor-role:active,
+        .message-entry:active,
+        .search-box:active,
+        .todo-item:active,
+        .patient-metric:active,
+        .quick-item:active {
+            transform: scale(0.98);
+        }
+
+        @media (max-width: 374px) {
+            .status-bar {
+                padding: 0 24px;
+            }
+
+            .hero {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+
+            .content {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            .doctor-name {
+                font-size: 22px;
+            }
+
+            .avatar {
+                width: 62px;
+                height: 62px;
+            }
+
+            .todo-item {
+                padding-left: 11px;
+                padding-right: 11px;
+            }
+
+            .todo-name,
+            .metric-label,
+            .patient-title {
+                font-size: 13px;
+            }
+
+            .metric-value strong {
+                font-size: 31px;
+            }
+
+            .quick-panel {
+                padding-left: 8px;
+                padding-right: 8px;
+            }
+
+            .quick-icon {
+                width: 44px;
+                height: 44px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <div class="status-bar">
+            <span>9:41</span>
+            <div class="icons">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+
+        <section class="hero">
+            <div class="profile-row">
+                <div class="doctor-profile">
+                    <div class="avatar" onclick="goToPersonalInfo()">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <div class="doctor-copy">
+                        <div class="doctor-name" onclick="goToPersonalInfo()">张大仙</i></div>
+                        <div class="doctor-role" onclick="showWorkbenchPopup()">
+                            <span class="workbench-prefix">当前工作台</span>
+                            <span class="workbench-name" id="currentWorkbench">公卫慢病</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="message-entry" onclick="goToMessages()">
+                    <div class="message-icon">
+                        <i class="far fa-bell"></i>
+                        <span class="badge">12</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="search-section">
+                <div class="search-box" onclick="goToSearch()">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="搜索指南、规范、共识等" readonly>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+            <div class="section-head">
+                <h2 class="section-title">待办事项</h2>
+            </div>
+
+            <div class="panel todo-panel">
+                <div class="todo-item blue" onclick="goToPendingPatients()">
+                    <div class="todo-top">
+                        <div class="mini-icon"><i class="fas fa-clipboard-list"></i></div>
+                        <div class="todo-name">待管患者</div>
+                    </div>
+                    <div class="metric-value"><strong>128</strong><span>人</span></div>
+                    <div class="metric-label">未纳管人员</div>
+                    <i class="fas fa-chevron-right card-arrow"></i>
+                </div>
+
+                <div class="todo-item green" onclick="goToFollowUp()">
+                    <div class="todo-top">
+                        <div class="mini-icon"><i class="fas fa-calendar-check"></i></div>
+                        <div class="todo-name">随访任务</div>
+                    </div>
+                    <div class="metric-value"><strong>56</strong><span>条</span></div>
+                    <div class="metric-label">本月待随访</div>
+                    <i class="fas fa-chevron-right card-arrow"></i>
+                </div>
+
+                <div class="todo-item orange" onclick="goToAnomaly()">
+                    <div class="todo-top">
+                        <div class="mini-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="todo-name">异常患者</div>
+                    </div>
+                    <div class="metric-value"><strong>23</strong><span>人</span></div>
+                    <div class="metric-label">近1个月内</div>
+                    <i class="fas fa-chevron-right card-arrow"></i>
+                </div>
+            </div>
+
+            <div class="section-head">
+                <h2 class="section-title">我的患者</h2>
+            </div>
+
+            <div class="panel patient-panel">
+                <div class="patient-metric red" onclick="goToHighRisk()">
+                    <div class="metric-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div>
+                        <div class="patient-title">在管高危</div>
+                        <div class="metric-value"><strong>87</strong><span>人</span></div>
+                        <div class="metric-label">在管高危人数</div>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+
+                <div class="patient-metric managed" onclick="goToMyPatients()">
+                    <div class="metric-icon"><i class="fas fa-user-plus"></i></div>
+                    <div>
+                        <div class="patient-title">在管患者</div>
+                        <div class="metric-value"><strong>352</strong><span>人</span></div>
+                        <div class="metric-label">在管患者人数</div>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+
+            <div class="section-head">
+                <h2 class="section-title">快捷入口</h2>
+            </div>
+
+            <div class="panel quick-panel">
+                <button class="quick-item" type="button" onclick="goToGuideline()">
+                    <span class="quick-icon bg-indigo"><i class="fas fa-book-medical"></i></span>
+                    <span>指南查阅</span>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <nav class="tabbar">
+        <button class="tabbar-item active" type="button" onclick="goToHome()">
+            <i class="fas fa-house"></i>
+            <span>首页</span>
+        </button>
+        <button class="tabbar-item" type="button" onclick="goToMessages()">
+            <i class="fas fa-comment-dots"></i>
+            <span>消息</span>
+            <span class="tabbar-badge">12</span>
+        </button>
+        <button class="tabbar-item" type="button" onclick="goToProfile()">
+            <i class="fas fa-user"></i>
+            <span>我的</span>
+        </button>
+    </nav>
+
+    <div class="popup-overlay" id="workbenchPopup">
+        <div class="popup-content">
+            <div class="popup-indicator"></div>
+            <div class="popup-header">
+                <h3 class="popup-title">切换工作台</h3>
+                <p class="popup-subtitle">请选择您要进入的工作台</p>
+            </div>
+            <div class="workbench-list">
+                <div class="workbench-item specialist" onclick="selectWorkbench('specialist')">
+                    <div class="workbench-icon">
+                        <i class="fas fa-stethoscope"></i>
+                    </div>
+                    <div class="workbench-info">
+                        <div class="workbench-name">专科慢病</div>
+                        <div class="workbench-desc">专科医生慢病管理工作台</div>
+                    </div>
+                    <i class="fas fa-chevron-right workbench-arrow"></i>
+                </div>
+                <div class="workbench-item public-health" onclick="selectWorkbench('public-health')">
+                    <div class="workbench-icon">
+                        <i class="fas fa-hospital"></i>
+                    </div>
+                    <div class="workbench-info">
+                        <div class="workbench-name">公卫慢病</div>
+                        <div class="workbench-desc">基层公卫慢病管理工作台</div>
+                    </div>
+                    <i class="fas fa-chevron-right workbench-arrow"></i>
+                </div>
+            </div>
+            <button class="popup-cancel" type="button" onclick="closeWorkbenchPopup()">取消</button>
+        </div>
+    </div>
+
+    <script>
+        const workbenchPopup = document.getElementById('workbenchPopup');
+        const currentWorkbenchEl = document.getElementById('currentWorkbench');
+
+        window.addEventListener('load', () => {
+            const savedWorkbench = localStorage.getItem('workbenchName');
+            if (savedWorkbench) {
+                currentWorkbenchEl.textContent = savedWorkbench;
+            }
+        });
+
+        function showWorkbenchPopup() {
+            workbenchPopup.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeWorkbenchPopup() {
+            workbenchPopup.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        function selectWorkbench(type) {
+            const names = {
+                'specialist': '专科慢病',
+                'public-health': '公卫慢病'
+            };
+
+            const workbenchName = names[type] || names['public-health'];
+            localStorage.setItem('selectedWorkbench', type);
+            localStorage.setItem('workbenchName', workbenchName);
+            currentWorkbenchEl.textContent = workbenchName;
+            closeWorkbenchPopup();
+            showToast('已切换到' + workbenchName);
+        }
+
+        function showToast(message) {
+            const existing = document.querySelector('.toast');
+            if (existing) existing.remove();
+
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 1500);
+        }
+
+        workbenchPopup.addEventListener('click', (e) => {
+            if (e.target === workbenchPopup) {
+                closeWorkbenchPopup();
+            }
+        });
+
+        function goToProfile() {
+            window.location.href = 'medical-staff-profile.html';
+        }
+
+        function goToMessages() {
+            window.location.href = 'medical-staff-message-center.html';
+        }
+
+        function goToSearch() {
+            showToast('敬请期待');
+        }
+
+        function goToPendingPatients() {
+            window.location.href = 'pending-patient-list.html';
+        }
+
+        function goToFollowUp() {
+            window.location.href = 'follow-up-task-list.html';
+        }
+
+        function goToAnomaly() {
+            window.location.href = 'abnormal-patient-list.html';
+        }
+
+        function goToHighRisk() {
+            window.location.href = 'managed-patient-list.html?tab=high-risk';
+        }
+
+        function goToMyPatients() {
+            window.location.href = 'managed-patient-list.html?tab=managed';
+        }
+
+        function goToGuideline() {
+            showToast('敬请期待');
+        }
+
+        function goToHome() {}
+
+        function goToPersonalInfo() {
+            window.location.href = 'medical-staff-personal-info.html';
+        }
+    </script>
+</body>
+</html>

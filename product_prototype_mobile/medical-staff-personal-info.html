@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>个人资料</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --arcoblue-6: #165DFF; --arcoblue-1: #E8F3FF;
+            --text-1: #1D2129; --text-2: #4E5969; --text-3: #86909C; --text-4: #C9CDD4;
+            --bg-1: #F2F3F5; --bg-2: #FFFFFF; --border: #E5E6EB;
+            --radius-medium: 8px; --radius-large: 12px;
+            --font-size-caption: 12px; --font-size-body-1: 14px; --font-size-title-1: 16px; --font-size-title-2: 18px;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif; background: var(--bg-1); min-height: 100vh; }
+        
+        /* 导航栏 */
+        .navbar { background: linear-gradient(135deg, var(--arcoblue-6) 0%, #4080FF 100%); padding: 44px 16px 0; position: sticky; top: 0; z-index: 100; }
+        .navbar-content { display: flex; align-items: center; justify-content: center; padding-bottom: 16px; position: relative; }
+        .navbar-title { font-size: var(--font-size-title-2); font-weight: 600; color: white; }
+        .back-btn { position: absolute; left: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; cursor: pointer; }
+        
+        /* 信息列表 */
+        .info-section { margin-top: 12px; }
+        .section-title { font-size: var(--font-size-caption); color: var(--text-3); padding: 12px 16px; }
+        .info-list { background: var(--bg-2); }
+        .info-item { display: flex; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+        .info-item:last-child { border-bottom: none; }
+        .info-label { font-size: var(--font-size-body-1); color: var(--text-1); width: 100px; flex-shrink: 0; }
+        .info-value { flex: 1; font-size: var(--font-size-body-1); color: var(--text-2); text-align: right; }
+        .info-value.editable { color: var(--arcoblue-6); display: flex; align-items: center; justify-content: flex-end; gap: 8px; cursor: pointer; }
+        .info-avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--arcoblue-1); display: flex; align-items: center; justify-content: center; font-size: 24px; color: var(--arcoblue-6); }
+        .info-arrow { color: var(--text-4); font-size: 14px; }
+        
+        /* 第三方应用 */
+        .app-section { margin-top: 12px; }
+        .app-item { display: flex; align-items: center; padding: 16px 20px; background: var(--bg-2); }
+        .app-icon { width: 40px; height: 40px; border-radius: var(--radius-medium); background: #07C160; display: flex; align-items: center; justify-content: center; font-size: 20px; color: white; margin-right: 12px; }
+        .app-info { flex: 1; }
+        .app-name { font-size: var(--font-size-body-1); color: var(--text-1); margin-bottom: 2px; }
+        .app-desc { font-size: var(--font-size-caption); color: var(--text-3); }
+        .app-status { font-size: var(--font-size-caption); color: var(--text-3); }
+        .app-status.binded { color: #07C160; }
+        .app-arrow { color: var(--text-4); font-size: 14px; margin-left: 8px; }
+        
+        /* Toast 提示 */
+        .toast { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.7); color: white; padding: 12px 24px; border-radius: 8px; font-size: 14px; z-index: 1000; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+        .toast.show { opacity: 1; }
+/* 首页风格统一覆盖 */
+body {
+    color: #0f1f33;
+    background:
+        radial-gradient(circle at 82% 2%, rgba(181, 213, 255, 0.8) 0 110px, transparent 220px),
+        linear-gradient(180deg, #d9ebff 0%, #f4faff 28%, #f7fbff 68%, #ffffff 100%) !important;
+    -webkit-font-smoothing: antialiased;
+}
+
+.navbar {
+    position: sticky;
+    top: 0;
+    overflow: hidden;
+    background: rgba(217, 235, 255, 0.82) !important;
+    border-bottom: 1px solid rgba(118, 140, 165, 0.12);
+    box-shadow: 0 10px 26px rgba(60, 101, 145, 0.08);
+    backdrop-filter: blur(14px);
+}
+
+.navbar::before {
+    content: "";
+    position: absolute;
+    top: -58px;
+    right: -34px;
+    width: 170px;
+    height: 150px;
+    border-radius: 34px;
+    background: linear-gradient(135deg, rgba(67, 142, 255, 0.2), rgba(255, 255, 255, 0.06));
+    transform: rotate(-12deg);
+    pointer-events: none;
+}
+
+.navbar-content,
+.navbar-title,
+.back-btn,
+.search-btn,
+.navbar-count {
+    position: relative;
+    z-index: 1;
+}
+
+.navbar-title,
+.back-btn,
+.search-btn,
+.navbar-count {
+    color: #0f1f33 !important;
+}
+
+.navbar-title {
+    font-weight: 800 !important;
+}
+
+.tabs,
+.search-section,
+.stats-bar,
+.page-container,
+.session-list,
+.system-list {
+    background: transparent !important;
+}
+
+.tab-item.active {
+    color: #2f7af6 !important;
+}
+
+.tab-item.active::after {
+    background: #2f7af6 !important;
+}
+
+.patient-card,
+.user-card,
+.org-card,
+.menu-list,
+.info-card,
+.detail-card,
+.record-card,
+.task-card,
+.anomaly-card,
+.form-card,
+.card,
+.section-card,
+.profile-card,
+.health-card,
+.content-card,
+.result-item,
+.empty-icon,
+.modal-content {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border: 1px solid rgba(123, 147, 176, 0.14) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12) !important;
+    backdrop-filter: blur(12px);
+}
+
+.session-item,
+.system-item,
+.menu-item,
+.list-item,
+.record-item,
+.info-row {
+    border-color: rgba(119, 140, 166, 0.18) !important;
+}
+
+.search-box,
+.search-input-wrapper,
+input,
+select,
+textarea {
+    border-color: rgba(122, 150, 184, 0.13) !important;
+    box-shadow: inset 0 0 0 1px rgba(122, 150, 184, 0.08);
+}
+
+.action-btn.primary,
+.submit-btn,
+.filter-btn.confirm,
+.modal-btn.confirm,
+.login-btn,
+.code-btn:not(:disabled) {
+    background: linear-gradient(145deg, #4b9bff, #2f7af6) !important;
+    color: #fff !important;
+    border: 0 !important;
+    box-shadow: 0 8px 16px rgba(45, 101, 170, 0.13);
+}
+
+.action-btn,
+.filter-btn.reset,
+.modal-btn.cancel,
+.popup-option,
+.phone-btn,
+.call-btn {
+    border-color: rgba(123, 147, 176, 0.14) !important;
+}
+
+.toast,
+.arco-toast {
+    background: rgba(12, 20, 34, 0.82) !important;
+    border-radius: 8px !important;
+}
+/* 首页风格补充覆盖 */
+.info-section,
+.info-list,
+.app-section,
+.form-section,
+.form-item,
+.filter-section,
+.disease-card,
+.indicator-item,
+.quick-action-item {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border: 1px solid rgba(123, 147, 176, 0.14) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12) !important;
+    backdrop-filter: blur(12px);
+}
+
+.patient-list,
+.task-list,
+.record-list,
+.search-results {
+    position: relative;
+    z-index: 1;
+}
+
+.action-btn,
+.submit-btn,
+.code-btn,
+.filter-btn,
+.modal-btn,
+.phone-btn,
+.call-btn {
+    border-radius: 10px !important;
+    font-weight: 700;
+}
+
+.navbar + .tabs,
+.tabs {
+    border-bottom-color: rgba(118, 140, 165, 0.16) !important;
+    backdrop-filter: blur(10px);
+}
+
+
+/* 全局顶部与查询框统一 */
+.navbar {
+    position: sticky !important;
+    top: 0 !important;
+    min-height: 92px;
+    padding: 44px 16px 12px !important;
+    z-index: 100 !important;
+}
+
+.navbar-content {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 36px;
+    padding-bottom: 0 !important;
+}
+
+.navbar-content .back-btn {
+    position: absolute !important;
+    left: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    margin: 0 !important;
+    z-index: 2 !important;
+}
+
+.navbar > .back-btn {
+    position: absolute !important;
+    left: 16px !important;
+    bottom: 12px !important;
+    margin: 0 !important;
+    z-index: 2 !important;
+}
+
+.navbar-title,
+.navbar-content .navbar-title,
+.navbar > .navbar-title {
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: calc(100% - 128px) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: center !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+    z-index: 1 !important;
+}
+
+.navbar > .navbar-title {
+    top: auto !important;
+    bottom: 19px !important;
+    transform: translateX(-50%) !important;
+}
+
+.search-btn,
+.navbar-count {
+    position: absolute !important;
+    right: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    margin: 0 !important;
+    z-index: 2 !important;
+}
+
+.navbar > .search-btn,
+.navbar > .navbar-count {
+    right: 16px !important;
+    top: auto !important;
+    bottom: 12px !important;
+    transform: none !important;
+}
+
+.search-section,
+.filter-section,
+.search-header {
+    background: transparent !important;
+}
+
+.search-box,
+.search-input-wrapper {
+    min-height: 52px !important;
+    height: 52px !important;
+    border: 0 !important;
+    border-radius: 24px !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    box-shadow: inset 0 0 0 1px rgba(122, 150, 184, 0.13), 0 10px 28px rgba(85, 127, 174, 0.1) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 13px !important;
+    padding: 0 20px !important;
+}
+
+.search-box i,
+.search-input-wrapper i {
+    color: #5f6d7d !important;
+    font-size: 20px !important;
+    flex: 0 0 auto;
+}
+
+.search-box input,
+.search-input-wrapper input {
+    width: 100% !important;
+    flex: 1 1 auto !important;
+    min-width: 0;
+    border: 0 !important;
+    outline: 0 !important;
+    color: #29384b !important;
+    font-size: 16px !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    font-family: var(--font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif) !important;
+}
+
+.search-box input::placeholder,
+.search-input-wrapper input::placeholder {
+    color: #a0a8b1 !important;
+}
+
+    </style>
+</head>
+<body>
+    <!-- Toast 容器 -->
+    <div class="toast" id="toast"></div>
+
+    <!-- 导航栏 -->
+    <div class="navbar">
+        <div class="navbar-content">
+            <div class="back-btn" onclick="goBack()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <h1 class="navbar-title">个人资料</h1>
+        </div>
+    </div>
+
+    <!-- 用户信息 -->
+    <div class="info-section">
+        <div class="info-list">
+            <div class="info-item">
+                <span class="info-label">头像</span>
+                <div class="info-value">
+                    <div class="info-avatar">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="info-item">
+                <span class="info-label">昵称</span>
+                <span class="info-value">张医生</span>
+            </div>
+            <div class="info-item" onclick="goToBindPhone()">
+                <span class="info-label">手机号码</span>
+                <div class="info-value editable">
+                    <span id="phoneDisplay">未绑定</span>
+                    <i class="fas fa-chevron-right info-arrow"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第三方应用 -->
+    <div class="app-section">
+        <div class="section-title">第三方应用</div>
+        <div class="app-item" onclick="handleWechatWork()">
+            <div class="app-icon">
+                <i class="fas fa-comment"></i>
+            </div>
+            <div class="app-info">
+                <div class="app-name">企业微信</div>
+                <div class="app-desc">绑定后可接收企业微信消息通知</div>
+            </div>
+            <span class="app-status" id="wechatStatus">未绑定</span>
+            <i class="fas fa-chevron-right app-arrow"></i>
+        </div>
+    </div>
+
+    <script>
+        // Toast 提示函数
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 1500);
+        }
+
+        // 返回上一页
+        function goBack() {
+            window.history.back();
+        }
+
+        // 进入绑定手机号页面
+        function goToBindPhone() {
+            window.location.href = 'medical-staff-phone-binding.html';
+        }
+
+        // 处理企业微信绑定
+        function handleWechatWork() {
+            const status = document.getElementById('wechatStatus');
+            if (status.textContent === '未绑定') {
+                // 模拟绑定
+                showToast('绑定成功');
+                status.textContent = '张三';
+                status.classList.add('binded');
+            } else {
+                showToast('已绑定：' + status.textContent);
+            }
+        }
+
+        // 页面加载时检查本地存储
+        document.addEventListener('DOMContentLoaded', function() {
+            const phone = localStorage.getItem('userPhone');
+            if (phone) {
+                document.getElementById('phoneDisplay').textContent = phone;
+            }
+        });
+    </script>
+</body>
+</html>

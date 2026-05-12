@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>预随访</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@arco-design/mobile-react/dist/arco.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --arcoblue-6: #165DFF;
+            --arcoblue-1: #E8F3FF;
+            --text-1: #1D2129;
+            --text-2: #4E5969;
+            --text-3: #86909C;
+            --bg-1: #F2F3F5;
+            --bg-2: #FFFFFF;
+            --radius-medium: 8px;
+            --radius-large: 12px;
+            --font-size-body-1: 14px;
+            --font-size-title-1: 16px;
+            --font-size-title-2: 18px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background-color: var(--bg-1);
+            color: var(--text-1);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--arcoblue-6) 0%, #4080FF 100%);
+            padding: 44px 16px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: var(--radius-medium);
+        }
+
+        .navbar-title {
+            flex: 1;
+            font-size: var(--font-size-title-2);
+            font-weight: 600;
+            color: white;
+        }
+
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .placeholder-icon {
+            width: 100px;
+            height: 100px;
+            background: var(--arcoblue-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 60px auto 20px;
+        }
+
+        .placeholder-icon i {
+            font-size: 48px;
+            color: var(--arcoblue-6);
+        }
+
+        .placeholder-title {
+            font-size: var(--font-size-title-1);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .placeholder-desc {
+            font-size: var(--font-size-body-1);
+            color: var(--text-3);
+        }
+/* 首页风格统一覆盖 */
+body {
+    color: #0f1f33;
+    background:
+        radial-gradient(circle at 82% 2%, rgba(181, 213, 255, 0.8) 0 110px, transparent 220px),
+        linear-gradient(180deg, #d9ebff 0%, #f4faff 28%, #f7fbff 68%, #ffffff 100%) !important;
+    -webkit-font-smoothing: antialiased;
+}
+
+.navbar {
+    position: sticky;
+    top: 0;
+    overflow: hidden;
+    background: rgba(217, 235, 255, 0.82) !important;
+    border-bottom: 1px solid rgba(118, 140, 165, 0.12);
+    box-shadow: 0 10px 26px rgba(60, 101, 145, 0.08);
+    backdrop-filter: blur(14px);
+}
+
+.navbar::before {
+    content: "";
+    position: absolute;
+    top: -58px;
+    right: -34px;
+    width: 170px;
+    height: 150px;
+    border-radius: 34px;
+    background: linear-gradient(135deg, rgba(67, 142, 255, 0.2), rgba(255, 255, 255, 0.06));
+    transform: rotate(-12deg);
+    pointer-events: none;
+}
+
+.navbar-content,
+.navbar-title,
+.back-btn,
+.search-btn,
+.navbar-count {
+    position: relative;
+    z-index: 1;
+}
+
+.navbar-title,
+.back-btn,
+.search-btn,
+.navbar-count {
+    color: #0f1f33 !important;
+}
+
+.navbar-title {
+    font-weight: 800 !important;
+}
+
+.tabs,
+.search-section,
+.stats-bar,
+.page-container,
+.session-list,
+.system-list {
+    background: transparent !important;
+}
+
+.tab-item.active {
+    color: #2f7af6 !important;
+}
+
+.tab-item.active::after {
+    background: #2f7af6 !important;
+}
+
+.patient-card,
+.user-card,
+.org-card,
+.menu-list,
+.info-card,
+.detail-card,
+.record-card,
+.task-card,
+.anomaly-card,
+.form-card,
+.card,
+.section-card,
+.profile-card,
+.health-card,
+.content-card,
+.result-item,
+.empty-icon,
+.modal-content {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border: 1px solid rgba(123, 147, 176, 0.14) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12) !important;
+    backdrop-filter: blur(12px);
+}
+
+.session-item,
+.system-item,
+.menu-item,
+.list-item,
+.record-item,
+.info-row {
+    border-color: rgba(119, 140, 166, 0.18) !important;
+}
+
+.search-box,
+.search-input-wrapper,
+input,
+select,
+textarea {
+    border-color: rgba(122, 150, 184, 0.13) !important;
+    box-shadow: inset 0 0 0 1px rgba(122, 150, 184, 0.08);
+}
+
+.action-btn.primary,
+.submit-btn,
+.filter-btn.confirm,
+.modal-btn.confirm,
+.login-btn,
+.code-btn:not(:disabled) {
+    background: linear-gradient(145deg, #4b9bff, #2f7af6) !important;
+    color: #fff !important;
+    border: 0 !important;
+    box-shadow: 0 8px 16px rgba(45, 101, 170, 0.13);
+}
+
+.action-btn,
+.filter-btn.reset,
+.modal-btn.cancel,
+.popup-option,
+.phone-btn,
+.call-btn {
+    border-color: rgba(123, 147, 176, 0.14) !important;
+}
+
+.toast,
+.arco-toast {
+    background: rgba(12, 20, 34, 0.82) !important;
+    border-radius: 8px !important;
+}
+/* 首页风格补充覆盖 */
+.info-section,
+.info-list,
+.app-section,
+.form-section,
+.form-item,
+.filter-section,
+.disease-card,
+.indicator-item,
+.quick-action-item {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border: 1px solid rgba(123, 147, 176, 0.14) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12) !important;
+    backdrop-filter: blur(12px);
+}
+
+.patient-list,
+.task-list,
+.record-list,
+.search-results {
+    position: relative;
+    z-index: 1;
+}
+
+.action-btn,
+.submit-btn,
+.code-btn,
+.filter-btn,
+.modal-btn,
+.phone-btn,
+.call-btn {
+    border-radius: 10px !important;
+    font-weight: 700;
+}
+
+.navbar + .tabs,
+.tabs {
+    border-bottom-color: rgba(118, 140, 165, 0.16) !important;
+    backdrop-filter: blur(10px);
+}
+
+
+/* 全局顶部与查询框统一 */
+.navbar {
+    position: sticky !important;
+    top: 0 !important;
+    min-height: 92px;
+    padding: 44px 16px 12px !important;
+    z-index: 100 !important;
+}
+
+.navbar-content {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 36px;
+    padding-bottom: 0 !important;
+}
+
+.navbar-content .back-btn {
+    position: absolute !important;
+    left: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    margin: 0 !important;
+    z-index: 2 !important;
+}
+
+.navbar > .back-btn {
+    position: absolute !important;
+    left: 16px !important;
+    bottom: 12px !important;
+    margin: 0 !important;
+    z-index: 2 !important;
+}
+
+.navbar-title,
+.navbar-content .navbar-title,
+.navbar > .navbar-title {
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: calc(100% - 128px) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: center !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+    z-index: 1 !important;
+}
+
+.navbar > .navbar-title {
+    top: auto !important;
+    bottom: 19px !important;
+    transform: translateX(-50%) !important;
+}
+
+.search-btn,
+.navbar-count {
+    position: absolute !important;
+    right: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    margin: 0 !important;
+    z-index: 2 !important;
+}
+
+.navbar > .search-btn,
+.navbar > .navbar-count {
+    right: 16px !important;
+    top: auto !important;
+    bottom: 12px !important;
+    transform: none !important;
+}
+
+.search-section,
+.filter-section,
+.search-header {
+    background: transparent !important;
+}
+
+.search-box,
+.search-input-wrapper {
+    min-height: 52px !important;
+    height: 52px !important;
+    border: 0 !important;
+    border-radius: 24px !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    box-shadow: inset 0 0 0 1px rgba(122, 150, 184, 0.13), 0 10px 28px rgba(85, 127, 174, 0.1) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 13px !important;
+    padding: 0 20px !important;
+}
+
+.search-box i,
+.search-input-wrapper i {
+    color: #5f6d7d !important;
+    font-size: 20px !important;
+    flex: 0 0 auto;
+}
+
+.search-box input,
+.search-input-wrapper input {
+    width: 100% !important;
+    flex: 1 1 auto !important;
+    min-width: 0;
+    border: 0 !important;
+    outline: 0 !important;
+    color: #29384b !important;
+    font-size: 16px !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    font-family: var(--font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif) !important;
+}
+
+.search-box input::placeholder,
+.search-input-wrapper input::placeholder {
+    color: #a0a8b1 !important;
+}
+
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="back-btn" onclick="goBack()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="navbar-title">预随访</div>
+        </div>
+    </nav>
+
+    <div class="content">
+        <div class="placeholder-icon">
+            <i class="fas fa-edit"></i>
+        </div>
+        <div class="placeholder-title">预随访</div>
+        <div class="placeholder-desc">功能开发中，敬请期待...</div>
+    </div>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

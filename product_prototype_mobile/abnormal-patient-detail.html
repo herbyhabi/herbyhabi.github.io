@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>异常详情</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@arco-design/mobile-react/dist/arco.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --arcoblue-6: #165DFF;
+            --arcoblue-1: #E8F3FF;
+            --green-6: #00B42A;
+            --green-1: #E8FFEA;
+            --orange-6: #FF7D00;
+            --orange-1: #FFF7E8;
+            --red-6: #F53F3F;
+            --red-1: #FFECE8;
+            --pink-6: #F5319D;
+            --pink-1: #FFE8F1;
+            --purple-6: #722ED1;
+            --purple-1: #F9F0FF;
+            --text-1: #1D2129;
+            --text-2: #4E5969;
+            --text-3: #86909C;
+            --text-4: #C9CDD4;
+            --bg-1: #F2F3F5;
+            --bg-2: #FFFFFF;
+            --border: #E5E6EB;
+            --radius-small: 4px;
+            --radius-medium: 8px;
+            --radius-large: 12px;
+            --font-size-caption: 12px;
+            --font-size-body-1: 14px;
+            --font-size-title-1: 16px;
+            --font-size-title-2: 18px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background-color: var(--bg-1);
+            color: var(--text-1);
+            min-height: 100vh;
+            padding-bottom: 20px;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--arcoblue-6) 0%, #4080FF 100%);
+            padding: 44px 16px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: var(--radius-medium);
+        }
+
+        .navbar-title {
+            flex: 1;
+            font-size: var(--font-size-title-2);
+            font-weight: 600;
+            color: white;
+        }
+
+        .patient-overview {
+            background: var(--bg-2);
+            margin: 12px 16px;
+            border-radius: var(--radius-large);
+            padding: 16px;
+        }
+
+        .patient-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .patient-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--arcoblue-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--arcoblue-6);
+        }
+
+        .patient-avatar.female {
+            background: var(--pink-1);
+            color: var(--pink-6);
+        }
+
+        .patient-meta h2 {
+            font-size: var(--font-size-title-1);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .patient-meta .meta-text {
+            font-size: var(--font-size-caption);
+            color: var(--text-3);
+        }
+
+        .patient-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .detail-label {
+            font-size: var(--font-size-caption);
+            color: var(--text-3);
+        }
+
+        .detail-value {
+            font-size: var(--font-size-body-1);
+            color: var(--text-1);
+        }
+
+        .overview-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-medium);
+            background: var(--bg-2);
+            font-size: var(--font-size-body-1);
+            color: var(--text-2);
+            cursor: pointer;
+        }
+
+        .action-btn.primary {
+            background: var(--arcoblue-6);
+            border-color: var(--arcoblue-6);
+            color: white;
+        }
+
+        .section-title {
+            font-size: var(--font-size-body-1);
+            font-weight: 600;
+            color: var(--text-2);
+            margin: 20px 16px 12px;
+            padding-left: 12px;
+            border-left: 3px solid var(--red-6);
+        }
+
+        .anomaly-group {
+            background: var(--bg-2);
+            margin: 0 16px 12px;
+            border-radius: var(--radius-large);
+            overflow: hidden;
+        }
+
+        .group-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            background: var(--red-1);
+            cursor: pointer;
+        }
+
+        .group-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: var(--font-size-body-1);
+            font-weight: 600;
+            color: var(--red-6);
+        }
+
+        .group-count {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .count-badge {
+            padding: 2px 8px;
+            background: var(--red-6);
+            color: white;
+            font-size: var(--font-size-caption);
+            border-radius: 10px;
+        }
+
+        .group-arrow {
+            color: var(--red-6);
+            transition: transform 0.3s;
+        }
+
+        .group-arrow.expanded {
+            transform: rotate(180deg);
+        }
+
+        .group-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .group-content.expanded {
+            max-height: 2000px;
+        }
+
+        .anomaly-card {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .anomaly-card:last-child {
+            border-bottom: none;
+        }
+
+        .anomaly-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .anomaly-category {
+            font-size: var(--font-size-body-1);
+            font-weight: 600;
+            color: var(--text-1);
+        }
+
+        .referral-tag {
+            padding: 4px 10px;
+            background: var(--red-6);
+            color: white;
+            font-size: var(--font-size-caption);
+            border-radius: var(--radius-small);
+        }
+
+        .anomaly-body {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .info-row {
+            display: flex;
+            gap: 8px;
+            font-size: var(--font-size-body-1);
+        }
+
+        .info-label {
+            color: var(--text-3);
+            min-width: 80px;
+        }
+
+        .info-value {
+            color: var(--text-1);
+        }
+
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(29, 33, 41, 0.9);
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--radius-medium);
+            font-size: var(--font-size-body-1);
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-2);
+            border-radius: 24px 24px 0 0;
+            padding: 20px;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.show .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .modal-header::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 36px;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        .modal-title {
+            font-size: var(--font-size-title-1);
+            font-weight: 600;
+            color: var(--text-1);
+        }
+
+        .modal-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 12px;
+        }
+
+        .modal-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            font-size: var(--font-size-body-1);
+            color: var(--text-3);
+            cursor: pointer;
+            border-radius: var(--radius-medium);
+            transition: all 0.2s;
+        }
+
+        .modal-tab.active {
+            background: var(--arcoblue-1);
+            color: var(--arcoblue-6);
+            font-weight: 600;
+        }
+
+        .form-item {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: var(--font-size-body-1);
+            color: var(--text-2);
+            margin-bottom: 8px;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-medium);
+            font-size: var(--font-size-body-1);
+            background: var(--bg-2);
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--arcoblue-6);
+        }
+
+        .form-select:disabled {
+            background: var(--bg-1);
+            color: var(--text-3);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: var(--radius-medium);
+            font-size: var(--font-size-body-1);
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+        }
+
+        .modal-btn.cancel {
+            background: var(--bg-1);
+            color: var(--text-2);
+        }
+
+        .modal-btn.confirm {
+            background: var(--arcoblue-6);
+            color: white;
+        }
+
+        /* 首页风格统一覆盖 */
+        body {
+            color: #0f1f33;
+            background:
+                radial-gradient(circle at 82% 2%, rgba(181, 213, 255, 0.8) 0 110px, transparent 220px),
+                linear-gradient(180deg, #d9ebff 0%, #f4faff 28%, #f7fbff 68%, #ffffff 100%) !important;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            overflow: hidden;
+            background: rgba(217, 235, 255, 0.82) !important;
+            border-bottom: 1px solid rgba(118, 140, 165, 0.12);
+            box-shadow: 0 10px 26px rgba(60, 101, 145, 0.08);
+            backdrop-filter: blur(14px);
+        }
+
+        .navbar::before {
+            content: "";
+            position: absolute;
+            top: -58px;
+            right: -34px;
+            width: 170px;
+            height: 150px;
+            border-radius: 34px;
+            background: linear-gradient(135deg, rgba(67, 142, 255, 0.2), rgba(255, 255, 255, 0.06));
+            transform: rotate(-12deg);
+            pointer-events: none;
+        }
+
+        .navbar-content,
+        .navbar-title,
+        .back-btn,
+        .search-btn,
+        .navbar-count {
+            position: relative;
+            z-index: 1;
+        }
+
+        .navbar-title,
+        .back-btn,
+        .search-btn,
+        .navbar-count {
+            color: #0f1f33 !important;
+        }
+
+        .navbar-title {
+            font-weight: 800 !important;
+        }
+
+        .tabs,
+        .search-section,
+        .stats-bar,
+        .page-container,
+        .session-list,
+        .system-list {
+            background: transparent !important;
+        }
+
+        .tab-item.active {
+            color: #2f7af6 !important;
+        }
+
+        .tab-item.active::after {
+            background: #2f7af6 !important;
+        }
+
+        .patient-card,
+        .user-card,
+        .org-card,
+        .menu-list,
+        .info-card,
+        .detail-card,
+        .record-card,
+        .task-card,
+        .anomaly-card,
+        .form-card,
+        .card,
+        .section-card,
+        .profile-card,
+        .health-card,
+        .content-card,
+        .result-item,
+        .empty-icon,
+        .modal-content {
+            background: rgba(255, 255, 255, 0.92) !important;
+            border: 1px solid rgba(123, 147, 176, 0.14) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12) !important;
+            backdrop-filter: blur(12px);
+        }
+
+        .session-item,
+        .system-item,
+        .menu-item,
+        .list-item,
+        .record-item,
+        .info-row {
+            border-color: rgba(119, 140, 166, 0.18) !important;
+        }
+
+        .search-box,
+        .search-input-wrapper,
+        input,
+        select,
+        textarea {
+            border-color: rgba(122, 150, 184, 0.13) !important;
+            box-shadow: inset 0 0 0 1px rgba(122, 150, 184, 0.08);
+        }
+
+        .action-btn.primary,
+        .submit-btn,
+        .filter-btn.confirm,
+        .modal-btn.confirm,
+        .login-btn,
+        .code-btn:not(:disabled) {
+            background: linear-gradient(145deg, #4b9bff, #2f7af6) !important;
+            color: #fff !important;
+            border: 0 !important;
+            box-shadow: 0 8px 16px rgba(45, 101, 170, 0.13);
+        }
+
+        .action-btn,
+        .filter-btn.reset,
+        .modal-btn.cancel,
+        .popup-option,
+        .phone-btn,
+        .call-btn {
+            border-color: rgba(123, 147, 176, 0.14) !important;
+        }
+
+        .toast,
+        .arco-toast {
+            background: rgba(12, 20, 34, 0.82) !important;
+            border-radius: 8px !important;
+        }
+
+        /* 首页风格补充覆盖 */
+        .info-section,
+        .info-list,
+        .app-section,
+        .form-section,
+        .form-item,
+        .filter-section,
+        .disease-card,
+        .indicator-item,
+        .quick-action-item {
+            background: rgba(255, 255, 255, 0.92) !important;
+            border: 1px solid rgba(123, 147, 176, 0.14) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12) !important;
+            backdrop-filter: blur(12px);
+        }
+
+        .patient-list,
+        .task-list,
+        .record-list,
+        .search-results {
+            position: relative;
+            z-index: 1;
+        }
+
+        .action-btn,
+        .submit-btn,
+        .code-btn,
+        .filter-btn,
+        .modal-btn,
+        .phone-btn,
+        .call-btn {
+            border-radius: 10px !important;
+            font-weight: 700;
+        }
+
+        .navbar+.tabs,
+        .tabs {
+            border-bottom-color: rgba(118, 140, 165, 0.16) !important;
+            backdrop-filter: blur(10px);
+        }
+
+
+        /* 全局顶部与查询框统一 */
+        .navbar {
+            position: sticky !important;
+            top: 0 !important;
+            min-height: 92px;
+            padding: 44px 16px 12px !important;
+            z-index: 100 !important;
+        }
+
+        .navbar-content {
+            position: relative !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            min-height: 36px;
+            padding-bottom: 0 !important;
+        }
+
+        .navbar-content .back-btn {
+            position: absolute !important;
+            left: 0 !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            margin: 0 !important;
+            z-index: 2 !important;
+        }
+
+        .navbar>.back-btn {
+            position: absolute !important;
+            left: 16px !important;
+            bottom: 12px !important;
+            margin: 0 !important;
+            z-index: 2 !important;
+        }
+
+        .navbar-title,
+        .navbar-content .navbar-title,
+        .navbar>.navbar-title {
+            position: absolute !important;
+            left: 50% !important;
+            top: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            width: calc(100% - 128px) !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            text-align: center !important;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            pointer-events: none;
+            z-index: 1 !important;
+        }
+
+        .navbar>.navbar-title {
+            top: auto !important;
+            bottom: 19px !important;
+            transform: translateX(-50%) !important;
+        }
+
+        .search-btn,
+        .navbar-count {
+            position: absolute !important;
+            right: 0 !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            margin: 0 !important;
+            z-index: 2 !important;
+        }
+
+        .navbar>.search-btn,
+        .navbar>.navbar-count {
+            right: 16px !important;
+            top: auto !important;
+            bottom: 12px !important;
+            transform: none !important;
+        }
+
+        .search-section,
+        .filter-section,
+        .search-header {
+            background: transparent !important;
+        }
+
+        .search-box,
+        .search-input-wrapper {
+            min-height: 52px !important;
+            height: 52px !important;
+            border: 0 !important;
+            border-radius: 24px !important;
+            background: rgba(255, 255, 255, 0.96) !important;
+            box-shadow: inset 0 0 0 1px rgba(122, 150, 184, 0.13), 0 10px 28px rgba(85, 127, 174, 0.1) !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 13px !important;
+            padding: 0 20px !important;
+        }
+
+        .search-box i,
+        .search-input-wrapper i {
+            color: #5f6d7d !important;
+            font-size: 20px !important;
+            flex: 0 0 auto;
+        }
+
+        .search-box input,
+        .search-input-wrapper input {
+            width: 100% !important;
+            flex: 1 1 auto !important;
+            min-width: 0;
+            border: 0 !important;
+            outline: 0 !important;
+            color: #29384b !important;
+            font-size: 16px !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            font-family: var(--font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif) !important;
+        }
+
+        .search-box input::placeholder,
+        .search-input-wrapper input::placeholder {
+            color: #a0a8b1 !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="navbar-content">
+            <div class="back-btn" onclick="goBack()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="navbar-title">异常详情</div>
+        </div>
+    </div>
+
+    <div class="patient-overview">
+        <div class="patient-header">
+            <div class="patient-avatar" id="patientAvatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="patient-meta">
+                <h2 id="patientName">--</h2>
+                <div class="meta-text" id="patientMeta">--</div>
+            </div>
+        </div>
+        <div class="patient-details">
+            <div class="detail-item">
+                <span class="detail-label">联系电话</span>
+                <span class="detail-value" id="patientPhone">--</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">身份证</span>
+                <span class="detail-value" id="patientIdCard">--</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">归属网格</span>
+                <span class="detail-value" id="patientGrid">--</span>
+            </div>
+            <div class="detail-item" id="addressItem">
+                <span class="detail-label">居住地址</span>
+                <span class="detail-value" id="patientAddress">--</span>
+            </div>
+        </div>
+        <div class="overview-actions">
+            <button class="action-btn" onclick="viewProfile()">
+                <i class="fas fa-id-card"></i> 画像
+            </button>
+            <button class="action-btn primary" onclick="openAppointmentModal()">
+                <i class="fas fa-calendar-plus"></i> 预约
+            </button>
+            <button class="action-btn" onclick="sendMessage()">
+                <i class="fas fa-comment-dots"></i> 消息
+            </button>
+        </div>
+    </div>
+
+    <div class="section-title">异常信息</div>
+    <div id="anomalyGroups"></div>
+
+    <div class="toast" id="toast"></div>
+
+    <div class="modal-overlay" id="appointmentModal" onclick="closeAppointmentModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div class="modal-title">患者预约</div>
+            </div>
+            <div class="modal-tabs">
+                <div class="modal-tab active" onclick="switchTab('visit')" id="tabVisit">就诊预约</div>
+                <div class="modal-tab" onclick="switchTab('referral')" id="tabReferral">转诊预约</div>
+            </div>
+            <div class="form-item">
+                <label class="form-label">预约日期时间</label>
+                <input type="datetime-local" class="form-input" id="appointmentDateTime">
+            </div>
+            <div class="form-item">
+                <label class="form-label">预约机构</label>
+                <select class="form-select" id="appointmentInstitution" onchange="onInstitutionChange()">
+                    <option value="">请选择机构</option>
+                </select>
+            </div>
+            <div class="form-item">
+                <label class="form-label">预约科室</label>
+                <select class="form-select" id="appointmentDepartment" disabled>
+                    <option value="">请先选择机构</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn cancel" onclick="closeAppointmentModal()">取消</button>
+                <button class="modal-btn confirm" onclick="confirmAppointment()">确认预约</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const mockPatients = [
+            {
+                id: 1, name: '王建国', gender: 'male', age: 68, phone: '13811111234',
+                idCard: '310111111111111234', grid: '第一网格', address: '幸福社区1号楼201室',
+                anomalies: [
+                    // 体征异常 - 3条
+                    { type: 'vital', category: '血压异常', indicator: '收缩压', value: '158mmHg', date: '2024-01-15', referral: true },
+                    { type: 'vital', category: '血压异常', indicator: '舒张压', value: '102mmHg', date: '2024-01-15', referral: false },
+                    { type: 'vital', category: '血糖异常', indicator: '空腹血糖', value: '9.8mmol/L', date: '2024-01-12', referral: true },
+                    { type: 'vital', category: '血糖异常', indicator: '糖化血红蛋白', value: '8.5%', date: '2024-01-10', referral: false },
+                    // 评估异常 - 2条
+                    { type: 'assess', category: ' 其他评估异常 ', assessType: 'ASCVD评估', assessDate: '2024-01-10', result: '高危人群', referral: true },
+                    { type: 'assess', category: '慢病分级加重 ', assessType: '高血压分级评估 ', assessDate: '2024-01-08', result: '三级管理 ', referral: false },
+                    // 危险因素异常 - 2条
+                    { type: 'risk', category: '危险因素新增', riskFactor: '低高密度脂蛋白', disease: '高血压', date: '2024-01-12', referral: false },
+                    { type: 'risk', category: '危险因素新增', riskFactor: 'BMI≥28或者腰围≥90cm', disease: '糖尿病', date: '2024-01-12', referral: false },
+                    // 未及时复诊 - 1条
+                    { type: 'visit', category: '未及时复诊', expectedDate: '2024-01-15', lastDate: '2023-12-15', referral: false }
+                ]
+            },
+            {
+                id: 2, name: '李秀英', gender: 'female', age: 72, phone: '13911115678',
+                idCard: '310111111111115678', grid: '第二网格', address: '幸福社区2号楼305室',
+                anomalies: [
+                    // 体征异常 - 2条
+                    { type: 'vital', category: '血压异常', indicator: '收缩压', value: '162mmHg', date: '2024-01-14', referral: true },
+                    { type: 'vital', category: '血糖异常', indicator: '餐后2h血糖', value: '14.2mmol/L', date: '2024-01-13', referral: true },
+                    // 合/并发症异常 - 2条
+                    { type: 'complication', category: '合/并发症新增 ', occurDate: '2024-01-08', disease: '糖尿病', complication: '糖尿病肾病III期', referral: true },
+                    { type: 'complication', category: '合/并发症新增', occurDate: '2024-01-05', disease: '糖尿病', complication: '视网膜病变II期', referral: false },
+                    // 未及时复诊 - 1条
+                    { type: 'visit', expectedDate: '2024-01-10', lastDate: '2023-12-01', referral: false },
+                    // 其他异常 - 1条
+                    { type: 'other', category: '用药依从性差', occurDate: '2024-01-06', result: '依从性评分55分', referral: false }
+                ]
+            },
+            {
+                id: 3, name: '张大山', gender: 'male', age: 65, phone: '13711119012',
+                idCard: '310111111111119012', grid: '第一网格', address: '大洋街道1001',
+                anomalies: [
+                    // 越级就诊 - 2条
+                    { type: 'skipVisit', category: '越级就诊', date: '2024-01-14', institution: '市第一人民医院', referral: false },
+                    { type: 'skipVisit', category: '越级就诊', date: '2024-01-08', institution: '省人民医院', referral: false },
+                    // 体征异常 - 1条
+                    { type: 'vital', category: '血脂异常', indicator: '总胆固醇', value: '6.8mmol/L', date: '2024-01-12', referral: false },
+                    // 危险因素异常 - 1条
+                    { type: 'risk', category: '危险因素新增', riskFactor: '吸烟或被动吸烟', disease: '冠心病', date: '2024-01-10', referral: false },
+                    // 其他异常 - 1条
+                    { type: 'other', category: '特殊疾病诊断 ', occurDate: '2024-01-10', result: '糖尿病肾病', referral: false }
+                ]
+            }
+        ];
+
+        const anomalyTypeConfig = {
+            'vital': { name: '体征异常', icon: 'fa-heartbeat' },
+            'assess': { name: '评估异常', icon: 'fa-clipboard-check' },
+            'risk': { name: '危险因素异常', icon: 'fa-exclamation-circle' },
+            'complication': { name: '合/并发症异常', icon: 'fa-notes-medical' },
+            'visit': { name: '未及时复诊', icon: 'fa-calendar-times' },
+            'skipVisit': { name: '越级就诊', icon: 'fa-hospital' },
+            'other': { name: '其他异常', icon: 'fa-question-circle' }
+        };
+
+        const institutions = {
+            visit: [
+                { id: 'current', name: '社区卫生服务中心', departments: ['全科门诊', '内科', '外科'] },
+                { id: 'branch1', name: '第一分中心', departments: ['全科门诊', '中医科'] },
+                { id: 'branch2', name: '第二分中心', departments: ['全科门诊', '康复科'] }
+            ],
+            referral: [
+                { id: 'superior', name: '市第一人民医院', departments: ['心内科', '内分泌科', '肾内科'] },
+                { id: 'superior2', name: '市第二人民医院', departments: ['心内科', '神经内科'] }
+            ]
+        };
+
+        let currentPatient = null;
+        let currentTab = 'visit';
+
+        function getUrlParam(name) {
+            const params = new URLSearchParams(window.location.search);
+            return params.get(name);
+        }
+
+        function init() {
+            const patientId = getUrlParam('id') || 1;
+            currentPatient = mockPatients.find(p => p.id == patientId) || mockPatients[0];
+            renderPatientInfo();
+            renderAnomalyGroups();
+            initAppointmentModal();
+        }
+
+        function renderPatientInfo() {
+            const avatarEl = document.getElementById('patientAvatar');
+            avatarEl.innerHTML = '<i class="fas fa-user"></i>';
+            if (currentPatient.gender === 'female') {
+                avatarEl.classList.add('female');
+            }
+            document.getElementById('patientName').textContent = currentPatient.name;
+            document.getElementById('patientMeta').textContent = (currentPatient.gender === 'male' ? '男' : '女') + ' · ' + currentPatient.age + '岁';
+            document.getElementById('patientPhone').textContent = currentPatient.phone;
+            document.getElementById('patientIdCard').textContent = currentPatient.idCard;
+            document.getElementById('patientGrid').textContent = currentPatient.grid;
+            const addressItem = document.getElementById('addressItem');
+            if (currentPatient.address) {
+                document.getElementById('patientAddress').textContent = currentPatient.address;
+                addressItem.style.display = 'flex';
+            } else {
+                addressItem.style.display = 'none';
+            }
+        }
+
+        function renderAnomalyGroups() {
+            const container = document.getElementById('anomalyGroups');
+            container.innerHTML = '';
+            const grouped = {};
+            Object.keys(anomalyTypeConfig).forEach(type => { grouped[type] = []; });
+            currentPatient.anomalies.forEach(anomaly => {
+                if (grouped[anomaly.type]) { grouped[anomaly.type].push(anomaly); }
+            });
+            Object.keys(anomalyTypeConfig).forEach(type => {
+                const anomalies = grouped[type];
+                if (anomalies.length === 0) return;
+                const config = anomalyTypeConfig[type];
+                const groupEl = document.createElement('div');
+                groupEl.className = 'anomaly-group';
+                groupEl.innerHTML = '<div class="group-header" onclick="toggleGroup(\'' + type + '\')"><div class="group-title"><i class="fas ' + config.icon + '"></i><span>' + config.name + '</span></div><div class="group-count"><span class="count-badge">' + anomalies.length + '</span><i class="fas fa-chevron-down group-arrow" id="arrow-' + type + '"></i></div></div><div class="group-content" id="content-' + type + '">' + anomalies.map(anomaly => renderAnomalyCard(anomaly)).join('') + '</div>';
+                container.appendChild(groupEl);
+            });
+        }
+
+        function renderAnomalyCard(anomaly) {
+            let infoRows = '';
+            switch (anomaly.type) {
+                case 'vital':
+                    infoRows = '<div class="info-row"><span class="info-label">指标</span><span class="info-value">' + anomaly.indicator + '</span></div><div class="info-row"><span class="info-label">数值</span><span class="info-value">' + anomaly.value + '</span></div><div class="info-row"><span class="info-label">记录日期</span><span class="info-value">' + anomaly.date + '</span></div>';
+                    break;
+                case 'assess':
+                    infoRows = '<div class="info-row"><span class="info-label">评估日期</span><span class="info-value">' + anomaly.assessDate + '</span></div><div class="info-row"><span class="info-label">评估项目 </span><span class="info-value" font-weight: 600;">' + anomaly.assessType + '</div><div class="info-row"><span class="info-label">评估结果</span><span class="info-value" style="color: var(--red-6); font-weight: 600;">' + anomaly.result + '</span></div>';
+                    break;
+                case 'risk':
+                    infoRows = '<div class="info-row"><span class="info-label">危险因素</span><span class="info-value">' + anomaly.riskFactor + '</span></div><div class="info-row"><span class="info-label"> 针对疾病 </span><span class="info-value">' + anomaly.disease + '</span></div><div class="info-row"><span class="info-label">记录日期</span><span class="info-value">' + anomaly.date + '</span></div>';
+                    break;
+                case 'complication':
+                    infoRows = '<div class="info-row"><span class="info-label">针对病种</span><span class="info-value">' + anomaly.disease + '</span></div><div class="info-row"><span class="info-label">合/并发症</span><span class="info-value">' + anomaly.complication + '</span></div><div class="info-row"><span class="info-label">发生日期</span><span class="info-value">' + anomaly.occurDate + '</span></div>';
+                    break;
+                case 'visit':
+                    infoRows = '<div class="info-row"><span class="info-label">应复诊日期</span><span class="info-value">' + anomaly.expectedDate + '</span></div><div class="info-row"><span class="info-label">上次就诊</span><span class="info-value">' + anomaly.lastDate + '</span></div>';
+                    break;
+                case 'skipVisit':
+                    infoRows = '<div class="info-row"><span class="info-label">就诊机构</span><span class="info-value">' + anomaly.institution + '</span></div><div class="info-row"><span class="info-label">就诊日期</span><span class="info-value">' + anomaly.date + '</span></div>';
+                    break;
+                case 'other':
+                    infoRows = '<div class="info-row"><span class="info-label">异常结果</span><span class="info-value">' + anomaly.result + '</span></div><div class="info-row"><span class="info-label">发生日期</span><span class="info-value">' + anomaly.occurDate + '</span></div>';
+                    break;
+            }
+            const referralTag = anomaly.referral ? '<span class="referral-tag">建议转诊</span>' : '';
+            return '<div class="anomaly-card"><div class="anomaly-header"><span class="anomaly-category">' + anomaly.category + '</span>' + referralTag + '</div><div class="anomaly-body">' + infoRows + '</div></div>';
+        }
+
+        function toggleGroup(type) {
+            const content = document.getElementById('content-' + type);
+            const arrow = document.getElementById('arrow-' + type);
+            content.classList.toggle('expanded');
+            arrow.classList.toggle('expanded');
+        }
+
+        function initAppointmentModal() {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(8, 0, 0, 0);
+            const dateTimeInput = document.getElementById('appointmentDateTime');
+            dateTimeInput.value = tomorrow.toISOString().slice(0, 16);
+            updateInstitutionOptions();
+        }
+
+        function updateInstitutionOptions() {
+            const select = document.getElementById('appointmentInstitution');
+            select.innerHTML = '<option value="">请选择机构</option>';
+            institutions[currentTab].forEach(inst => {
+                const selected = currentTab === 'visit' && inst.id === 'current' ? 'selected' : '';
+                select.innerHTML += '<option value="' + inst.id + '" ' + selected + '>' + inst.name + '</option>';
+            });
+            if (currentTab === 'visit') {
+                select.value = 'current';
+                onInstitutionChange();
+            }
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.getElementById('tabVisit').classList.toggle('active', tab === 'visit');
+            document.getElementById('tabReferral').classList.toggle('active', tab === 'referral');
+            updateInstitutionOptions();
+        }
+
+        function onInstitutionChange() {
+            const instSelect = document.getElementById('appointmentInstitution');
+            const deptSelect = document.getElementById('appointmentDepartment');
+            const inst = institutions[currentTab].find(i => i.id === instSelect.value);
+            if (inst) {
+                deptSelect.innerHTML = '<option value="">请选择科室</option>';
+                inst.departments.forEach(dept => {
+                    deptSelect.innerHTML += '<option value="' + dept + '">' + dept + '</option>';
+                });
+                deptSelect.disabled = false;
+            } else {
+                deptSelect.innerHTML = '<option value="">请先选择机构</option>';
+                deptSelect.disabled = true;
+            }
+        }
+
+        function openAppointmentModal() {
+            document.getElementById('appointmentModal').classList.add('show');
+        }
+
+        function closeAppointmentModal(e) {
+            if (!e || e.target.id === 'appointmentModal') {
+                document.getElementById('appointmentModal').classList.remove('show');
+            }
+        }
+
+        function confirmAppointment() {
+            const dateTime = document.getElementById('appointmentDateTime').value;
+            const inst = document.getElementById('appointmentInstitution').value;
+            const dept = document.getElementById('appointmentDepartment').value;
+            if (!dateTime || !inst || !dept) {
+                showToast('请填写完整预约信息');
+                return;
+            }
+            showToast('预约成功');
+            closeAppointmentModal();
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 2000);
+        }
+
+        function goBack() { history.back(); }
+        function viewProfile() { showToast('敬请期待'); }
+        function sendMessage() { showToast('敬请期待'); }
+
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+
+</html>

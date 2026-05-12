@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>待管患者</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@arco-design/mobile-react/dist/arco.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --arcoblue-6: #165DFF;
+            --arcoblue-1: #E8F3FF;
+            --green-6: #00B42A;
+            --green-1: #E8FFEA;
+            --orange-6: #FF7D00;
+            --orange-1: #FFF7E8;
+            --red-6: #F53F3F;
+            --red-1: #FFECE8;
+            --pink-6: #F5319D;
+            --pink-1: #FFE8F1;
+            --text-1: #1D2129;
+            --text-2: #4E5969;
+            --text-3: #86909C;
+            --text-4: #C9CDD4;
+            --bg-1: #F2F3F5;
+            --bg-2: #FFFFFF;
+            --border: #E5E6EB;
+            --radius-small: 4px;
+            --radius-medium: 8px;
+            --radius-large: 12px;
+            --radius-xlarge: 20px;
+            --font-size-caption: 12px;
+            --font-size-body-1: 14px;
+            --font-size-body-2: 15px;
+            --font-size-title-1: 16px;
+            --font-size-title-2: 18px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background-color: var(--bg-1);
+            color: var(--text-1);
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            background: linear-gradient(135deg, var(--arcoblue-6) 0%, #4080FF 100%);
+            padding: 44px 16px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: var(--radius-medium);
+            transition: background 0.2s;
+        }
+
+        .back-btn:active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .navbar-title {
+            flex: 1;
+            font-size: var(--font-size-title-2);
+            font-weight: 600;
+            color: white;
+        }
+
+        .navbar-count {
+            font-size: var(--font-size-body-1);
+            color: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: var(--radius-xlarge);
+        }
+
+        /* 搜索和筛选区域 */
+        .filter-section {
+            background: var(--bg-2);
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-1);
+            padding: 10px 14px;
+            border-radius: var(--radius-xlarge);
+            margin-bottom: 12px;
+        }
+
+        .search-box i {
+            color: var(--text-3);
+            font-size: 16px;
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: var(--font-size-body-1);
+            color: var(--text-1);
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-4);
+        }
+
+        .filter-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tag {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
+            background: var(--bg-1);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xlarge);
+            font-size: var(--font-size-caption);
+            color: var(--text-2);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-tag.active {
+            background: var(--arcoblue-1);
+            border-color: var(--arcoblue-6);
+            color: var(--arcoblue-6);
+        }
+
+        .filter-tag i {
+            font-size: 10px;
+        }
+
+        /* 患者列表 */
+        .patient-list {
+            padding: 12px 16px;
+        }
+
+        .patient-count {
+            font-size: var(--font-size-caption);
+            color: var(--text-3);
+            margin-bottom: 12px;
+        }
+
+        .patient-count span {
+            color: var(--arcoblue-6);
+            font-weight: 600;
+        }
+
+        .patient-card {
+            background: var(--bg-2);
+            border-radius: var(--radius-large);
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .patient-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .patient-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .patient-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+            background: var(--arcoblue-1);
+            color: var(--arcoblue-6);
+        }
+
+        .patient-avatar.female {
+            background: var(--pink-1);
+            color: var(--pink-6);
+        }
+
+        .patient-name {
+            font-size: var(--font-size-title-1);
+            font-weight: 600;
+        }
+
+        .patient-name.male {
+            color: var(--arcoblue-6);
+        }
+
+        .patient-name.female {
+            color: var(--pink-6);
+        }
+
+        .patient-name.other {
+            color: var(--arcoblue-6);
+        }
+
+        .patient-age {
+            font-size: var(--font-size-caption);
+            color: var(--text-3);
+            background: var(--bg-1);
+            padding: 2px 8px;
+            border-radius: var(--radius-small);
+        }
+
+        .phone-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
+            background: var(--green-1);
+            color: var(--green-6);
+            border: none;
+            border-radius: var(--radius-medium);
+            font-size: var(--font-size-caption);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .phone-btn:active {
+            background: var(--green-6);
+            color: white;
+        }
+
+        .patient-details {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed var(--border);
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: var(--font-size-body-1);
+        }
+
+        .detail-label {
+            color: var(--text-3);
+            min-width: 60px;
+        }
+
+        .detail-value {
+            color: var(--text-2);
+            font-family: 'SF Mono', monospace;
+        }
+
+        .disease-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .disease-tag {
+            padding: 4px 10px;
+            background: var(--orange-1);
+            color: var(--orange-6);
+            font-size: var(--font-size-caption);
+            border-radius: var(--radius-small);
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .action-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-medium);
+            background: var(--bg-2);
+            font-size: var(--font-size-body-1);
+            color: var(--text-2);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .action-btn.primary {
+            background: var(--arcoblue-6);
+            border-color: var(--arcoblue-6);
+            color: white;
+        }
+
+        .action-btn:active {
+            opacity: 0.8;
+        }
+
+        /* 筛选弹窗 */
+        .filter-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .filter-popup.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .filter-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-2);
+            border-radius: 24px 24px 0 0;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+
+        .filter-popup.show .filter-content {
+            transform: translateY(0);
+        }
+
+        .filter-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .filter-title {
+            font-size: var(--font-size-title-1);
+            font-weight: 600;
+        }
+
+        .filter-close {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-3);
+            cursor: pointer;
+        }
+
+        .filter-body {
+            padding: 20px;
+        }
+
+        .filter-group {
+            margin-bottom: 24px;
+        }
+
+        .filter-group-title {
+            font-size: var(--font-size-body-1);
+            font-weight: 600;
+            color: var(--text-1);
+            margin-bottom: 12px;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-option {
+            padding: 8px 16px;
+            background: var(--bg-1);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-medium);
+            font-size: var(--font-size-body-1);
+            color: var(--text-2);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-option.selected {
+            background: var(--arcoblue-1);
+            border-color: var(--arcoblue-6);
+            color: var(--arcoblue-6);
+        }
+
+        .filter-footer {
+            display: flex;
+            gap: 12px;
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .filter-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: var(--radius-medium);
+            font-size: var(--font-size-body-1);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn.reset {
+            background: var(--bg-1);
+            border: 1px solid var(--border);
+            color: var(--text-2);
+        }
+
+        .filter-btn.confirm {
+            background: var(--arcoblue-6);
+            border: 1px solid var(--arcoblue-6);
+            color: white;
+        }
+
+        .filter-btn:active {
+            opacity: 0.8;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(29, 33, 41, 0.9);
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--radius-medium);
+            font-size: var(--font-size-body-1);
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        /* 空状态 */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--bg-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .empty-icon i {
+            font-size: 36px;
+            color: var(--text-4);
+        }
+
+        .empty-text {
+            font-size: var(--font-size-body-1);
+            color: var(--text-3);
+        }
+/* 首页风格统一覆盖 */
+body {
+    color: #0f1f33;
+    background:
+        radial-gradient(circle at 82% 2%, rgba(181, 213, 255, 0.8) 0 110px, transparent 220px),
+        linear-gradient(180deg, #d9ebff 0%, #f4faff 28%, #f7fbff 68%, #ffffff 100%) !important;
+    -webkit-font-smoothing: antialiased;
+}
+
+.navbar {
+    position: sticky;
+    top: 0;
+    overflow: hidden;
+    background: rgba(217, 235, 255, 0.82) !important;
+    border-bottom: 1px solid rgba(118, 140, 165, 0.12);
+    box-shadow: 0 10px 26px rgba(60, 101, 145, 0.08);
+    backdrop-filter: blur(14px);
+}
+
+.navbar::before {
+    content: "";
+    position: absolute;
+    top: -58px;
+    right: -34px;
+    width: 170px;
+    height: 150px;
+    border-radius: 34px;
+    background: linear-gradient(135deg, rgba(67, 142, 255, 0.2), rgba(255, 255, 255, 0.06));
+    transform: rotate(-12deg);
+    pointer-events: none;
+}
+
+.navbar-content,
+.navbar-title,
+.back-btn,
+.search-btn,
+.navbar-count {
+    position: relative;
+    z-index: 1;
+}
+
+.navbar-title,
+.back-btn,
+.search-btn,
+.navbar-count {
+    color: #0f1f33 !important;
+}
+
+.navbar-title {
+    font-weight: 800 !important;
+}
+
+.tabs,
+.search-section,
+.stats-bar,
+.page-container,
+.session-list,
+.system-list {
+    background: transparent !important;
+}
+
+.tab-item.active {
+    color: #2f7af6 !important;
+}
+
+.tab-item.active::after {
+    background: #2f7af6 !important;
+}
+
+.patient-card,
+.user-card,
+.org-card,
+.menu-list,
+.info-card,
+.detail-card,
+.record-card,
+.task-card,
+.anomaly-card,
+.form-card,
+.card,
+.section-card,
+.profile-card,
+.health-card,
+.content-card,
+.result-item,
+.empty-icon,
+.modal-content {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border: 1px solid rgba(123, 147, 176, 0.14) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12) !important;
+    backdrop-filter: blur(12px);
+}
+
+.session-item,
+.system-item,
+.menu-item,
+.list-item,
+.record-item,
+.info-row {
+    border-color: rgba(119, 140, 166, 0.18) !important;
+}
+
+.search-box,
+.search-input-wrapper,
+input,
+select,
+textarea {
+    border-color: rgba(122, 150, 184, 0.13) !important;
+    box-shadow: inset 0 0 0 1px rgba(122, 150, 184, 0.08);
+}
+
+.action-btn.primary,
+.submit-btn,
+.filter-btn.confirm,
+.modal-btn.confirm,
+.login-btn,
+.code-btn:not(:disabled) {
+    background: linear-gradient(145deg, #4b9bff, #2f7af6) !important;
+    color: #fff !important;
+    border: 0 !important;
+    box-shadow: 0 8px 16px rgba(45, 101, 170, 0.13);
+}
+
+.action-btn,
+.filter-btn.reset,
+.modal-btn.cancel,
+.popup-option,
+.phone-btn,
+.call-btn {
+    border-color: rgba(123, 147, 176, 0.14) !important;
+}
+
+.toast,
+.arco-toast {
+    background: rgba(12, 20, 34, 0.82) !important;
+    border-radius: 8px !important;
+}
+/* 首页风格补充覆盖 */
+.info-section,
+.info-list,
+.app-section,
+.form-section,
+.form-item,
+.filter-section,
+.disease-card,
+.indicator-item,
+.quick-action-item {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border: 1px solid rgba(123, 147, 176, 0.14) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12) !important;
+    backdrop-filter: blur(12px);
+}
+
+.patient-list,
+.task-list,
+.record-list,
+.search-results {
+    position: relative;
+    z-index: 1;
+}
+
+.action-btn,
+.submit-btn,
+.code-btn,
+.filter-btn,
+.modal-btn,
+.phone-btn,
+.call-btn {
+    border-radius: 10px !important;
+    font-weight: 700;
+}
+
+.navbar + .tabs,
+.tabs {
+    border-bottom-color: rgba(118, 140, 165, 0.16) !important;
+    backdrop-filter: blur(10px);
+}
+
+
+/* 全局顶部与查询框统一 */
+.navbar {
+    position: sticky !important;
+    top: 0 !important;
+    min-height: 92px;
+    padding: 44px 16px 12px !important;
+    z-index: 100 !important;
+}
+
+.navbar-content {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 36px;
+    padding-bottom: 0 !important;
+}
+
+.navbar-content .back-btn {
+    position: absolute !important;
+    left: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    margin: 0 !important;
+    z-index: 2 !important;
+}
+
+.navbar > .back-btn {
+    position: absolute !important;
+    left: 16px !important;
+    bottom: 12px !important;
+    margin: 0 !important;
+    z-index: 2 !important;
+}
+
+.navbar-title,
+.navbar-content .navbar-title,
+.navbar > .navbar-title {
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: calc(100% - 128px) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: center !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+    z-index: 1 !important;
+}
+
+.navbar > .navbar-title {
+    top: auto !important;
+    bottom: 19px !important;
+    transform: translateX(-50%) !important;
+}
+
+.search-btn,
+.navbar-count {
+    position: absolute !important;
+    right: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    margin: 0 !important;
+    z-index: 2 !important;
+}
+
+.navbar > .search-btn,
+.navbar > .navbar-count {
+    right: 16px !important;
+    top: auto !important;
+    bottom: 12px !important;
+    transform: none !important;
+}
+
+.search-section,
+.filter-section,
+.search-header {
+    background: transparent !important;
+}
+
+.search-box,
+.search-input-wrapper {
+    min-height: 52px !important;
+    height: 52px !important;
+    border: 0 !important;
+    border-radius: 24px !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    box-shadow: inset 0 0 0 1px rgba(122, 150, 184, 0.13), 0 10px 28px rgba(85, 127, 174, 0.1) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 13px !important;
+    padding: 0 20px !important;
+}
+
+.search-box i,
+.search-input-wrapper i {
+    color: #5f6d7d !important;
+    font-size: 20px !important;
+    flex: 0 0 auto;
+}
+
+.search-box input,
+.search-input-wrapper input {
+    width: 100% !important;
+    flex: 1 1 auto !important;
+    min-width: 0;
+    border: 0 !important;
+    outline: 0 !important;
+    color: #29384b !important;
+    font-size: 16px !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    font-family: var(--font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif) !important;
+}
+
+.search-box input::placeholder,
+.search-input-wrapper input::placeholder {
+    color: #a0a8b1 !important;
+}
+
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="back-btn" onclick="goBack()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="navbar-title">待管患者</div>
+           
+            
+        </div>
+    </nav>
+
+    <!-- 搜索和筛选 -->
+    <div class="filter-section">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="搜索姓名、身份证、手机号" oninput="handleSearch()">
+        </div>
+        <div class="filter-tags">
+            <div class="filter-tag" id="diseaseFilter" onclick="showDiseaseFilter()">
+                <span>待管病种</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="filter-tag" id="gridFilter" onclick="showGridFilter()">
+                <span>归属网格</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- 患者列表 -->
+    <div class="patient-list" id="patientList"></div>
+
+    <!-- 筛选弹窗 -->
+    <div class="filter-popup" id="filterPopup">
+        <div class="filter-content">
+            <div class="filter-header">
+                <div class="filter-title" id="filterTitle">筛选</div>
+                <div class="filter-close" onclick="closeFilterPopup()">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            <div class="filter-body" id="filterBody">
+                <!-- 筛选选项将通过JS动态生成 -->
+            </div>
+            <div class="filter-footer">
+                <button class="filter-btn reset" onclick="resetFilter()">重置</button>
+                <button class="filter-btn confirm" onclick="confirmFilter()">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // 模拟患者数据
+        const patientData = [
+            {
+                id: 1,
+                name: '王建国',
+                gender: 'male',
+                age: 68,
+                phone: '138****1234',
+                idCard: '310111111111111234',
+                grid: '第一网格',
+                diseases: ['高血压', '糖尿病'],
+                address: '幸福社区1号楼201室'
+            },
+            {
+                id: 2,
+                name: '李秀英',
+                gender: 'female',
+                age: 72,
+                phone: '139****5678',
+                idCard: '310111111111115678',
+                grid: '第二网格',
+                diseases: ['高血压', '冠心病'],
+                address: '幸福社区2号楼305室'
+            },
+            {
+                id: 3,
+                name: '张大山',
+                gender: 'male',
+                age: 65,
+                phone: '137****9012',
+                idCard: '310111111111119012',
+                grid: '第一网格',
+                diseases: ['糖尿病', '高血脂'],
+                address: '幸福社区3号楼102室'
+            },
+            {
+                id: 4,
+                name: '陈美丽',
+                gender: 'female',
+                age: 58,
+                phone: '136****3456',
+                idCard: '310111111111113456',
+                grid: '第三网格',
+                diseases: ['高血压'],
+                address: '幸福社区4号楼408室'
+            },
+            {
+                id: 5,
+                name: '刘志强',
+                gender: 'male',
+                age: 70,
+                phone: '135****7890',
+                idCard: '310111111111117890',
+                grid: '第二网格',
+                diseases: ['糖尿病', '冠心病', '高血压'],
+                address: '幸福社区5号楼506室'
+            }
+        ];
+
+        // 病种选项
+        const diseaseOptions = ['高血压', '糖尿病', '冠心病', '高血脂', '脑卒中', '慢阻肺'];
+        
+        // 网格选项（根据用户角色动态调整）
+        const gridOptions = ['第一网格', '第二网格', '第三网格', '第四网格'];
+
+        // 当前筛选状态
+        let currentFilter = {
+            search: '',
+            diseases: [],
+            grids: []
+        };
+
+        let currentFilterType = '';
+
+        // 初始化
+        window.addEventListener('load', () => {
+            renderPatientList(patientData);
+        });
+
+        // 渲染患者列表
+        function renderPatientList(patients) {
+            const listContainer = document.getElementById('patientList');
+            const countEl = document.getElementById('patientCount');
+            if (countEl) {
+                countEl.textContent = `共 ${patients.length} 人`;
+            }
+
+            if (patients.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-inbox"></i>
+                        </div>
+                        <div class="empty-text">暂无待管患者</div>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `<div class="patient-count">共有 <span>${patients.length}</span> 个待管患者</div>`;
+            
+            patients.forEach(patient => {
+                const genderClass = patient.gender === 'female' ? 'female' : (patient.gender === 'male' ? 'male' : 'other');
+                const avatarIcon = patient.gender === 'female' ? 'fa-female' : 'fa-male';
+                const diseaseTags = patient.diseases.map(d => `<span class="disease-tag">${d}</span>`).join('');
+                
+                html += `
+                    <div class="patient-card">
+                        <div class="patient-header">
+                            <div class="patient-info">
+                                <div class="patient-avatar ${genderClass}">
+                                    <i class="fas ${avatarIcon}"></i>
+                                </div>
+                                <span class="patient-name ${genderClass}">${patient.name}</span>
+                                <span class="patient-age">${patient.age}岁</span>
+                            </div>
+                            <button class="phone-btn" onclick="callPatient('${patient.phone}', '${patient.name}')">
+                                <i class="fas fa-phone"></i>
+                                <span>呼叫</span>
+                            </button>
+                        </div>
+                        <div class="patient-details">
+                            <div class="detail-item">
+                                <span class="detail-label">身份证</span>
+                                <span class="detail-value">${patient.idCard}</span>
+                            </div>
+                            
+                        </div>
+                        <div class="disease-tags">
+                            ${diseaseTags}
+                        </div>
+                        <div class="card-actions">
+                            <button class="action-btn" onclick="viewHealthProfile(${patient.id})">
+                                <i class="fas fa-user-circle"></i>
+                                <span>健康画像</span>
+                            </button>
+                            <button class="action-btn primary" onclick="viewPendingDetail(${patient.id})">
+                                <i class="fas fa-clipboard-list"></i>
+                                <span>待管信息</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            listContainer.innerHTML = html;
+        }
+
+        // 搜索功能
+        function handleSearch() {
+            const keyword = document.getElementById('searchInput').value.toLowerCase();
+            currentFilter.search = keyword;
+            filterPatients();
+        }
+
+        // 筛选患者
+        function filterPatients() {
+            let filtered = patientData.filter(patient => {
+                // 搜索筛选
+                if (currentFilter.search) {
+                    const matchName = patient.name.toLowerCase().includes(currentFilter.search);
+                    const matchPhone = patient.phone.includes(currentFilter.search);
+                    const matchIdCard = patient.idCard.includes(currentFilter.search);
+                    if (!matchName && !matchPhone && !matchIdCard) return false;
+                }
+
+                // 病种筛选（或关系）
+                if (currentFilter.diseases.length > 0) {
+                    const hasDisease = patient.diseases.some(d => currentFilter.diseases.includes(d));
+                    if (!hasDisease) return false;
+                }
+
+                // 网格筛选
+                if (currentFilter.grids.length > 0) {
+                    if (!currentFilter.grids.includes(patient.grid)) return false;
+                }
+
+                return true;
+            });
+
+            renderPatientList(filtered);
+        }
+
+        // 显示病种筛选
+        function showDiseaseFilter() {
+            currentFilterType = 'disease';
+            document.getElementById('filterTitle').textContent = '选择待管病种';
+            
+            let html = `
+                <div class="filter-group">
+                    <div class="filter-group-title">病种（可多选）</div>
+                    <div class="filter-options">
+            `;
+            
+            diseaseOptions.forEach(disease => {
+                const selected = currentFilter.diseases.includes(disease) ? 'selected' : '';
+                html += `<div class="filter-option ${selected}" onclick="toggleDisease('${disease}')">${disease}</div>`;
+            });
+            
+            html += `</div></div>`;
+            document.getElementById('filterBody').innerHTML = html;
+            
+            document.getElementById('filterPopup').classList.add('show');
+        }
+
+        // 显示网格筛选
+        function showGridFilter() {
+            currentFilterType = 'grid';
+            document.getElementById('filterTitle').textContent = '选择归属网格';
+            
+            let html = `
+                <div class="filter-group">
+                    <div class="filter-group-title">归属网格（可多选）</div>
+                    <div class="filter-options">
+            `;
+            
+            gridOptions.forEach(grid => {
+                const selected = currentFilter.grids.includes(grid) ? 'selected' : '';
+                html += `<div class="filter-option ${selected}" onclick="toggleGrid('${grid}')">${grid}</div>`;
+            });
+            
+            html += `</div></div>`;
+            document.getElementById('filterBody').innerHTML = html;
+            
+            document.getElementById('filterPopup').classList.add('show');
+        }
+
+        // 切换病种选择
+        function toggleDisease(disease) {
+            const index = currentFilter.diseases.indexOf(disease);
+            if (index > -1) {
+                currentFilter.diseases.splice(index, 1);
+            } else {
+                currentFilter.diseases.push(disease);
+            }
+            showDiseaseFilter(); // 重新渲染
+        }
+
+        // 切换网格选择
+        function toggleGrid(grid) {
+            const index = currentFilter.grids.indexOf(grid);
+            if (index > -1) {
+                currentFilter.grids.splice(index, 1);
+            } else {
+                currentFilter.grids.push(grid);
+            }
+            showGridFilter(); // 重新渲染
+        }
+
+        // 关闭筛选弹窗
+        function closeFilterPopup() {
+            document.getElementById('filterPopup').classList.remove('show');
+        }
+
+        // 重置筛选
+        function resetFilter() {
+            if (currentFilterType === 'disease') {
+                currentFilter.diseases = [];
+                showDiseaseFilter();
+            } else if (currentFilterType === 'grid') {
+                currentFilter.grids = [];
+                showGridFilter();
+            }
+        }
+
+        // 确认筛选
+        function confirmFilter() {
+            closeFilterPopup();
+            filterPatients();
+            
+            // 更新筛选标签状态
+            const diseaseTag = document.getElementById('diseaseFilter');
+            const gridTag = document.getElementById('gridFilter');
+            
+            if (currentFilter.diseases.length > 0) {
+                diseaseTag.classList.add('active');
+                diseaseTag.querySelector('span').textContent = `病种(${currentFilter.diseases.length})`;
+            } else {
+                diseaseTag.classList.remove('active');
+                diseaseTag.querySelector('span').textContent = '待管病种';
+            }
+            
+            if (currentFilter.grids.length > 0) {
+                gridTag.classList.add('active');
+                gridTag.querySelector('span').textContent = `网格(${currentFilter.grids.length})`;
+            } else {
+                gridTag.classList.remove('active');
+                gridTag.querySelector('span').textContent = '归属网格';
+            }
+        }
+
+        // 呼叫患者
+        function callPatient(phone, name) {
+            showToast(`正在呼叫 ${name}: ${phone}`);
+            // 实际项目中使用: window.location.href = `tel:${phone}`;
+        }
+
+        // 查看健康画像
+        function viewHealthProfile(patientId) {
+            window.location.href = `patient-health-profile.html?id=${patientId}`;
+        }
+
+        // 查看待管详情
+        function viewPendingDetail(patientId) {
+            window.location.href = `pending-patient-detail.html?id=${patientId}`;
+        }
+
+        // 返回
+        function goBack() {
+            window.location.href = 'medical-staff-home.html';
+        }
+
+        // Toast提示
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // 点击遮罩关闭弹窗
+        document.getElementById('filterPopup').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('filterPopup')) {
+                closeFilterPopup();
+            }
+        });
+    </script>
+</body>
+</html>
