@@ -1094,7 +1094,11 @@
 
         function goBack() { history.back(); }
         function viewProfile() { showToast('敬请期待'); }
-        function sendMessage() { showToast('敬请期待'); }
+        function sendMessage() {
+            const name = patient ? patient.name : '张三';
+            const residentId = patient ? patient.id : 'default';
+            window.location.href = `patient-chat-session.html?residentId=${residentId}&name=${encodeURIComponent(name)}`;
+        }
 
         window.addEventListener('DOMContentLoaded', init);
     </script>

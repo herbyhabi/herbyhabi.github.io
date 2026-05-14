@@ -1232,7 +1232,9 @@ textarea {
 
         // 发送消息
         function sendMessage(id) {
-            window.location.href = `patient-direct-message.html?id=${id}`;
+            const name = patient ? patient.name : '张三';
+            const residentId = id || 'default';
+            window.location.href = `patient-chat-session.html?residentId=${residentId}&name=${encodeURIComponent(name)}`;
         }
 
         // 显示预约弹窗

@@ -23,9 +23,9 @@
         .back-btn { position: absolute; left: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; cursor: pointer; }
         
         /* 信息列表 */
-        .info-section { margin-top: 12px; }
-        .section-title { font-size: var(--font-size-caption); color: var(--text-3); padding: 12px 16px; }
-        .info-list { background: var(--bg-2); }
+        .info-section { margin: 12px 16px 0; }
+        .section-title { font-size: var(--font-size-caption); color: var(--text-3); padding: 12px 20px; }
+        .info-list { background: var(--bg-2); border-radius: var(--radius-large); overflow: hidden; }
         .info-item { display: flex; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--border); }
         .info-item:last-child { border-bottom: none; }
         .info-label { font-size: var(--font-size-body-1); color: var(--text-1); width: 100px; flex-shrink: 0; }
@@ -33,10 +33,10 @@
         .info-value.editable { color: var(--arcoblue-6); display: flex; align-items: center; justify-content: flex-end; gap: 8px; cursor: pointer; }
         .info-avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--arcoblue-1); display: flex; align-items: center; justify-content: center; font-size: 24px; color: var(--arcoblue-6); }
         .info-arrow { color: var(--text-4); font-size: 14px; }
-        
+
         /* 第三方应用 */
-        .app-section { margin-top: 12px; }
-        .app-item { display: flex; align-items: center; padding: 16px 20px; background: var(--bg-2); }
+        .app-section { margin: 12px 16px 0; }
+        .app-item { display: flex; align-items: center; padding: 16px 20px; background: var(--bg-2); border-radius: var(--radius-large); }
         .app-icon { width: 40px; height: 40px; border-radius: var(--radius-medium); background: #07C160; display: flex; align-items: center; justify-content: center; font-size: 20px; color: white; margin-right: 12px; }
         .app-info { flex: 1; }
         .app-name { font-size: var(--font-size-body-1); color: var(--text-1); margin-bottom: 2px; }
@@ -374,7 +374,7 @@ textarea {
             <div class="info-item">
                 <span class="info-label">头像</span>
                 <div class="info-value">
-                    <div class="info-avatar">
+                    <div class="info-avatar" style="margin-left: auto;">
                         <i class="fas fa-user-md"></i>
                     </div>
                 </div>
@@ -395,14 +395,12 @@ textarea {
 
     <!-- 第三方应用 -->
     <div class="app-section">
-        <div class="section-title">第三方应用</div>
         <div class="app-item" onclick="handleWechatWork()">
             <div class="app-icon">
                 <i class="fas fa-comment"></i>
             </div>
             <div class="app-info">
                 <div class="app-name">企业微信</div>
-                <div class="app-desc">绑定后可接收企业微信消息通知</div>
             </div>
             <span class="app-status" id="wechatStatus">未绑定</span>
             <i class="fas fa-chevron-right app-arrow"></i>

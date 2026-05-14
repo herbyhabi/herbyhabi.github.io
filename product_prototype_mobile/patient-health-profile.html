@@ -5,429 +5,1230 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>健康画像</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/@arco-design/mobile-react/dist/arco.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --arcoblue-6: #165DFF;
-            --arcoblue-1: #E8F3FF;
-            --text-1: #1D2129;
-            --text-2: #4E5969;
-            --text-3: #86909C;
-            --bg-1: #F2F3F5;
-            --bg-2: #FFFFFF;
-            --border: #E5E6EB;
-            --radius-medium: 8px;
-            --radius-large: 12px;
-            --font-size-body-1: 14px;
-            --font-size-title-1: 16px;
-            --font-size-title-2: 18px;
+            --blue: #2f7af6;
+            --blue-soft: #eaf3ff;
+            --green: #13b66b;
+            --green-soft: #eafaf2;
+            --orange: #ff8a00;
+            --orange-soft: #fff4e2;
+            --red: #f53f3f;
+            --red-soft: #fff0f0;
+            --purple: #7655ff;
+            --text-1: #142033;
+            --text-2: #4f6074;
+            --text-3: #8a96a8;
+            --line: rgba(116, 137, 164, 0.16);
+            --card: rgba(255, 255, 255, 0.94);
+            --shadow: 0 12px 32px rgba(60, 101, 145, 0.12);
         }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-            background-color: var(--bg-1);
-            color: var(--text-1);
             min-height: 100vh;
+            padding-bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+            color: var(--text-1);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+            background:
+                radial-gradient(circle at 82% 2%, rgba(181, 213, 255, 0.8) 0 110px, transparent 220px),
+                linear-gradient(180deg, #d9ebff 0%, #f4faff 28%, #f7fbff 68%, #ffffff 100%);
+            -webkit-font-smoothing: antialiased;
         }
-
         .navbar {
-            background: linear-gradient(135deg, var(--arcoblue-6) 0%, #4080FF 100%);
-            padding: 44px 16px 16px;
             position: sticky;
             top: 0;
             z-index: 100;
+            min-height: 92px;
+            padding: 44px 16px 12px;
+            overflow: hidden;
+            background: rgba(217, 235, 255, 0.82);
+            border-bottom: 1px solid rgba(118, 140, 165, 0.12);
+            box-shadow: 0 10px 26px rgba(60, 101, 145, 0.08);
+            backdrop-filter: blur(14px);
         }
-
+        .navbar::before {
+            content: "";
+            position: absolute;
+            top: -58px;
+            right: -34px;
+            width: 170px;
+            height: 150px;
+            border-radius: 34px;
+            background: linear-gradient(135deg, rgba(67, 142, 255, 0.2), rgba(255, 255, 255, 0.06));
+            transform: rotate(-12deg);
+            pointer-events: none;
+        }
         .navbar-content {
+            position: relative;
             display: flex;
             align-items: center;
-            gap: 12px;
+            justify-content: center;
+            min-height: 36px;
+            z-index: 1;
         }
-
-        .back-btn {
+        .navbar-title {
+            width: calc(100% - 128px);
+            text-align: center;
+            font-size: 18px;
+            font-weight: 800;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .back-btn,
+        .more-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
             width: 36px;
             height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            border: 0;
+            background: transparent;
+            color: var(--text-1);
             font-size: 18px;
             cursor: pointer;
-            border-radius: var(--radius-medium);
         }
-
-        .navbar-title {
+        .back-btn { left: 0; }
+        .more-btn { right: 0; }
+        .page { padding: 12px 12px 0; }
+        .profile-hero,
+        .section-card {
+            background: var(--card);
+            border: 1px solid rgba(123, 147, 176, 0.14);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(12px);
+        }
+        .profile-hero { padding: 14px; }
+        .patient-top { display: flex; gap: 9px; align-items: flex-start; }
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            flex: 0 0 auto;
+            overflow: hidden;
+            background: linear-gradient(145deg, #d8ecff, #ffffff);
+            border: 2px solid rgba(255, 255, 255, 0.88);
+        }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .patient-main { flex: 1; min-width: 0; }
+        .name-row { display: flex; align-items: center; gap: 7px; margin-bottom: 6px; }
+        .patient-name { font-size: 17px; font-weight: 800; }
+        .meta { color: var(--text-2); font-size: 12px; }
+        .self-badge {
+            padding: 2px 7px;
+            border-radius: 999px;
+            background: var(--blue-soft);
+            color: var(--blue);
+            font-size: 11px;
+            font-weight: 800;
+        }
+        .edit-link {
+            margin-left: auto;
+            border: 0;
+            background: transparent;
+            color: var(--text-2);
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 7px 12px;
+            margin-top: 4px;
+            color: var(--text-2);
+            font-size: 12px;
+            line-height: 1.35;
+        }
+        .info-item { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .info-item.full { grid-column: 1 / -1; }
+        .info-item strong { color: var(--text-1); font-weight: 700; }
+        .phone-link { color: var(--blue); text-decoration: none; margin-left: 6px; }
+        .phone-link i { font-size: 11px; }
+        .address-row { margin: 6px 0 4px; color: var(--text-2); font-size: 12px; }
+        .manage-strip {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid var(--line);
+            color: var(--text-3);
+            font-size: 12px;
+        }
+        .manage-strip .status-item {
             flex: 1;
-            font-size: var(--font-size-title-2);
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        .manage-strip strong {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: var(--text-2);
+            font-weight: 800;
+        }
+        .manage-strip strong.red { color: var(--red); }
+        .manage-strip strong.green { color: var(--green); }
+        .tag-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--line);
+        }
+        .tags {
+            flex: 1;
+            display: flex;
+            gap: 6px;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .tags.expanded { flex-wrap: wrap; white-space: normal; overflow: visible; }
+        .tag {
+            flex: 0 0 auto;
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: #f4f7fb;
+            color: var(--text-2);
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .tag.source { background: #fff7e8; color: #c66a00; }
+        .tag.add { background: var(--blue-soft); color: var(--blue); border: 0; cursor: pointer; }
+        .expand-tags {
+            flex: 0 0 auto;
+            border: 0;
+            background: transparent;
+            color: var(--blue);
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+        .label { color: var(--text-3); font-size: 12px; margin-bottom: 5px; }
+        .value { color: var(--text-1); font-size: 14px; font-weight: 800; }
+        .value.red { color: var(--red); }
+        .value.orange { color: var(--orange); }
+        .value.green { color: var(--green); }
+        .tabs {
+            position: sticky;
+            top: 92px;
+            z-index: 80;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            margin: 10px -12px 0;
+            padding: 0 12px;
+            background: rgba(246, 251, 255, 0.84);
+            border-bottom: 1px solid rgba(118, 140, 165, 0.16);
+            backdrop-filter: blur(10px);
+        }
+        .tab {
+            position: relative;
+            height: 44px;
+            border: 0;
+            background: transparent;
+            color: var(--text-2);
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .tab.active { color: var(--blue); }
+        .tab.active::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            width: 34px;
+            height: 3px;
+            transform: translateX(-50%);
+            background: var(--blue);
+            border-radius: 999px;
+        }
+        .panel { display: none; padding-top: 10px; }
+        .panel.active { display: block; }
+        .section-card { padding: 14px; margin-bottom: 10px; }
+        .section-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .section-title { font-size: 15px; font-weight: 900; }
+        .section-title .hint {
+            margin-left: 8px;
+            color: var(--text-3);
+            font-size: 11px;
             font-weight: 600;
-            color: white;
         }
-
-        .content {
-            padding: 20px;
-            text-align: center;
+        .section-action {
+            border: 0;
+            background: transparent;
+            color: var(--text-3);
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
         }
-
-        .placeholder-icon {
-            width: 100px;
-            height: 100px;
-            background: var(--arcoblue-1);
+        .indicator-scroll {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: calc((100% - 16px) / 3);
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 2px;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+        }
+        .indicator-scroll::-webkit-scrollbar { display: none; }
+        .metric-card {
+            min-height: 134px;
+            padding: 10px 8px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: linear-gradient(180deg, #ffffff, #f8fbff);
+            min-width: 0;
+            scroll-snap-align: start;
+        }
+        .metric-name { color: var(--text-2); font-size: 11px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .metric-reading {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 4px;
+            margin-top: 9px;
+        }
+        .metric-value-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .metric-value {
+            min-width: 0;
+            font-size: 20px;
+            font-weight: 900;
+            letter-spacing: 0;
+            line-height: 1.05;
+            white-space: nowrap;
+        }
+        .metric-unit {
+            display: block;
+            margin-top: 2px;
+            color: var(--text-3);
+            font-size: 9px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .metric-status {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 5px;
+            border-radius: 5px;
+            font-size: 10px;
+            font-weight: 900;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .metric-status.red { background: var(--red-soft); color: var(--red); }
+        .metric-status.green { background: var(--green-soft); color: var(--green); }
+        .metric-range { margin-top: 6px; color: var(--text-3); font-size: 10px; line-height: 1.25; }
+        .sparkline { width: 100%; height: 28px; margin-top: 8px; }
+        .sparkline path { fill: none; stroke-width: 2.2; stroke-linecap: round; }
+        .risk-grid,
+        .risk-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+        .risk-list .mini-card { padding: 11px 12px; }
+        .risk-list .mini-row { min-height: 32px; }
+        .risk-list .mini-value {
+            flex: 0 0 auto;
+            margin-top: 0;
+            font-size: 13px;
+        }
+        .risk-list .mini-desc {
+            margin: 4px 0 0 36px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .mini-card {
+            padding: 12px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: linear-gradient(180deg, #ffffff, #f8fbff);
+            cursor: pointer;
+        }
+        .mini-row { display: flex; align-items: center; gap: 8px; }
+        .mini-icon {
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 60px auto 20px;
+            font-size: 13px;
         }
-
-        .placeholder-icon i {
-            font-size: 48px;
-            color: var(--arcoblue-6);
+        .mini-icon.red { background: var(--red-soft); color: var(--red); }
+        .mini-icon.blue { background: var(--blue-soft); color: var(--blue); }
+        .mini-title { flex: 1; min-width: 0; font-size: 12px; font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .mini-value { margin-top: 9px; font-size: 13px; font-weight: 900; }
+        .mini-value.green { color: var(--green); }
+        .mini-value.orange { color: var(--orange); }
+        .mini-desc { margin-top: 5px; color: var(--text-3); font-size: 11px; line-height: 1.35; }
+        .list { border-top: 1px solid var(--line); }
+        .list-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-height: 42px;
+            border-bottom: 1px solid var(--line);
+            color: var(--text-2);
+            font-size: 13px;
         }
-
-        .placeholder-title {
-            font-size: var(--font-size-title-1);
-            font-weight: 600;
+        .list-row:last-child { border-bottom: 0; }
+        .list-row .name { flex: 1; min-width: 0; color: var(--text-1); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .list-row .dose,
+        .list-row .freq { min-width: 58px; text-align: right; }
+        .list-row i { color: var(--text-3); font-size: 11px; }
+        .adherence { color: var(--green); font-size: 12px; font-weight: 900; }
+        .timeline-dynamic {
+            padding: 10px 12px;
+            border-radius: 12px;
+            background: #f7faff;
+            color: var(--text-2);
+            font-size: 13px;
+            line-height: 1.45;
+        }
+        .dynamic-type { color: var(--blue); font-weight: 900; }
+        .record-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+        .record-grid-3col { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+        @media (max-width: 360px) {
+            .record-grid-3col { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        .record-item {
+            min-height: 92px;
+            padding: 10px 8px;
+            border-radius: 12px;
+            background: linear-gradient(180deg, #ffffff, #f7faff);
+            border: 1px solid var(--line);
+        }
+        .record-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: var(--blue-soft);
+            color: var(--blue);
+            font-size: 12px;
+            flex: 0 0 auto;
+        }
+        .record-main {
+            display: flex;
+            align-items: center;
+            gap: 7px;
             margin-bottom: 8px;
         }
-
-        .placeholder-desc {
-            font-size: var(--font-size-body-1);
-            color: var(--text-3);
+        .record-title {
+            min-width: 0;
+            color: var(--text-1);
+            font-size: 12px;
+            font-weight: 900;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
-/* 首页风格统一覆盖 */
-body {
-    color: #0f1f33;
-    background:
-        radial-gradient(circle at 82% 2%, rgba(181, 213, 255, 0.8) 0 110px, transparent 220px),
-        linear-gradient(180deg, #d9ebff 0%, #f4faff 28%, #f7fbff 68%, #ffffff 100%) !important;
-    -webkit-font-smoothing: antialiased;
-}
-
-.navbar {
-    position: sticky;
-    top: 0;
-    overflow: hidden;
-    background: rgba(217, 235, 255, 0.82) !important;
-    border-bottom: 1px solid rgba(118, 140, 165, 0.12);
-    box-shadow: 0 10px 26px rgba(60, 101, 145, 0.08);
-    backdrop-filter: blur(14px);
-}
-
-.navbar::before {
-    content: "";
-    position: absolute;
-    top: -58px;
-    right: -34px;
-    width: 170px;
-    height: 150px;
-    border-radius: 34px;
-    background: linear-gradient(135deg, rgba(67, 142, 255, 0.2), rgba(255, 255, 255, 0.06));
-    transform: rotate(-12deg);
-    pointer-events: none;
-}
-
-.navbar-content,
-.navbar-title,
-.back-btn,
-.search-btn,
-.navbar-count {
-    position: relative;
-    z-index: 1;
-}
-
-.navbar-title,
-.back-btn,
-.search-btn,
-.navbar-count {
-    color: #0f1f33 !important;
-}
-
-.navbar-title {
-    font-weight: 800 !important;
-}
-
-.tabs,
-.search-section,
-.stats-bar,
-.page-container,
-.session-list,
-.system-list {
-    background: transparent !important;
-}
-
-.tab-item.active {
-    color: #2f7af6 !important;
-}
-
-.tab-item.active::after {
-    background: #2f7af6 !important;
-}
-
-.patient-card,
-.user-card,
-.org-card,
-.menu-list,
-.info-card,
-.detail-card,
-.record-card,
-.task-card,
-.anomaly-card,
-.form-card,
-.card,
-.section-card,
-.profile-card,
-.health-card,
-.content-card,
-.result-item,
-.empty-icon,
-.modal-content {
-    background: rgba(255, 255, 255, 0.92) !important;
-    border: 1px solid rgba(123, 147, 176, 0.14) !important;
-    border-radius: 16px !important;
-    box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12) !important;
-    backdrop-filter: blur(12px);
-}
-
-.session-item,
-.system-item,
-.menu-item,
-.list-item,
-.record-item,
-.info-row {
-    border-color: rgba(119, 140, 166, 0.18) !important;
-}
-
-.search-box,
-.search-input-wrapper,
-input,
-select,
-textarea {
-    border-color: rgba(122, 150, 184, 0.13) !important;
-    box-shadow: inset 0 0 0 1px rgba(122, 150, 184, 0.08);
-}
-
-.action-btn.primary,
-.submit-btn,
-.filter-btn.confirm,
-.modal-btn.confirm,
-.login-btn,
-.code-btn:not(:disabled) {
-    background: linear-gradient(145deg, #4b9bff, #2f7af6) !important;
-    color: #fff !important;
-    border: 0 !important;
-    box-shadow: 0 8px 16px rgba(45, 101, 170, 0.13);
-}
-
-.action-btn,
-.filter-btn.reset,
-.modal-btn.cancel,
-.popup-option,
-.phone-btn,
-.call-btn {
-    border-color: rgba(123, 147, 176, 0.14) !important;
-}
-
-.toast,
-.arco-toast {
-    background: rgba(12, 20, 34, 0.82) !important;
-    border-radius: 8px !important;
-}
-/* 首页风格补充覆盖 */
-.info-section,
-.info-list,
-.app-section,
-.form-section,
-.form-item,
-.filter-section,
-.disease-card,
-.indicator-item,
-.quick-action-item {
-    background: rgba(255, 255, 255, 0.92) !important;
-    border: 1px solid rgba(123, 147, 176, 0.14) !important;
-    border-radius: 16px !important;
-    box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12) !important;
-    backdrop-filter: blur(12px);
-}
-
-.patient-list,
-.task-list,
-.record-list,
-.search-results {
-    position: relative;
-    z-index: 1;
-}
-
-.action-btn,
-.submit-btn,
-.code-btn,
-.filter-btn,
-.modal-btn,
-.phone-btn,
-.call-btn {
-    border-radius: 10px !important;
-    font-weight: 700;
-}
-
-.navbar + .tabs,
-.tabs {
-    border-bottom-color: rgba(118, 140, 165, 0.16) !important;
-    backdrop-filter: blur(10px);
-}
-
-
-/* 全局顶部与查询框统一 */
-.navbar {
-    position: sticky !important;
-    top: 0 !important;
-    min-height: 92px;
-    padding: 44px 16px 12px !important;
-    z-index: 100 !important;
-}
-
-.navbar-content {
-    position: relative !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    min-height: 36px;
-    padding-bottom: 0 !important;
-}
-
-.navbar-content .back-btn {
-    position: absolute !important;
-    left: 0 !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    margin: 0 !important;
-    z-index: 2 !important;
-}
-
-.navbar > .back-btn {
-    position: absolute !important;
-    left: 16px !important;
-    bottom: 12px !important;
-    margin: 0 !important;
-    z-index: 2 !important;
-}
-
-.navbar-title,
-.navbar-content .navbar-title,
-.navbar > .navbar-title {
-    position: absolute !important;
-    left: 50% !important;
-    top: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    width: calc(100% - 128px) !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    text-align: center !important;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    pointer-events: none;
-    z-index: 1 !important;
-}
-
-.navbar > .navbar-title {
-    top: auto !important;
-    bottom: 19px !important;
-    transform: translateX(-50%) !important;
-}
-
-.search-btn,
-.navbar-count {
-    position: absolute !important;
-    right: 0 !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    margin: 0 !important;
-    z-index: 2 !important;
-}
-
-.navbar > .search-btn,
-.navbar > .navbar-count {
-    right: 16px !important;
-    top: auto !important;
-    bottom: 12px !important;
-    transform: none !important;
-}
-
-.search-section,
-.filter-section,
-.search-header {
-    background: transparent !important;
-}
-
-.search-box,
-.search-input-wrapper {
-    min-height: 52px !important;
-    height: 52px !important;
-    border: 0 !important;
-    border-radius: 24px !important;
-    background: rgba(255, 255, 255, 0.96) !important;
-    box-shadow: inset 0 0 0 1px rgba(122, 150, 184, 0.13), 0 10px 28px rgba(85, 127, 174, 0.1) !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 13px !important;
-    padding: 0 20px !important;
-}
-
-.search-box i,
-.search-input-wrapper i {
-    color: #5f6d7d !important;
-    font-size: 20px !important;
-    flex: 0 0 auto;
-}
-
-.search-box input,
-.search-input-wrapper input {
-    width: 100% !important;
-    flex: 1 1 auto !important;
-    min-width: 0;
-    border: 0 !important;
-    outline: 0 !important;
-    color: #29384b !important;
-    font-size: 16px !important;
-    background: transparent !important;
-    box-shadow: none !important;
-    font-family: var(--font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif) !important;
-}
-
-.search-box input::placeholder,
-.search-input-wrapper input::placeholder {
-    color: #a0a8b1 !important;
-}
-
+        .record-date,
+        .record-desc { color: var(--text-2); font-size: 11px; line-height: 1.35; }
+        .abnormal-row {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            min-height: 42px;
+            padding: 8px 0;
+            border-top: 1px solid var(--line);
+            cursor: pointer;
+        }
+        .abnormal-row:first-of-type { border-top: 0; }
+        .warn-icon {
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 7px;
+            background: var(--red-soft);
+            color: var(--red);
+            font-size: 11px;
+            flex: 0 0 auto;
+        }
+        .abnormal-text { flex: 1; min-width: 0; color: var(--text-1); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .date { color: var(--text-3); font-size: 11px; }
+        .badge-count {
+            display: inline-flex;
+            min-width: 16px;
+            height: 16px;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5px;
+            margin-left: 4px;
+            border-radius: 999px;
+            background: var(--red);
+            color: #fff;
+            font-size: 10px;
+            vertical-align: 1px;
+        }
+        .service-table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow: hidden;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+        .service-table th,
+        .service-table td {
+            padding: 10px 8px;
+            border-bottom: 1px solid var(--line);
+            text-align: left;
+        }
+        .service-table th { color: var(--text-3); font-weight: 800; background: #f7faff; }
+        .service-table td { color: var(--text-2); }
+        .service-table tr:last-child td { border-bottom: 0; }
+        .package-tabs {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: minmax(138px, 46%);
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 2px;
+            margin-bottom: 12px;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+        }
+        .package-tabs::-webkit-scrollbar { display: none; }
+        .package-tab {
+            min-height: 72px;
+            padding: 11px 12px;
+            border: 1px solid var(--line);
+            border-radius: 13px;
+            background: linear-gradient(180deg, #ffffff, #f8fbff);
+            color: var(--text-2);
+            text-align: left;
+            cursor: pointer;
+            scroll-snap-align: start;
+        }
+        .package-tab.active {
+            border-color: rgba(47, 122, 246, 0.45);
+            background: linear-gradient(180deg, #eef6ff, #ffffff);
+            box-shadow: inset 0 0 0 1px rgba(47, 122, 246, 0.18);
+        }
+        .package-name {
+            color: var(--text-1);
+            font-size: 13px;
+            font-weight: 900;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .package-meta {
+            margin-top: 7px;
+            color: var(--text-3);
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .service-package-panel { display: none; }
+        .service-package-panel.active { display: block; }
+        .freq-tag {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 22px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: var(--blue-soft);
+            color: var(--blue);
+            font-size: 11px;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+        .freq-tag.green { background: var(--green-soft); color: var(--green); }
+        .freq-tag.orange { background: var(--orange-soft); color: var(--orange); }
+        .check-plan { margin-top: 14px; }
+        .plan-stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .plan-stat {
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #fff;
+            text-align: center;
+        }
+        .plan-stat .num {
+            padding: 9px 2px 7px;
+            color: var(--text-1);
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 1;
+        }
+        .plan-stat .period {
+            padding: 7px 2px;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+        .plan-stat.month { background: #eafff6; border-color: #c8f2df; }
+        .plan-stat.quarter,
+        .plan-stat.half { background: #fff8e9; border-color: #f6e8c5; }
+        .plan-stat.year { background: #f7f8fa; border-color: #e4e8ed; }
+        .plan-stat.month .period { background: #45d59a; }
+        .plan-stat.quarter .period,
+        .plan-stat.half .period { background: #ffc13d; }
+        .plan-stat.year .period { background: #e9edf2; color: #8792a1; }
+        .plan-table {
+            display: grid;
+            grid-template-columns: minmax(118px, 1.7fr) repeat(4, minmax(44px, 1fr));
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: #fff;
+        }
+        .plan-cell {
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 6px;
+            border-right: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+            color: var(--text-2);
+            font-size: 12px;
+            font-weight: 800;
+            text-align: center;
+        }
+        .plan-cell:nth-child(5n) { border-right: 0; }
+        .plan-cell:nth-last-child(-n + 5) { border-bottom: 0; }
+        .plan-head {
+            min-height: 46px;
+            color: var(--text-3);
+            font-size: 13px;
+            background: #fbfcff;
+        }
+        .plan-item-name {
+            justify-content: center;
+            color: var(--text-1);
+            line-height: 1.35;
+        }
+        .plan-item-name span {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .check-dot {
+            width: 22px;
+            height: 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #d7dee2;
+            color: #fff;
+            font-size: 12px;
+        }
+        .check-dot.done { background: #2f8ff0; }
+        .dash { color: var(--text-2); font-size: 16px; font-weight: 900; }
+        .empty {
+            padding: 18px 12px;
+            text-align: center;
+            color: var(--text-3);
+            font-size: 13px;
+        }
+        [hidden] { display: none !important; }
+        .toast {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            z-index: 1000;
+            transform: translate(-50%, -50%);
+            padding: 12px 22px;
+            border-radius: 8px;
+            background: rgba(12, 20, 34, 0.82);
+            color: #fff;
+            font-size: 14px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+        .toast.show { opacity: 1; }
+        .modal-mask {
+            position: fixed;
+            inset: 0;
+            z-index: 900;
+            display: none;
+            align-items: flex-end;
+            background: rgba(14, 25, 42, 0.38);
+        }
+        .modal-mask.show { display: flex; }
+        .modal {
+            width: 100%;
+            max-height: 72vh;
+            padding: 16px;
+            overflow: auto;
+            border-radius: 20px 20px 0 0;
+            background: #fff;
+        }
+        .modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+        .modal-title { font-size: 16px; font-weight: 900; }
+        .modal-close { border: 0; background: transparent; color: var(--text-2); font-size: 18px; }
+        .system-group { padding: 12px 0; border-top: 1px solid var(--line); }
+        .system-group:first-of-type { border-top: 0; }
+        .system-name { font-size: 14px; font-weight: 900; margin-bottom: 8px; }
+        .complication { color: var(--text-2); font-size: 13px; line-height: 1.6; }
+        @media (max-width: 360px) {
+            .risk-list,
+            .risk-grid,
+            .record-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .indicator-scroll { grid-auto-columns: calc((100% - 16px) / 3); }
+            .metric-value { font-size: 18px; }
+            .plan-stats { gap: 6px; }
+            .plan-stat .num { font-size: 17px; }
+            .plan-stat .period { font-size: 11px; }
+            .plan-table { grid-template-columns: minmax(104px, 1.6fr) repeat(4, minmax(38px, 1fr)); }
+            .plan-cell { padding: 7px 4px; font-size: 11px; }
+        }
     </style>
 </head>
 <body>
+    <div class="toast" id="toast"></div>
     <nav class="navbar">
         <div class="navbar-content">
-            <div class="back-btn" onclick="goBack()">
-                <i class="fas fa-chevron-left"></i>
-            </div>
+            <button class="back-btn" type="button" onclick="goBack()"><i class="fas fa-chevron-left"></i></button>
             <div class="navbar-title">健康画像</div>
+            <!-- <button class="more-btn" type="button" onclick="showToast('更多操作')"><i class="fas fa-ellipsis"></i></button> -->
         </div>
     </nav>
 
-    <div class="content">
-        <div class="placeholder-icon">
-            <i class="fas fa-user-md"></i>
+    <main class="page">
+        <section class="profile-hero">
+            <div class="patient-top">
+                <div class="avatar">
+                    <img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&w=160&q=80" alt="居民头像">
+                </div>
+                <div class="patient-main">
+                    <div class="name-row">
+                        <span class="patient-name">张建国</span>
+                        <span class="meta">男</span>
+                        <span class="meta">67岁</span>
+                        <span class="self-badge">老</span><span class="self-badge">高</span><span class="self-badge">糖</span><span class="self-badge">低</span>
+                        <button class="edit-link" type="button" data-workspace="operation" onclick="editInfo()" hidden>编辑信息 ></button>
+                    </div>
+                    
+                    <div class="info-grid">
+                        <div class="info-item">联系号码：13811115678<a href="tel:13812345678" class="phone-link"><i class="fas fa-phone"></i></a></div>
+                        <div class="info-item">归属网格：滨海网格</div>
+                        <div class="info-item">基层在管：高,糖,肺</div>
+                        <div class="info-item">医院在管：高,糖</div>
+                        <div class="info-item full">居住地址：浙江省杭州市余杭区闲林街道海滨南路88号</div>
+                    </div>
+                </div>
+            </div>
+            <div class="tag-row">
+                <div class="tags" id="tags">
+                    <span class="tag source">有赞助手-高意向</span>
+                    <span class="tag">糖尿病</span>
+                    <span class="tag">高血压</span>
+                    <span class="tag">低盐饮食</span>
+                    <span class="tag">独居</span>
+                    <button class="tag add" type="button" onclick="showToast('添加居民标签')">+ 添加</button>
+                </div>
+                <button class="expand-tags" type="button" onclick="toggleTags(event)">全部</button>
+            </div>
+            <div class="manage-strip">
+                <div class="status-item">综合管理 <strong class="red">强化管理</strong></div>
+                <div class="status-item">当前状态 <strong class="green">在管</strong></div>
+            </div>
+            <div class="mini-card" data-workspace="operation" style="margin-top:10px" hidden>
+                <div class="mini-row">
+                    <span class="mini-icon blue"><i class="fas fa-address-card"></i></span>
+                    <span class="mini-title">客户名片</span>
+                    <span class="value green" style="font-size:12px">稳定复购</span>
+                </div>
+                <div class="mini-desc">当前阶段：慢病管理服务期｜客户来源：有赞助手</div>
+            </div>
+        </section>
+
+        <section class="section-card" style="margin-top:10px">
+            <div class="section-head">
+                <div class="section-title">异常提醒<span class="badge-count">12</span></div>
+                <button class="section-action" type="button" onclick="goAbnormalDetail()">查看更多 ></button>
+            </div>
+            <div class="abnormal-row" onclick="goAbnormalDetail()">
+                <span class="warn-icon"><i class="fas fa-triangle-exclamation"></i></span>
+                <span class="abnormal-text">越级就诊「临海市第一人民医院」</span>
+                <span class="date">05-15</span>
+                <i class="fas fa-chevron-right date"></i>
+            </div>
+            <div class="abnormal-row" onclick="goAbnormalDetail()">
+                <span class="warn-icon"><i class="fas fa-triangle-exclamation"></i></span>
+                <span class="abnormal-text">空腹血糖 8.6mmol/L</span>
+                <span class="date">05-10</span>
+                <i class="fas fa-chevron-right date"></i>
+            </div>
+            <!-- <div class="abnormal-row" onclick="goAbnormalDetail()">
+                <span class="warn-icon"><i class="fas fa-triangle-exclamation"></i></span>
+                <span class="abnormal-text">2026-05-04未到院复诊</span>
+                <span class="date">05-04</span>
+                <i class="fas fa-chevron-right date"></i>
+            </div> -->
+        </section>
+
+        <div class="tabs">
+            <button class="tab active" type="button" data-tab="control">健康动态</button>
+            <button class="tab" type="button" data-tab="service">服务管理</button>
+            <button class="tab" type="button" data-tab="behavior">行为依从</button>
+            <button class="tab" type="button" data-tab="timeline">时间轴</button>
         </div>
-        <div class="placeholder-title">健康画像</div>
-        <div class="placeholder-desc">功能开发中，敬请期待...</div>
+
+        <section class="panel active" id="control">
+            <div class="section-card">
+                <div class="section-head">
+                    <div class="section-title">核心指标<span class="hint">可左右滑动查看</span></div>
+                </div>
+                <div class="indicator-scroll">
+                    <div class="metric-card">
+                        <div class="metric-name">收缩压</div>
+                        <div class="metric-reading">
+                            <div class="metric-value-group">
+                                <span class="metric-value">142</span>
+                                <span class="metric-unit">mmHg</span>
+                            </div>
+                            <span class="metric-status red">偏高</span>
+                        </div>
+                        <div class="metric-range">目标：&lt;130</div>
+                        <svg class="sparkline" viewBox="0 0 92 28"><path d="M2 23 C12 20,16 7,25 15 S42 19,50 14 S66 18,74 12 S84 13,90 7" stroke="#f53f3f"/></svg>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-name">舒张压</div>
+                        <div class="metric-reading">
+                            <div class="metric-value-group">
+                                <span class="metric-value">88</span>
+                                <span class="metric-unit">mmHg</span>
+                            </div>
+                            <span class="metric-status red">偏高</span>
+                        </div>
+                        <div class="metric-range">目标：&lt;80</div>
+                        <svg class="sparkline" viewBox="0 0 92 28"><path d="M2 19 C12 16,21 18,31 12 S49 16,58 13 S72 17,90 9" stroke="#f53f3f"/></svg>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-name">空腹血糖</div>
+                        <div class="metric-reading">
+                            <div class="metric-value-group">
+                                <span class="metric-value">8.2</span>
+                                <span class="metric-unit">mmol/L</span>
+                            </div>
+                            <span class="metric-status red">偏高</span>
+                        </div>
+                        <div class="metric-range">目标：4.4-7.0</div>
+                        <svg class="sparkline" viewBox="0 0 92 28"><path d="M2 22 C12 18,14 10,24 16 S40 20,48 13 S62 17,70 11 S82 14,90 6" stroke="#f53f3f"/></svg>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-name">餐后血糖</div>
+                        <div class="metric-reading">
+                            <div class="metric-value-group">
+                                <span class="metric-value">10.6</span>
+                                <span class="metric-unit">mmol/L</span>
+                            </div>
+                            <span class="metric-status red">偏高</span>
+                        </div>
+                        <div class="metric-range">目标：&lt;10.0</div>
+                        <svg class="sparkline" viewBox="0 0 92 28"><path d="M2 21 C12 16,20 11,30 18 S46 14,56 10 S70 18,90 7" stroke="#f53f3f"/></svg>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-name">糖化血红蛋白</div>
+                        <div class="metric-reading">
+                            <div class="metric-value-group">
+                                <span class="metric-value">7.9</span>
+                                <span class="metric-unit">%</span>
+                            </div>
+                            <span class="metric-status red">偏高</span>
+                        </div>
+                        <div class="metric-range">目标：&lt;7.0%</div>
+                        <svg class="sparkline" viewBox="0 0 92 28"><path d="M2 15 C12 8,20 18,30 13 S48 12,56 18 S70 17,78 12 S86 9,90 6" stroke="#f53f3f"/></svg>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-name">体重</div>
+                        <div class="metric-reading">
+                            <div class="metric-value-group">
+                                <span class="metric-value">76.5</span>
+                                <span class="metric-unit">kg</span>
+                            </div>
+                            <span class="metric-status green">正常</span>
+                        </div>
+                        <div class="metric-range">目标：-</div>
+                        <svg class="sparkline" viewBox="0 0 92 28"><path d="M2 20 C14 19,24 17,34 18 S50 15,58 16 S74 10,90 11" stroke="#13b66b"/></svg>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-name">腰围</div>
+                        <div class="metric-reading">
+                            <div class="metric-value-group">
+                                <span class="metric-value">91</span>
+                                <span class="metric-unit">cm</span>
+                            </div>
+                            <span class="metric-status red">偏高</span>
+                        </div>
+                        <div class="metric-range">目标：&lt;90</div>
+                        <svg class="sparkline" viewBox="0 0 92 28"><path d="M2 18 C16 17,24 15,34 16 S52 12,62 14 S78 10,90 9" stroke="#f53f3f"/></svg>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-name">低密度脂蛋白</div>
+                        <div class="metric-reading">
+                            <div class="metric-value-group">
+                                <span class="metric-value">3.6</span>
+                                <span class="metric-unit">mmol/L</span>
+                            </div>
+                            <span class="metric-status red">偏高</span>
+                        </div>
+                        <div class="metric-range">目标：&lt;2.6</div>
+                        <svg class="sparkline" viewBox="0 0 92 28"><path d="M2 18 C14 12,22 15,32 10 S48 17,58 12 S72 16,90 8" stroke="#f53f3f"/></svg>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-name">血尿酸</div>
+                        <div class="metric-reading">
+                            <div class="metric-value-group">
+                                <span class="metric-value">420</span>
+                                <span class="metric-unit">umol/L</span>
+                            </div>
+                            <span class="metric-status red">偏高</span>
+                        </div>
+                        <div class="metric-range">目标：&lt;420</div>
+                        <svg class="sparkline" viewBox="0 0 92 28"><path d="M2 19 C13 21,22 14,32 16 S49 11,58 13 S72 9,90 8" stroke="#f53f3f"/></svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-head">
+                    <div class="section-title">风险评估</div>
+                </div>
+                <div class="risk-list">
+                    <div class="mini-card" onclick="showToast('进入 ASCVD 评估详情')">
+                        <div class="mini-row">
+                            <span class="mini-icon red"><i class="fas fa-heart-pulse"></i></span>
+                            <span class="mini-title">心血管风险</span>
+                            <span class="mini-value" style="color:var(--red)">高风险</span>
+                            <i class="fas fa-chevron-right date"></i>
+                        </div>
+                        <div class="mini-desc">10年风险：24.5%</div>
+                    </div>
+                    <div class="mini-card" onclick="openComplicationModal()">
+                        <div class="mini-row">
+                            <span class="mini-icon blue"><i class="fas fa-notes-medical"></i></span>
+                            <span class="mini-title">并发症筛查</span>
+                            <span class="mini-value" style="color:var(--orange)">密切观察</span>
+                            <i class="fas fa-chevron-right date"></i>
+                        </div>
+                        <div class="mini-desc">2个身体系统异常</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-head">
+                    <div class="section-title">用药治疗</div>
+                    <button class="section-action" type="button" onclick="showToast('查看全部用药记录')">查看全部</button>
+                </div>
+                <div class="label">近3个月内用药</div>
+                <div class="list">
+                    <div class="list-row"><span class="name">二甲双胍缓释片</span><span class="dose">0.5g</span><span class="freq">2次/日</span></div>
+                    <div class="list-row"><span class="name">阿卡波糖片</span><span class="dose">50mg</span><span class="freq">3次/日</span></div>
+                    <div class="list-row"><span class="name">氨氯地平片</span><span class="dose">5mg</span><span class="freq">1次/日</span></div>
+                </div>
+                <div style="height:12px"></div>
+                <div class="timeline-dynamic"><span class="dynamic-type">09-19 调整：</span>「二甲双胍」剂量1.0g-&gt;1.5g 频次每日三次-&gt;每日1次</div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-head">
+                    <div class="section-title">近期医疗记录</div>
+                </div>
+                <div class="record-grid-3col">
+                    <div class="record-item">
+                        <div class="record-main">
+                            <div class="record-icon"><i class="fas fa-clipboard-list"></i></div>
+                            <div class="record-title">门诊记录</div>
+                        </div>
+                        <div class="record-date">2026-04-28</div>
+                        <div class="record-desc">内分泌科</div>
+                    </div>
+                    <div class="record-item">
+                        <div class="record-main">
+                            <div class="record-icon"><i class="fas fa-file-medical"></i></div>
+                            <div class="record-title">检验检查</div>
+                        </div>
+                        <div class="record-date">2026-04-25</div>
+                        <div class="record-desc">共3项异常</div>
+                    </div>
+                    <div class="record-item">
+                        <div class="record-main">
+                            <div class="record-icon"><i class="fas fa-hospital"></i></div>
+                            <div class="record-title">住院记录</div>
+                        </div>
+                        <div class="record-date">2026-11-18</div>
+                        <div class="record-desc">共4天</div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="panel" id="behavior">
+            <div class="section-card">
+                <div class="section-head"><div class="section-title">行为依从</div></div>
+                <div class="risk-grid">
+                    <div class="mini-card"><div class="mini-title">随访依从</div><div class="mini-value green">良好</div><div class="mini-desc">近3次按时完成</div></div>
+                    <div class="mini-card"><div class="mini-title">检测依从</div><div class="mini-value orange">需提醒</div><div class="mini-desc">血糖连续7天未上传</div></div>
+                </div>
+            </div>
+            <div class="section-card">
+                <div class="section-head"><div class="section-title">居民标签</div></div>
+                <div class="tag-row" style="margin-top:0;padding-top:0;border-top:0">
+                    <div class="tags expanded">
+                        <span class="tag source">有赞助手-高意向</span>
+                        <span class="tag">糖尿病</span>
+                        <span class="tag">高血压</span>
+                        <span class="tag">低盐饮食</span>
+                        <span class="tag">独居</span>
+                        <span class="tag">复诊提醒</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel" id="service">
+            <div class="section-card">
+                <div class="section-head">
+                    <div class="section-title">当前服务</div>
+                </div>
+                <div class="package-tabs">
+                    <button class="package-tab active" type="button" data-package="chronic">
+                        <div class="package-name">慢病管理服务包</div>
+                        <div class="package-meta">长期有效</div>
+                    </button>
+                    <button class="package-tab" type="button" data-package="nutrition">
+                        <div class="package-name">营养干预服务包</div>
+                        <div class="package-meta">有效期 至 2026-08-01</div>
+                    </button>
+                </div>
+
+                <div class="service-package-panel active" id="package-chronic">
+                    <table class="service-table">
+                        <thead><tr><th>服务项目</th><th>服务次数</th><th>服务频次</th></tr></thead>
+                        <tbody>
+                            <tr><td>定期随访</td><td>4次</td><td><span class="freq-tag">按需服务</span></td></tr>
+                            <tr><td>个性化健康指导</td><td>3次</td><td><span class="freq-tag green">每月1次</span></td></tr>
+                            <tr><td>检查计划</td><td>本月 2/3</td><td><span class="freq-tag orange">月/季/年</span></td></tr>
+                        </tbody>
+                    </table>
+
+                    <div class="check-plan">
+                        <div class="section-head">
+                            <div class="section-title">检查计划</div>
+                        </div>
+                        <div class="plan-stats">
+                            <div class="plan-stat month">
+                                <div class="num">12/12</div>
+                                <div class="period">本月检查</div>
+                            </div>
+                            <div class="plan-stat quarter">
+                                <div class="num">3/12</div>
+                                <div class="period">本季度检查</div>
+                            </div>
+                            <div class="plan-stat half">
+                                <div class="num">3/12</div>
+                                <div class="period">下半年检查</div>
+                            </div>
+                            <div class="plan-stat year">
+                                <div class="num">1/8</div>
+                                <div class="period">本年检查</div>
+                            </div>
+                        </div>
+                        <div class="plan-table">
+                            <div class="plan-cell plan-head">检查项目</div>
+                            <div class="plan-cell plan-head">本月</div>
+                            <div class="plan-cell plan-head">本季度</div>
+                            <div class="plan-cell plan-head">下半年</div>
+                            <div class="plan-cell plan-head">本年</div>
+
+                            <div class="plan-cell plan-item-name"><span>血压</span></div>
+                            <div class="plan-cell"><span class="check-dot"><i class="fas fa-check"></i></span></div>
+                            <div class="plan-cell"><span class="check-dot"><i class="fas fa-check"></i></span></div>
+                            <div class="plan-cell"><span class="check-dot"><i class="fas fa-check"></i></span></div>
+                            <div class="plan-cell"><span class="check-dot"><i class="fas fa-check"></i></span></div>
+
+                            <div class="plan-cell plan-item-name"><span>空腹血糖</span></div>
+                            <div class="plan-cell"><span class="check-dot done"><i class="fas fa-check"></i></span></div>
+                            <div class="plan-cell"><span class="dash">-</span></div>
+                            <div class="plan-cell"><span class="check-dot done"><i class="fas fa-check"></i></span></div>
+                            <div class="plan-cell"><span class="dash">-</span></div>
+
+                            <div class="plan-cell plan-item-name"><span>尿微量白蛋白</span></div>
+                            <div class="plan-cell"><span class="check-dot done"><i class="fas fa-check"></i></span></div>
+                            <div class="plan-cell"><span class="dash">-</span></div>
+                            <div class="plan-cell"><span class="dash">-</span></div>
+                            <div class="plan-cell"><span class="dash">-</span></div>
+
+                            <div class="plan-cell plan-item-name"><span>眼底检查</span></div>
+                            <div class="plan-cell"><span class="check-dot done"><i class="fas fa-check"></i></span></div>
+                            <div class="plan-cell"><span class="dash">-</span></div>
+                            <div class="plan-cell"><span class="dash">-</span></div>
+                            <div class="plan-cell"><span class="dash">-</span></div>
+
+                            <div class="plan-cell plan-item-name"><span>神经病变传导速度检查</span></div>
+                            <div class="plan-cell"><span class="check-dot"><i class="fas fa-check"></i></span></div>
+                            <div class="plan-cell"><span class="dash">-</span></div>
+                            <div class="plan-cell"><span class="check-dot"><i class="fas fa-check"></i></span></div>
+                            <div class="plan-cell"><span class="check-dot"><i class="fas fa-check"></i></span></div>
+
+                            <div class="plan-cell plan-item-name"><span>肾功能</span></div>
+                            <div class="plan-cell"><span class="check-dot"><i class="fas fa-check"></i></span></div>
+                            <div class="plan-cell"><span class="dash">-</span></div>
+                            <div class="plan-cell"><span class="check-dot"><i class="fas fa-check"></i></span></div>
+                            <div class="plan-cell"><span class="check-dot"><i class="fas fa-check"></i></span></div>
+
+                            <div class="plan-cell plan-item-name"><span>检查项目名称最多显示2行缩略</span></div>
+                            <div class="plan-cell"><span class="check-dot"><i class="fas fa-check"></i></span></div>
+                            <div class="plan-cell"><span class="dash">-</span></div>
+                            <div class="plan-cell"><span class="check-dot"><i class="fas fa-check"></i></span></div>
+                            <div class="plan-cell"><span class="dash">-</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-package-panel" id="package-nutrition">
+                    <div class="mini-card" style="margin-bottom:12px">
+                        <div class="mini-title">营养干预服务</div>
+                        <div class="mini-desc">针对血糖控制不佳、体重管理需求居民提供阶段性营养支持</div>
+                    </div>
+                    <table class="service-table">
+                        <thead><tr><th>服务项目</th><th>服务次数</th><th>服务频次</th></tr></thead>
+                        <tbody>
+                            <tr><td>营养评估</td><td>1次</td><td><span class="freq-tag orange">服务开始</span></td></tr>
+                            <tr><td>膳食方案制定</td><td>1次</td><td><span class="freq-tag">按需服务</span></td></tr>
+                            <tr><td>饮食打卡反馈</td><td>12次</td><td><span class="freq-tag green">每周1次</span></td></tr>
+                            <tr><td>体重与腰围追踪</td><td>3次</td><td><span class="freq-tag green">每月1次</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel" id="timeline">
+            <div class="section-card">
+                <div class="section-head"><div class="section-title">健康动态</div></div>
+                <div class="list">
+                    <div class="list-row"><span class="name">05-15 体征异常：空腹血糖 8.6mmol/L</span><i class="fas fa-chevron-right"></i></div>
+                    <div class="list-row"><span class="name">05-12 疾病新增或加重：高血压,糖尿病</span><i class="fas fa-chevron-right"></i></div>
+                    <div class="list-row"><span class="name">05-04 高血压分级评估 三级管理</span><i class="fas fa-chevron-right"></i></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal-mask" id="complicationModal" onclick="closeComplicationModal(event)">
+        <div class="modal">
+            <div class="modal-head">
+                <div class="modal-title">并发症详情</div>
+                <button class="modal-close" type="button" onclick="closeComplicationModal(event)"><i class="fas fa-xmark"></i></button>
+            </div>
+            <div class="system-group">
+                <div class="system-name">心血管系统</div>
+                <div class="complication">冠状动脉粥样硬化性心脏病｜2026-04-12｜HIS同步 临海市第一人民医院</div>
+            </div>
+            <div class="system-group">
+                <div class="system-name">肾脏系统</div>
+                <div class="complication">糖尿病肾病｜2026-05-04｜医生录入 滨海社区卫生服务中心</div>
+            </div>
+        </div>
     </div>
 
     <script>
         function goBack() {
             window.history.back();
         }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 1500);
+        }
+
+        function editInfo() {
+            showToast('进入客户信息编辑页面');
+        }
+
+        function toggleTags(event) {
+            const tags = document.getElementById('tags');
+            const btn = event.currentTarget;
+            tags.classList.toggle('expanded');
+            btn.textContent = tags.classList.contains('expanded') ? '收起' : '全部';
+        }
+
+        function goAbnormalDetail() {
+            window.location.href = 'abnormal-patient-detail.html?id=1';
+        }
+
+        function openComplicationModal() {
+            document.getElementById('complicationModal').classList.add('show');
+        }
+
+        function closeComplicationModal(event) {
+            const clickedMask = event.target.id === 'complicationModal';
+            const clickedClose = event.currentTarget.classList && event.currentTarget.classList.contains('modal-close');
+            if (clickedMask || clickedClose) {
+                document.getElementById('complicationModal').classList.remove('show');
+            }
+        }
+
+        function applyWorkspaceMode() {
+            const params = new URLSearchParams(window.location.search);
+            const isOperation = params.get('workspace') === 'operation';
+            document.querySelectorAll('[data-workspace="operation"]').forEach(item => {
+                item.hidden = !isOperation;
+            });
+        }
+
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(item => item.classList.remove('active'));
+                document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        document.querySelectorAll('.package-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.package-tab').forEach(item => item.classList.remove('active'));
+                document.querySelectorAll('.service-package-panel').forEach(panel => panel.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(`package-${tab.dataset.package}`).classList.add('active');
+            });
+        });
+
+        applyWorkspaceMode();
     </script>
 </body>
 </html>

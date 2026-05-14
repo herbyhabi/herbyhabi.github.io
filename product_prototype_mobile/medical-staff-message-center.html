@@ -31,6 +31,17 @@
         /* 页面容器 */
         .page-container { display: none; }
         .page-container.active { display: block; }
+
+        /* 内联搜索框 */
+        .inline-search { padding: 12px 16px 8px; }
+        .inline-search .search-input-wrapper {
+            min-height: 40px !important;
+            height: 40px !important;
+            padding: 0 14px !important;
+            box-shadow: inset 0 0 0 1px rgba(122, 150, 184, 0.13), 0 4px 12px rgba(85, 127, 174, 0.06) !important;
+        }
+        .inline-search .search-input-wrapper i { font-size: 16px !important; }
+        .inline-search .search-input-wrapper input { font-size: 14px !important; }
         
         /* 搜索页面 */
         .search-page { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg-1); z-index: 200; transform: translateY(100%); transition: transform 0.3s; }
@@ -92,6 +103,45 @@
         /* Toast 提示 */
         .toast { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.7); color: white; padding: 12px 24px; border-radius: 8px; font-size: 14px; z-index: 1000; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
         .toast.show { opacity: 1; }
+
+        /* 系统消息未读小圆点 */
+        .system-icon { position: relative; }
+        .system-unread-dot { position: absolute; top: 2px; right: 2px; width: 8px; height: 8px; border-radius: 50%; background: #F53F3F; }
+        .system-unread-badge { position: absolute; top: -4px; right: -4px; min-width: 16px; height: 16px; border-radius: 8px; background: #F53F3F; color: #fff; font-size: 10px; display: flex; align-items: center; justify-content: center; padding: 0 4px; font-weight: 800; }
+        .system-arrow { color: var(--text-4); font-size: 14px; flex-shrink: 0; margin-left: 8px; }
+
+        /* 系统消息分类详情页 */
+        .sys-detail-header { display: flex; align-items: center; padding: 12px 16px; min-height: 44px; }
+        .sys-detail-header .back-btn { display: flex; align-items: center; gap: 4px; color: var(--text-1); font-size: 16px; cursor: pointer; padding: 8px 0; }
+        .sys-detail-header .back-btn span { font-size: 15px; }
+        .sys-detail-list { padding: 8px 16px 16px; display: flex; flex-direction: column; gap: 10px; }
+
+        /* 消息卡片 */
+        .msg-card { background: rgba(255, 255, 255, 0.92); border: 1px solid rgba(123, 147, 176, 0.14); border-radius: 14px; padding: 16px; cursor: pointer; box-shadow: 0 8px 24px rgba(60, 101, 145, 0.08); backdrop-filter: blur(12px); transition: transform 0.15s; }
+        .msg-card:active { transform: scale(0.98); }
+        .msg-card.unread { border-color: rgba(47, 122, 246, 0.3); }
+        .msg-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+        .msg-card-title { font-size: var(--font-size-body-1); font-weight: 600; color: var(--text-1); flex: 1; }
+        .msg-card.unread .msg-card-title { font-weight: 700; color: #1a3a6b; }
+        .msg-card-dot { width: 8px; height: 8px; border-radius: 50%; background: #2f7af6; flex-shrink: 0; margin-left: 8px; }
+        .msg-card-body { font-size: var(--font-size-caption); color: var(--text-2); line-height: 1.5; margin-bottom: 12px; }
+        .msg-card-footer { display: flex; align-items: center; gap: 5px; font-size: var(--font-size-caption); color: var(--text-3); }
+        .msg-card-footer i { font-size: 11px; }
+
+        /* 系统消息详情弹窗 */
+        .sys-msg-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 24px; }
+        .sys-msg-box { width: 100%; max-width: 340px; background: rgba(255,255,255,0.98); border-radius: 16px; box-shadow: 0 12px 32px rgba(60,101,145,0.2); backdrop-filter: blur(12px); overflow: hidden; }
+        .sys-msg-header { display: flex; align-items: center; gap: 12px; padding: 24px 20px 16px; }
+        .sys-msg-icon { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+        .sys-msg-icon.notice { background: #FFF7E8; color: #FF7D00; }
+        .sys-msg-icon.alert { background: #FFECE8; color: #F53F3F; }
+        .sys-msg-icon.info { background: #E8FFFB; color: #00B42A; }
+        .sys-msg-titles { flex: 1; }
+        .sys-msg-name { font-size: 17px; font-weight: 700; color: #1d2129; margin-bottom: 2px; }
+        .sys-msg-time { font-size: 12px; color: #86909C; }
+        .sys-msg-body { padding: 0 20px 20px; font-size: 14px; color: #4e5969; line-height: 1.7; max-height: 50vh; overflow-y: auto; }
+        .sys-msg-close { display: block; width: 100%; padding: 14px; border: none; border-top: 1px solid rgba(119,140,166,0.18); background: transparent; color: #2f7af6; font-size: 16px; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+        .sys-msg-close:active { background: rgba(47,122,246,0.06); }
 /* 首页风格统一覆盖 */
 body {
     color: #0f1f33;
@@ -412,21 +462,25 @@ textarea {
     <div class="navbar">
         <div class="navbar-content">
             <div class="navbar-title">消息中心</div>
-            <div class="search-btn" id="searchBtn" onclick="openSearch()">
-                <i class="fas fa-search"></i>
-            </div>
         </div>
     </div>
 
     <!-- 页签 -->
     <div class="tabs">
         <div class="tab-item active" data-tab="sessions" onclick="switchTab('sessions')">会话列表</div>
-        <div class="tab-item" data-tab="system" onclick="switchTab('system')">系统消息</div>
+        <div class="tab-item" data-tab="system" onclick="switchTab('system')">系统消息（草稿）</div>
     </div>
 
     <!-- 会话列表页 -->
     <div class="page-container active" id="sessionsPage">
+        <div class="inline-search">
+            <div class="search-input-wrapper">
+                <i class="fas fa-search" style="color: var(--text-3);"></i>
+                <input type="text" id="searchInput" placeholder="搜索姓名、电话、身份证" oninput="handleSearch()">
+            </div>
+        </div>
         <div class="session-list" id="sessionList"></div>
+        <div class="search-results" id="searchResults" style="display:none;"></div>
     </div>
 
     <!-- 系统消息页 -->
@@ -434,16 +488,15 @@ textarea {
         <div class="system-list" id="systemList"></div>
     </div>
 
-    <!-- 搜索页面 -->
-    <div class="search-page" id="searchPage">
-        <div class="search-header">
-            <div class="search-input-wrapper">
-                <i class="fas fa-search" style="color: var(--text-3);"></i>
-                <input type="text" id="searchInput" placeholder="姓名、电话、身份证" oninput="handleSearch()">
+    <!-- 系统消息分类详情页 -->
+    <div class="page-container" id="systemDetailPage">
+        <div class="sys-detail-header">
+            <div class="back-btn" onclick="backToSystemList()">
+                <i class="fas fa-chevron-left"></i>
+                <span>返回</span>
             </div>
-            <div class="cancel-btn" onclick="closeSearch()">取消</div>
         </div>
-        <div class="search-results" id="searchResults"></div>
+        <div class="sys-detail-list" id="sysDetailList"></div>
     </div>
 
     <!-- 底部导航 -->
@@ -490,8 +543,41 @@ textarea {
             { id: 3, residentId: 3, name: '张大山', idCard: '330326195801019012', lastMessage: '明天我去医院复查', lastTime: '周一', unread: 1 }
         ];
 
-        // 系统消息数据（暂未开发，置空）
-        const systemMessages = [];
+        // 系统消息分类及数据
+        const systemCategories = [
+            {
+                id: 'alert',
+                name: '任务提醒',
+                icon: 'exclamation-triangle',
+                colorClass: 'alert',
+                messages: [
+                    { id: 1, title: '随访任务提醒', content: '您有3位患者本周需要完成随访，请及时处理', time: '10:00', read: false, detail: '以下患者本周需要完成随访：\n\n1. 王建国 - 高血压随访（逾期1天）\n2. 李秀英 - 糖尿病随访（截止周五）\n3. 张大山 - 高血压随访（截止周日）\n\n请尽快安排随访，确保患者健康管理连续性。' },
+                    { id: 2, title: '体检结果待确认', content: '2位患者的体检结果已出，请及时确认', time: '昨天', read: false, detail: '以下患者的体检结果已出，请及时确认并反馈：\n\n1. 刘志强 - 年度体检（血压偏高、血脂异常）\n2. 陈美丽 - 季度检查（血糖控制良好）\n\n请登录系统查看详细报告。' },
+                    { id: 3, title: '待管患者提醒', content: '新增5位待管患者，请尽快完成纳管', time: '周一', read: true, detail: '本周新增5位待管患者：\n\n1. 周小明 - 高血压\n2. 吴芳芳 - 糖尿病\n3. 孙大伟 - 高血压合并糖尿病\n4. 马丽华 - 糖尿病\n5. 赵国强 - 高血压\n\n请尽快完成患者评估和纳管工作。' }
+                ]
+            },
+            {
+                id: 'notice',
+                name: '系统公告',
+                icon: 'bell',
+                colorClass: 'notice',
+                messages: [
+                    { id: 4, title: '系统维护通知', content: '2026年5月18日凌晨2:00-4:00进行系统升级', time: '昨天', read: false, detail: '尊敬的用户：\n\n为提升系统稳定性和使用体验，我们将于2026年5月18日（周一）凌晨2:00-4:00进行系统维护升级。\n\n维护期间系统将暂停服务，请您提前做好工作安排。给您带来的不便，敬请谅解。\n\n如有疑问，请联系技术支持。' },
+                    { id: 5, title: '培训通知', content: '基层医生慢病管理培训将于5月20日举行，请准时参加', time: '周一', read: true, detail: '培训主题：基层医生慢性病管理能力提升培训\n\n时间：2026年5月20日（周三）14:00-17:00\n地点：西湖区社区卫生服务中心三楼会议室\n\n培训内容：\n1. 高血压规范化管理（14:00-15:00）\n2. 糖尿病规范化管理（15:10-16:10）\n3. 慢病患者健康教育技巧（16:20-17:00）\n\n主讲人：市疾控中心 慢病科主任\n\n请各位医生提前安排好工作，准时参加。' },
+                    { id: 6, title: '节假日值班安排', content: '端午节值班安排已发布，请查看', time: '上周', read: true, detail: '2026年端午节值班安排：\n\n5月30日（周五）：张医生\n5月31日（周六）：李医生\n6月1日（周日）：王医生\n\n值班要求：\n1. 保持电话畅通\n2. 关注系统异常预警\n3. 及时处理紧急随访\n\n如需调班请提前报备。' }
+                ]
+            },
+            {
+                id: 'info',
+                name: '健康预警',
+                icon: 'info-circle',
+                colorClass: 'info',
+                messages: [
+                    { id: 7, title: '患者异常预警', content: '患者陈美丽血压连续3天偏高，建议关注', time: '昨天', read: true, detail: '患者信息：陈美丽\n身份证：330326196601023456\n\n异常详情：\n该患者近3天血压监测数据如下：\n• 5月12日 08:00 - 158/98 mmHg\n• 5月13日 08:30 - 162/100 mmHg\n• 5月14日 07:45 - 155/95 mmHg\n\n连续3天收缩压≥150mmHg，舒张压≥95mmHg，超出正常范围。\n\n建议：\n1. 及时联系患者了解用药情况\n2. 评估是否需要调整用药方案\n3. 建议患者来院复查' },
+                    { id: 8, title: '月度报表已生成', content: '您4月份的慢病管理月度报表已生成，请查看', time: '上周', read: true, detail: '2026年4月慢病管理月度报表\n\n管辖患者总数：352人\n\n高血压管理：\n• 在管人数：187人\n• 规范随访率：92.3%\n• 血压达标率：78.5%\n\n糖尿病管理：\n• 在管人数：165人\n• 规范随访率：89.7%\n• 血糖达标率：72.1%\n\n新增纳管：12人\n转出/死亡：3人\n\n详细数据请登录管理后台查看。' }
+                ]
+            }
+        ];
 
         // 当前页签
         let currentTab = 'sessions';
@@ -542,10 +628,10 @@ textarea {
             `).join('');
         }
 
-        // 渲染系统消息列表
+        // 渲染系统消息分类列表
         function renderSystemMessages() {
             const container = document.getElementById('systemList');
-            if (systemMessages.length === 0) {
+            if (systemCategories.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-icon">
@@ -557,20 +643,58 @@ textarea {
                 return;
             }
 
-            container.innerHTML = systemMessages.map(msg => `
-                <div class="system-item" onclick="viewSystemMessage(${msg.id})">
-                    <div class="system-icon ${msg.type}">
-                        <i class="fas fa-${msg.type === 'notice' ? 'bell' : msg.type === 'alert' ? 'exclamation-triangle' : 'info-circle'}"></i>
-                    </div>
-                    <div class="system-info">
-                        <div class="system-header">
-                            <span class="system-title">${msg.title}</span>
-                            <span class="system-time">${msg.time}</span>
+            container.innerHTML = systemCategories.map(cat => {
+                const unreadCount = cat.messages.filter(m => !m.read).length;
+                const latestMsg = cat.messages[0];
+                return `
+                    <div class="system-item" onclick="openCategory('${cat.id}')">
+                        <div class="system-icon ${cat.colorClass}">
+                            <i class="fas fa-${cat.icon}"></i>
+                            ${unreadCount > 0 ? `<span class="system-unread-badge">${unreadCount}</span>` : ''}
                         </div>
-                        <div class="system-content">${msg.content}</div>
+                        <div class="system-info">
+                            <div class="system-header">
+                                <span class="system-title">${cat.name}</span>
+                                <span class="system-time">${latestMsg.time}</span>
+                            </div>
+                            <div class="system-content">${latestMsg.content}</div>
+                        </div>
+                        <i class="fas fa-chevron-right system-arrow"></i>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 打开分类详情
+        function openCategory(catId) {
+            const cat = systemCategories.find(c => c.id === catId);
+            if (!cat) return;
+
+            const listContainer = document.getElementById('sysDetailList');
+
+            listContainer.innerHTML = cat.messages.map(msg => `
+                <div class="msg-card ${!msg.read ? 'unread' : ''}" onclick="viewSystemMessage('${cat.id}', ${msg.id})">
+                    <div class="msg-card-header">
+                        <span class="msg-card-title">${msg.title}</span>
+                        ${!msg.read ? '<span class="msg-card-dot"></span>' : ''}
+                    </div>
+                    <div class="msg-card-body">${msg.content}</div>
+                    <div class="msg-card-footer">
+                        <i class="fas fa-clock"></i>
+                        <span>${msg.time}</span>
                     </div>
                 </div>
             `).join('');
+
+            // 切换页面
+            document.getElementById('systemPage').classList.remove('active');
+            document.getElementById('systemDetailPage').classList.add('active');
+        }
+
+        // 返回系统消息分类列表
+        function backToSystemList() {
+            document.getElementById('systemDetailPage').classList.remove('active');
+            document.getElementById('systemPage').classList.add('active');
         }
 
         // 切换页签
@@ -579,43 +703,32 @@ textarea {
             // 更新页签状态
             document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
             document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
-            
+
             // 切换页面显示
             document.querySelectorAll('.page-container').forEach(p => p.classList.remove('active'));
             document.getElementById(tab === 'sessions' ? 'sessionsPage' : 'systemPage').classList.add('active');
-            
-            // 控制搜索按钮显示
-            document.getElementById('searchBtn').style.display = tab === 'sessions' ? 'flex' : 'none';
-        }
-
-        // 打开搜索页面
-        function openSearch() {
-            document.getElementById('searchPage').classList.add('show');
-            document.getElementById('searchInput').focus();
-        }
-
-        // 关闭搜索页面
-        function closeSearch() {
-            document.getElementById('searchPage').classList.remove('show');
-            document.getElementById('searchInput').value = '';
-            document.getElementById('searchResults').innerHTML = '';
         }
 
         // 搜索处理
         function handleSearch() {
             const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
             const resultsContainer = document.getElementById('searchResults');
-            
+            const sessionList = document.getElementById('sessionList');
+
             if (!keyword) {
-                resultsContainer.innerHTML = '';
+                resultsContainer.style.display = 'none';
+                sessionList.style.display = '';
                 return;
             }
 
-            const results = residents.filter(r => 
-                r.name.includes(keyword) || 
-                r.phone.includes(keyword) || 
+            const results = residents.filter(r =>
+                r.name.includes(keyword) ||
+                r.phone.includes(keyword) ||
                 r.idCard.includes(keyword)
             );
+
+            sessionList.style.display = 'none';
+            resultsContainer.style.display = '';
 
             if (results.length === 0) {
                 resultsContainer.innerHTML = `
@@ -642,9 +755,42 @@ textarea {
             `).join('');
         }
 
-        // 查看系统消息
-        function viewSystemMessage(id) {
-            showToast('敬请期待');
+        // 查看系统消息详情
+        function viewSystemMessage(catId, msgId) {
+            const cat = systemCategories.find(c => c.id === catId);
+            if (!cat) return;
+            const msg = cat.messages.find(m => m.id === msgId);
+            if (!msg) return;
+
+            // 标记为已读
+            msg.read = true;
+            // 刷新分类详情列表
+            openCategory(catId);
+            // 刷新分类列表（更新未读数）
+            renderSystemMessages();
+
+            // 显示详情弹窗
+            const overlay = document.createElement('div');
+            overlay.className = 'sys-msg-overlay';
+            overlay.innerHTML = `
+                <div class="sys-msg-box">
+                    <div class="sys-msg-header">
+                        <div class="sys-msg-icon ${cat.colorClass}">
+                            <i class="fas fa-${cat.icon}"></i>
+                        </div>
+                        <div class="sys-msg-titles">
+                            <div class="sys-msg-name">${msg.title}</div>
+                            <div class="sys-msg-time">${msg.time}</div>
+                        </div>
+                    </div>
+                    <div class="sys-msg-body">${msg.detail.replace(/\n/g, '<br>')}</div>
+                    <button class="sys-msg-close" onclick="this.closest('.sys-msg-overlay').remove()">我知道了</button>
+                </div>
+            `;
+            overlay.addEventListener('click', function(e) {
+                if (e.target === overlay) overlay.remove();
+            });
+            document.body.appendChild(overlay);
         }
 
         // 进入聊天页面

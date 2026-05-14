@@ -23,13 +23,15 @@
         .back-btn { position: absolute; left: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; cursor: pointer; }
         
         /* 用户信息卡片 */
-        .user-card { background: var(--bg-2); margin: 12px 16px; border-radius: var(--radius-large); padding: 20px; display: flex; align-items: center; gap: 16px; }
+        .user-card { background: var(--bg-2); margin: 12px 16px; border-radius: var(--radius-large); padding: 20px; display: flex; align-items: center; gap: 16px; cursor: pointer; transition: all 0.2s ease; }
+        .user-card:hover { opacity: 0.9; }
         .user-avatar { width: 64px; height: 64px; border-radius: 50%; background: var(--arcoblue-1); display: flex; align-items: center; justify-content: center; font-size: 32px; color: var(--arcoblue-6); flex-shrink: 0; }
         .user-info { flex: 1; }
         .user-name-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
         .user-name { font-size: var(--font-size-title-1); font-weight: 600; color: var(--text-1); }
         .user-account { font-size: var(--font-size-caption); color: var(--text-3); }
         .user-type { font-size: var(--font-size-caption); color: var(--arcoblue-6); background: var(--arcoblue-1); padding: 2px 8px; border-radius: 4px; }
+        .user-card-arrow { color: var(--text-4); font-size: 14px; }
         
         /* 机构信息 */
         .org-card { background: var(--bg-2); margin: 0 16px 12px; border-radius: var(--radius-large); padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
@@ -357,7 +359,112 @@ textarea {
 
 .search-box input::placeholder,
 .search-input-wrapper input::placeholder {
-    color: #a0a8b1 !important;
+            color: #a0a8b1 !important;
+}
+
+/* 退出登录按钮 */
+.logout-section {
+    padding: 16px 16px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.logout-btn {
+    min-width: 140px;
+    max-width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 32px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(255, 77, 79, 0.3);
+    border-radius: 12px;
+    color: #ff4d4f;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(60, 101, 145, 0.1);
+    transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+    background: rgba(255, 77, 79, 0.08);
+    border-color: rgba(255, 77, 79, 0.5);
+}
+
+.logout-btn:active {
+    transform: scale(0.98);
+}
+
+.logout-btn i {
+    font-size: 16px;
+}
+
+/* 退出登录确认弹窗 */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+.modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+.modal-box {
+    width: 280px;
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 16px;
+    box-shadow: 0 12px 32px rgba(60, 101, 145, 0.2);
+    backdrop-filter: blur(12px);
+    overflow: hidden;
+}
+.modal-title {
+    text-align: center;
+    font-size: 17px;
+    font-weight: 700;
+    color: #1d2129;
+    padding: 24px 24px 8px;
+}
+.modal-msg {
+    text-align: center;
+    font-size: 14px;
+    color: #4e5969;
+    padding: 0 24px 24px;
+}
+.modal-actions {
+    display: flex;
+    border-top: 1px solid rgba(119, 140, 166, 0.18);
+}
+.modal-btn {
+    flex: 1;
+    padding: 14px 0;
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.modal-btn.cancel {
+    color: #4e5969;
+    border-right: 1px solid rgba(119, 140, 166, 0.18);
+}
+.modal-btn.cancel:active {
+    background: rgba(0, 0, 0, 0.04);
+}
+.modal-btn.confirm {
+    color: #2f7af6;
+}
+.modal-btn.confirm:active {
+    background: rgba(47, 122, 246, 0.06);
 }
 
     </style>
@@ -376,8 +483,8 @@ textarea {
         </div>
     </div>
 
-    <!-- 用户信息卡片 -->
-    <div class="user-card">
+    <!-- 用户信息卡片（点击进入个人资料） -->
+    <div class="user-card" onclick="goToPersonalInfo()">
         <div class="user-avatar">
             <i class="fas fa-user-md"></i>
         </div>
@@ -386,30 +493,17 @@ textarea {
                 <span class="user-name">张医生</span>
                 <span class="user-type">基层医生</span>
             </div>
-            <div class="user-account">zhangys123</div>
+            <div class="user-account">zhangys123 · 杭州市西湖区社区卫生服务中心</div>
         </div>
+        <i class="fas fa-chevron-right user-card-arrow"></i>
     </div>
 
-    <!-- 机构信息 -->
-    <div class="org-card">
-        <div class="org-icon">
-            <i class="fas fa-hospital"></i>
-        </div>
-        <div class="org-info">
-            <div class="org-label">所属机构</div>
-            <div class="org-name">杭州市西湖区社区卫生服务中心</div>
-        </div>
-    </div>
-
-    <!-- 功能列表 -->
-    <div class="menu-list">
-        <div class="menu-item" onclick="goToPersonalInfo()">
-            <div class="menu-icon">
-                <i class="fas fa-user-circle"></i>
-            </div>
-            <span class="menu-text">个人资料</span>
-            <i class="fas fa-chevron-right menu-arrow"></i>
-        </div>
+    <!-- 退出登录按钮 -->
+    <div class="logout-section">
+        <button class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>退出登录</span>
+        </button>
     </div>
 
     <!-- 底部导航 -->
@@ -428,6 +522,18 @@ textarea {
             <span>我的</span>
         </button>
     </nav>
+
+    <!-- 退出登录确认弹窗 -->
+    <div class="modal-overlay" id="logoutModal" onclick="closeLogoutModal()">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <div class="modal-title">提示</div>
+            <div class="modal-msg">确定要退出登录吗？</div>
+            <div class="modal-actions">
+                <button class="modal-btn cancel" onclick="closeLogoutModal()">取消</button>
+                <button class="modal-btn confirm" onclick="confirmLogout()">确定</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         // Toast 提示函数
@@ -459,6 +565,25 @@ textarea {
             } else if (page === 'profile') {
                 // 当前页面
             }
+        }
+
+        // 退出登录 - 打开弹窗
+        function logout() {
+            document.getElementById('logoutModal').classList.add('show');
+        }
+
+        // 关闭弹窗
+        function closeLogoutModal() {
+            document.getElementById('logoutModal').classList.remove('show');
+        }
+
+        // 确认退出
+        function confirmLogout() {
+            closeLogoutModal();
+            localStorage.removeItem('userInfo');
+            localStorage.removeItem('token');
+            sessionStorage.clear();
+            window.location.href = 'medical-staff-login.html';
         }
     </script>
 </body>

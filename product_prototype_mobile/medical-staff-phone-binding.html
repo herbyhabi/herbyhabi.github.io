@@ -23,20 +23,20 @@
         .back-btn { position: absolute; left: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; cursor: pointer; }
         
         /* 提示文本 */
-        .tips { padding: 16px 20px; font-size: var(--font-size-caption); color: var(--text-3); }
-        
+        .tips { margin: 12px 16px 0; padding: 12px 20px; font-size: var(--font-size-caption); color: var(--text-3); }
+
         /* 表单区域 */
-        .form-container { background: var(--bg-2); padding: 0 20px; }
-        .form-item { display: flex; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border); }
-        .form-item:last-child { border-bottom: none; }
+        .form-container { margin: 12px 16px 0; background: var(--bg-2); border-radius: var(--radius-large); overflow: hidden; }
+        .form-item { display: flex; align-items: center; padding: 16px 20px; }
+        .form-item + .form-item { border-top: 1px solid var(--border); }
         .form-label { font-size: var(--font-size-body-1); color: var(--text-1); width: 80px; flex-shrink: 0; }
-        .form-input { flex: 1; border: none; outline: none; font-size: var(--font-size-body-1); color: var(--text-1); }
+        .form-input { flex: 1; border: none !important; outline: none; font-size: var(--font-size-body-1); color: var(--text-1); background: transparent !important; box-shadow: none !important; }
         .form-input::placeholder { color: var(--text-4); }
         .code-btn { padding: 8px 16px; background: var(--arcoblue-6); color: white; border: none; border-radius: var(--radius-medium); font-size: var(--font-size-caption); cursor: pointer; white-space: nowrap; }
         .code-btn:disabled { background: var(--text-4); }
-        
+
         /* 确认按钮 */
-        .submit-btn { margin: 32px 20px; padding: 14px; background: var(--arcoblue-6); color: white; border: none; border-radius: var(--radius-large); font-size: var(--font-size-body-1); font-weight: 500; width: calc(100% - 40px); cursor: pointer; }
+        .submit-btn { margin: 32px 16px; padding: 14px; background: var(--arcoblue-6); color: white; border: none; border-radius: var(--radius-large); font-size: var(--font-size-body-1); font-weight: 500; width: calc(100% - 32px); cursor: pointer; }
         .submit-btn:disabled { background: var(--text-4); }
         
         /* Toast 提示 */
@@ -346,6 +346,132 @@ textarea {
     color: #a0a8b1 !important;
 }
 
+/* 绑定手机号页面专属样式 */
+body {
+    padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+}
+
+.tips {
+    position: relative;
+    margin: 18px 16px 10px !important;
+    padding: 11px 14px 11px 38px !important;
+    border-radius: 14px;
+    color: #506178 !important;
+    font-size: 13px !important;
+    line-height: 1.45;
+    background: rgba(255, 255, 255, 0.58);
+    border: 1px solid rgba(122, 150, 184, 0.13);
+    box-shadow: 0 8px 22px rgba(60, 101, 145, 0.08);
+    backdrop-filter: blur(10px);
+}
+
+.tips::before {
+    content: "\f05a";
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    color: #2f7af6;
+    font-size: 15px;
+}
+
+.form-container {
+    margin: 0 16px !important;
+    background: rgba(255, 255, 255, 0.94) !important;
+    border: 1px solid rgba(123, 147, 176, 0.14) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: visible;
+    backdrop-filter: blur(12px);
+}
+
+.tips + .form-container {
+    margin-top: 12px !important;
+    border-radius: 16px 16px 0 0 !important;
+    box-shadow: 0 14px 34px rgba(60, 101, 145, 0.12) !important;
+}
+
+.form-container + .form-container {
+    border-top: 0 !important;
+    border-radius: 0 0 16px 16px !important;
+    box-shadow: 0 14px 34px rgba(60, 101, 145, 0.12) !important;
+}
+
+.form-item {
+    min-height: 62px;
+    padding: 0 18px !important;
+    gap: 12px;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: inherit !important;
+    box-shadow: none !important;
+}
+
+.form-container + .form-container .form-item {
+    border-top: 1px solid rgba(119, 140, 166, 0.18) !important;
+}
+
+.form-label {
+    width: 66px !important;
+    color: #1d2b3f !important;
+    font-size: 15px !important;
+    font-weight: 700;
+}
+
+.form-input {
+    min-width: 0;
+    height: 42px;
+    color: #203048 !important;
+    font-size: 16px !important;
+    line-height: 42px;
+    caret-color: #2f7af6;
+}
+
+.form-input::placeholder {
+    color: #a6afbb !important;
+}
+
+.code-btn {
+    min-width: 96px;
+    height: 36px;
+    padding: 0 13px !important;
+    border-radius: 18px !important;
+    font-size: 13px !important;
+    transition: transform 0.16s ease, box-shadow 0.16s ease, opacity 0.16s ease;
+}
+
+.code-btn:active,
+.submit-btn:active {
+    transform: scale(0.98);
+}
+
+.code-btn:disabled {
+    background: #d7dde6 !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
+    opacity: 1;
+}
+
+.submit-btn {
+    display: block;
+    height: 48px;
+    margin: 30px 16px 0 !important;
+    padding: 0 !important;
+    border-radius: 24px !important;
+    font-size: 16px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0;
+    box-shadow: 0 14px 24px rgba(47, 122, 246, 0.22) !important;
+    transition: transform 0.16s ease, box-shadow 0.16s ease, opacity 0.16s ease;
+}
+
+.submit-btn:disabled {
+    background: #d7dde6 !important;
+    box-shadow: none !important;
+}
+
     </style>
 </head>
 <body>
@@ -365,12 +491,16 @@ textarea {
     <!-- 提示文本 -->
     <div class="tips">请确保输入的手机号能正常收到短信</div>
 
-    <!-- 表单区域 -->
+    <!-- 手机号输入 -->
     <div class="form-container">
         <div class="form-item">
             <span class="form-label">手机号</span>
             <input type="tel" class="form-input" id="phoneInput" placeholder="请输入手机号码" maxlength="11" oninput="handlePhoneInput()">
         </div>
+    </div>
+
+    <!-- 验证码输入 -->
+    <div class="form-container">
         <div class="form-item">
             <span class="form-label">验证码</span>
             <input type="text" class="form-input" id="codeInput" placeholder="请输入验证码" maxlength="6">
@@ -462,7 +592,7 @@ textarea {
             showToast('绑定成功');
             
             setTimeout(() => {
-                window.history.back();
+                window.location.href = 'medical-staff-personal-info.html';
             }, 1000);
         }
     </script>
