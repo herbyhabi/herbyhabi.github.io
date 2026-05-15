@@ -19,3 +19,6 @@
 *   **轻量化引入**：默认通过以下方式引入 Tailwind，避免复杂的构建流程：
     ```html
     <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+
+### 4. 代码编辑约束
+*   **禁止删除已注释代码**：除非用户明确发出类似”清空注释代码“等指令，否则严禁自动删除注释代码

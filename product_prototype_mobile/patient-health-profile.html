@@ -224,7 +224,7 @@
             top: 92px;
             z-index: 80;
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             margin: 10px -12px 0;
             padding: 0 12px;
             background: rgba(246, 251, 255, 0.84);
@@ -544,6 +544,7 @@
             background: #ffffff;
         }
         .package-name {
+            display: block;
             color: var(--text-1);
             font-size: 13px;
             font-weight: 900;
@@ -552,6 +553,7 @@
             text-overflow: ellipsis;
         }
         .package-meta {
+            display: block;
             margin-top: 7px;
             color: var(--text-3);
             font-size: 11px;
@@ -737,7 +739,7 @@
         }
         .plan-item-name span {
             display: -webkit-box;
-            -webkit-line-clamp: 2;
+            /* -webkit-line-clamp: 2; */
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
@@ -819,6 +821,9 @@
         .float-action {
             min-width: 0;
             height: 46px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             border: 1px solid rgba(47, 122, 246, 0.16);
             border-radius: 12px;
             background: #fff;
@@ -826,6 +831,12 @@
             font-size: 13px;
             font-weight: 900;
             cursor: pointer;
+        }
+        .float-action span {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         .float-action i { margin-right: 5px; }
         .float-action.primary {
@@ -909,19 +920,19 @@
 </head>
 <body>
     <div class="toast" id="toast"></div>
-    <nav class="navbar">
+    <div class="navbar">
         <div class="navbar-content">
             <button class="back-btn" type="button" onclick="goBack()"><i class="fas fa-chevron-left"></i></button>
             <div class="navbar-title">健康画像</div>
             <!-- <button class="more-btn" type="button" onclick="showToast('更多操作')"><i class="fas fa-ellipsis"></i></button> -->
         </div>
-    </nav>
+    </div>
 
-    <main class="page">
-        <section class="profile-hero">
+    <div class="page">
+        <div class="profile-hero">
             <div class="patient-top">
                 <div class="avatar">
-                    <img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&w=160&q=80" alt="居民头像">
+                    <img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&amp;fit=crop&amp;w=160&amp;q=80" alt="居民头像">
                 </div>
                 <div class="patient-main">
                     <div class="name-row">
@@ -929,7 +940,7 @@
                         <span class="meta">男</span>
                         <span class="meta">67岁</span>
                         <span class="self-badge">老</span><span class="self-badge">高</span><span class="self-badge">糖</span><span class="self-badge">低</span>
-                        <button class="edit-link" type="button" data-workspace="operation" onclick="editInfo()" hidden>编辑信息 ></button>
+                        <button class="edit-link" type="button" data-workspace="operation" onclick="editInfo()" hidden>编辑信息 &gt;</button>
                     </div>
                     
                     <div class="info-grid">
@@ -964,12 +975,12 @@
                 </div>
                 <div class="mini-desc">当前阶段：慢病管理服务期｜客户来源：有赞助手</div>
             </div>
-        </section>
+        </div>
 
-        <section class="section-card" style="margin-top:10px">
+        <div class="section-card" style="margin-top:10px">
             <div class="section-head">
                 <div class="section-title">异常提醒<span class="badge-count">12</span></div>
-                <button class="section-action" type="button" onclick="goAbnormalDetail()">查看更多 ></button>
+                <button class="section-action" type="button" onclick="goAbnormalDetail()">查看更多 &gt;</button>
             </div>
             <div class="abnormal-row" onclick="goAbnormalDetail()">
                 <span class="warn-icon"><i class="fas fa-triangle-exclamation"></i></span>
@@ -989,16 +1000,14 @@
                 <span class="date">05-04</span>
                 <i class="fas fa-chevron-right date"></i>
             </div> -->
-        </section>
+        </div>
 
         <div class="tabs">
             <button class="tab active" type="button" data-tab="control">健康动态</button>
             <button class="tab" type="button" data-tab="service">服务管理</button>
-            <button class="tab" type="button" data-tab="behavior">行为依从</button>
-            <button class="tab" type="button" data-tab="timeline">时间轴</button>
         </div>
 
-        <section class="panel active" id="control">
+        <div class="panel active" id="control">
             <div class="section-card">
                 <div class="section-head">
                     <div class="section-title">核心指标<span class="hint">可左右滑动查看</span></div>
@@ -1188,44 +1197,21 @@
                 </div>
             </div>
 
-        </section>
+        </div>
 
-        <section class="panel" id="behavior">
-            <div class="section-card">
-                <div class="section-head"><div class="section-title">行为依从</div></div>
-                <div class="risk-grid">
-                    <div class="mini-card"><div class="mini-title">随访依从</div><div class="mini-value green">良好</div><div class="mini-desc">近3次按时完成</div></div>
-                    <div class="mini-card"><div class="mini-title">检测依从</div><div class="mini-value orange">需提醒</div><div class="mini-desc">血糖连续7天未上传</div></div>
-                </div>
-            </div>
-            <div class="section-card">
-                <div class="section-head"><div class="section-title">居民标签</div></div>
-                <div class="tag-row" style="margin-top:0;padding-top:0;border-top:0">
-                    <div class="tags expanded">
-                        <span class="tag source">有赞助手-高意向</span>
-                        <span class="tag">糖尿病</span>
-                        <span class="tag">高血压</span>
-                        <span class="tag">低盐饮食</span>
-                        <span class="tag">独居</span>
-                        <span class="tag">复诊提醒</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="panel" id="service">
+        <div class="panel" id="service">
             <div class="section-card">
                 <div class="section-head">
                     <div class="section-title">当前服务</div>
                 </div>
                 <div class="package-tabs">
                     <button class="package-tab active" type="button" data-package="chronic">
-                        <div class="package-name">慢病管理服务包</div>
-                        <div class="package-meta">长期有效</div>
+                        <span class="package-name">慢病管理服务包</span>
+                        <span class="package-meta">长期有效</span>
                     </button>
                     <button class="package-tab" type="button" data-package="nutrition">
-                        <div class="package-name">营养干预服务包</div>
-                        <div class="package-meta">有效期 至 2026-08-01</div>
+                        <span class="package-name">营养干预服务包</span>
+                        <span class="package-meta">有效期 至 2026-08-01</span>
                     </button>
                 </div>
 
@@ -1369,19 +1355,9 @@
                     </table>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <section class="panel" id="timeline">
-            <div class="section-card">
-                <div class="section-head"><div class="section-title">健康动态</div></div>
-                <div class="list">
-                    <div class="list-row"><span class="name">05-15 体征异常：空腹血糖 8.6mmol/L</span><i class="fas fa-chevron-right"></i></div>
-                    <div class="list-row"><span class="name">05-12 疾病新增或加重：高血压,糖尿病</span><i class="fas fa-chevron-right"></i></div>
-                    <div class="list-row"><span class="name">05-04 高血压分级评估 三级管理</span><i class="fas fa-chevron-right"></i></div>
-                </div>
-            </div>
-        </section>
-    </main>
+    </div>
 
     <div class="modal-mask" id="complicationModal" onclick="closeComplicationModal(event)">
         <div class="modal">
@@ -1430,9 +1406,9 @@
     </div>
 
     <div class="floating-actions">
-        <button class="float-action primary" type="button" onclick="openAppointmentModal()"><i class="fas fa-calendar-plus"></i>预约就诊</button>
-        <button class="float-action" type="button" onclick="openPatientMessage()"><i class="fas fa-comment-dots"></i>发送消息</button>
-        <button class="float-action" type="button" onclick="startPreFollowUp()"><i class="fas fa-clipboard-check"></i>预随访</button>
+        <button class="float-action primary" type="button" onclick="openAppointmentModal()"><i class="fas fa-calendar-plus"></i><span>预约</span></button>
+        <button class="float-action" type="button" onclick="openPatientMessage()"><i class="fas fa-comment-dots"></i><span>消息</span></button>
+        <button class="float-action" type="button" onclick="startPreFollowUp()"><i class="fas fa-clipboard-check"></i><span>预随访</span></button>
     </div>
 
     <script>
@@ -1482,7 +1458,10 @@
         }
 
         function closeAppointmentModal(event) {
-            if (!event || event.target.id === 'appointmentModal' || event.currentTarget.classList.contains('modal-close')) {
+            const shouldClose = !event
+                || event.target.id === 'appointmentModal'
+                || (event.currentTarget && event.currentTarget.classList.contains('modal-close'));
+            if (shouldClose) {
                 document.getElementById('appointmentModal').classList.remove('show');
             }
         }
