@@ -82,49 +82,6 @@
             color: white;
         }
 
-        /* 患者信息头部 */
-        .patient-header {
-            background: var(--bg-2);
-            padding: 16px;
-            margin: 12px 16px;
-            border-radius: var(--radius-large);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-        }
-
-        .patient-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .patient-avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: var(--arcoblue-1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            color: var(--arcoblue-6);
-        }
-
-        .patient-avatar.female {
-            background: #FFE8F1;
-            color: #F5319D;
-        }
-
-        .patient-meta h2 {
-            font-size: var(--font-size-title-1);
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .patient-meta .meta-text {
-            font-size: var(--font-size-caption);
-            color: var(--text-3);
-        }
-
         /* 记录列表 */
         .record-list {
             padding: 0 16px;
@@ -139,11 +96,56 @@
             border-left: 3px solid var(--arcoblue-6);
         }
 
+        .year-group {
+            margin-bottom: 20px;
+        }
+
+        .year-header {
+            position: sticky;
+            top: 56px;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 2px 10px 0;
+            margin-bottom: 8px;
+            /* background: linear-gradient(180deg, var(--bg-1) 70%, rgba(247, 248, 250, 0)); */
+        }
+
+        .year-title {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-1);
+        }
+
+        .year-title span {
+            font-size: var(--font-size-caption);
+            font-weight: 500;
+            color: var(--text-3);
+        }
+
+        .year-count {
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: rgba(47, 122, 246, 0.1);
+            color: var(--arcoblue-6);
+            font-size: var(--font-size-caption);
+            font-weight: 600;
+        }
+
+        .year-records {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
         .record-card {
             background: var(--bg-2);
             border-radius: var(--radius-large);
             padding: 16px;
-            margin-bottom: 12px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
 
@@ -280,6 +282,32 @@ body {
 .navbar-title {
     font-weight: 800 !important;
 }
+
+        .navbar-title .title-meta {
+            margin-left: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            color: rgba(15, 31, 51, 0.52);
+        }
+
+        .pre-follow-up-btn {
+            height: 32px;
+            padding: 0 10px;
+            border: 0;
+            border-radius: 16px;
+            background: rgba(47, 122, 246, 0.12);
+            color: #2f7af6 !important;
+            font-size: 13px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .pre-follow-up-btn:active {
+            background: rgba(47, 122, 246, 0.18);
+        }
 
 .tabs,
 .search-section,
@@ -470,7 +498,8 @@ textarea {
 }
 
 .search-btn,
-.navbar-count {
+.navbar-count,
+.pre-follow-up-btn {
     position: absolute !important;
     right: 0 !important;
     top: 50% !important;
@@ -480,7 +509,8 @@ textarea {
 }
 
 .navbar > .search-btn,
-.navbar > .navbar-count {
+.navbar > .navbar-count,
+.navbar > .pre-follow-up-btn {
     right: 16px !important;
     top: auto !important;
     bottom: 12px !important;
@@ -542,14 +572,13 @@ textarea {
             <div class="back-btn" onclick="goBack()">
                 <i class="fas fa-chevron-left"></i>
             </div>
-            <div class="navbar-title">随访记录</div>
+            <div class="navbar-title" id="navbarTitle">随访记录</div>
+            <button class="pre-follow-up-btn" onclick="preFollowUp()">
+                <i class="fas fa-edit"></i>
+                <span>预随访</span>
+            </button>
         </div>
     </nav>
-
-    <!-- 患者信息头部 -->
-    <div class="patient-header" id="patientHeader">
-        <!-- 动态生成 -->
-    </div>
 
     <!-- 记录列表 -->
     <div class="record-list">
@@ -593,42 +622,56 @@ textarea {
             return date.toISOString().split('T')[0];
         }
 
+        function getYearDateStr(year, month, day) {
+            return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        }
+
         // 模拟随访记录数据（使用动态日期）
         const followUpRecords = {
             1: [
                 { date: getPastDateStr(5), type: '常规随访', disease: '高血压', doctor: '张医生' },
                 { date: getPastDateStr(35), type: '常规随访', disease: '高血压', doctor: '张医生' },
                 { date: getPastDateStr(65), type: '控制不满意随访', disease: '高血压', doctor: '李医生' },
-                { date: getPastDateStr(95), type: '常规随访', disease: '高血压', doctor: '张医生' }
+                { date: getPastDateStr(95), type: '常规随访', disease: '高血压', doctor: '张医生' },
+                { date: getYearDateStr(2025, 11, 18), type: '常规随访', disease: '高血压', doctor: '张医生' },
+                { date: getYearDateStr(2025, 8, 20), type: '控制不满意随访', disease: '高血压', doctor: '李医生' },
+                { date: getYearDateStr(2025, 4, 12), type: '常规随访', disease: '高血压', doctor: '张医生' },
+                { date: getYearDateStr(2024, 12, 9), type: '常规随访', disease: '高血压', doctor: '张医生' },
+                { date: getYearDateStr(2024, 7, 15), type: '常规随访', disease: '高血压', doctor: '李医生' }
             ],
             2: [
-                { date: getPastDateStr(10), type: '季度随访', disease: '糖尿病', doctor: '王医生' },
+                { date: getPastDateStr(10), type: '常规随访', disease: '糖尿病', doctor: '王医生' },
                 { date: getPastDateStr(40), type: '常规随访', disease: '糖尿病', doctor: '王医生' },
-                { date: getPastDateStr(70), type: '季度随访', disease: '糖尿病', doctor: '王医生' }
+                { date: getPastDateStr(70), type: '常规随访', disease: '糖尿病', doctor: '王医生' },
+                { date: getYearDateStr(2025, 10, 22), type: '常规随访', disease: '糖尿病', doctor: '王医生' },
+                { date: getYearDateStr(2025, 6, 18), type: '常规随访', disease: '糖尿病', doctor: '王医生' },
+                { date: getYearDateStr(2024, 11, 6), type: '常规随访', disease: '糖尿病', doctor: '王医生' }
             ],
             3: [
-                { date: getPastDateStr(12), type: '月度随访', disease: '冠心病', doctor: '刘医生' },
-                { date: getPastDateStr(42), type: '月度随访', disease: '冠心病', doctor: '刘医生' }
+                { date: getPastDateStr(12), type: '常规随访', disease: '冠心病', doctor: '刘医生' },
+                { date: getPastDateStr(42), type: '常规随访', disease: '冠心病', doctor: '刘医生' },
+                { date: getYearDateStr(2025, 9, 8), type: '常规随访', disease: '冠心病', doctor: '刘医生' },
+                { date: getYearDateStr(2024, 10, 16), type: '常规随访', disease: '冠心病', doctor: '刘医生' }
             ],
             4: [
                 { date: getPastDateStr(8), type: '常规随访', disease: '高血压', doctor: '张医生' },
                 { date: getPastDateStr(38), type: '常规随访', disease: '高血压', doctor: '张医生' }
             ],
             5: [
-                { date: getPastDateStr(15), type: '季度随访', disease: '糖尿病', doctor: '王医生' },
-                { date: getPastDateStr(45), type: '季度随访', disease: '糖尿病', doctor: '王医生' }
+                { date: getPastDateStr(15), type: '常规随访', disease: '糖尿病', doctor: '王医生' },
+                { date: getPastDateStr(45), type: '常规随访', disease: '糖尿病', doctor: '王医生' }
             ],
             6: [
                 { date: getPastDateStr(20), type: '常规随访', disease: '高血脂', doctor: '李医生' },
                 { date: getPastDateStr(50), type: '常规随访', disease: '高血脂', doctor: '李医生' }
             ],
             7: [
-                { date: getPastDateStr(25), type: '月度随访', disease: '高血压', doctor: '张医生' },
-                { date: getPastDateStr(55), type: '月度随访', disease: '高血压', doctor: '张医生' }
+                { date: getPastDateStr(25), type: '常规随访', disease: '高血压', doctor: '张医生' },
+                { date: getPastDateStr(55), type: '常规随访', disease: '高血压', doctor: '张医生' }
             ],
             8: [
-                { date: getPastDateStr(30), type: '季度随访', disease: '糖尿病', doctor: '王医生' },
-                { date: getPastDateStr(60), type: '季度随访', disease: '糖尿病', doctor: '王医生' }
+                { date: getPastDateStr(30), type: '常规随访', disease: '糖尿病', doctor: '王医生' },
+                { date: getPastDateStr(60), type: '常规随访', disease: '糖尿病', doctor: '王医生' }
             ],
             101: [
                 { date: getPastDateStr(3), type: '高危随访', disease: '高血压3级', doctor: '张医生' },
@@ -656,27 +699,14 @@ textarea {
         // 初始化
         window.addEventListener('load', () => {
             const patient = patientData[patientId] || patientData[1];
-            renderPatientHeader(patient);
+            renderNavbarTitle(patient);
             renderRecordList();
         });
 
-        // 渲染患者头部
-        function renderPatientHeader(patient) {
-            const container = document.getElementById('patientHeader');
-            const avatarClass = patient.gender === 'female' ? 'female' : '';
-            const avatarIcon = patient.gender === 'female' ? 'fa-female' : 'fa-male';
-            
-            container.innerHTML = `
-                <div class="patient-info">
-                    <div class="patient-avatar ${avatarClass}">
-                        <i class="fas ${avatarIcon}"></i>
-                    </div>
-                    <div class="patient-meta">
-                        <h2>${patient.name}</h2>
-                        <div class="meta-text">${patient.age}岁 · ${patient.phone}</div>
-                    </div>
-                </div>
-            `;
+        // 渲染页面标题
+        function renderNavbarTitle(patient) {
+            const genderText = patient.gender === 'female' ? '女' : '男';
+            document.getElementById('navbarTitle').innerHTML = `${patient.name}<span class="title-meta">${patient.age}岁 · ${genderText}</span>`;
         }
 
         // 渲染记录列表
@@ -698,28 +728,60 @@ textarea {
             
             // 按日期倒序排序
             const sortedRecords = [...records].sort((a, b) => new Date(b.date) - new Date(a.date));
+            const groupedRecords = sortedRecords.reduce((groups, record) => {
+                const year = new Date(record.date).getFullYear();
+                if (!groups[year]) {
+                    groups[year] = [];
+                }
+                groups[year].push(record);
+                return groups;
+            }, {});
             
             let html = '';
-            sortedRecords.forEach(record => {
-                html += `
-                    <div class="record-card">
-                        <div class="record-header">
-                            <span class="record-date">${record.date}</span>
-                            <span class="record-type">${record.type}</span>
-                        </div>
-                        <div class="record-body">
-                            <div class="record-item">
-                                <span class="record-label">随访病种</span>
-                                <span class="tag-disease">${record.disease}</span>
+            Object.keys(groupedRecords)
+                .sort((a, b) => Number(b) - Number(a))
+                .forEach(year => {
+                    const yearRecords = groupedRecords[year];
+                    const typeCountText = Object.entries(yearRecords.reduce((counts, record) => {
+                        const typeName = record.type.replace('随访', '');
+                        counts[typeName] = (counts[typeName] || 0) + 1;
+                        return counts;
+                    }, {})).map(([type, count]) => `${type} ${count} 次`).join('，');
+                    html += `
+                        <div class="year-group">
+                            <div class="year-header">
+                                <div class="year-title">${year}<span>年</span></div>
+                                <div class="year-count">${typeCountText}</div>
                             </div>
-                            <div class="record-item">
-                                <span class="record-label">随访医生</span>
-                                <span class="record-value">${record.doctor}</span>
+                            <div class="year-records">
+                    `;
+
+                    yearRecords.forEach(record => {
+                        html += `
+                            <div class="record-card">
+                                <div class="record-header">
+                                    <span class="record-date">${record.date}</span>
+                                    <span class="record-type">${record.type}</span>
+                                </div>
+                                <div class="record-body">
+                                    <div class="record-item">
+                                        <span class="record-label">随访病种</span>
+                                        <span class="tag-disease">${record.disease}</span>
+                                    </div>
+                                    <div class="record-item">
+                                        <span class="record-label">随访医生</span>
+                                        <span class="record-value">${record.doctor}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    html += `
                             </div>
                         </div>
-                    </div>
-                `;
-            });
+                    `;
+                });
             
             container.innerHTML = html;
         }
@@ -727,6 +789,11 @@ textarea {
         // 返回
         function goBack() {
             window.history.back();
+        }
+
+        // 预随访
+        function preFollowUp() {
+            window.location.href = `patient-pre-follow-up.html?id=${patientId}`;
         }
     </script>
 </body>

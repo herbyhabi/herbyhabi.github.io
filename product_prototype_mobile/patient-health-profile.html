@@ -26,7 +26,7 @@
         }
         body {
             min-height: 100vh;
-            padding-bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+            padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
             color: var(--text-1);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
             background:
@@ -271,11 +271,12 @@
             font-weight: 600;
         }
         .section-action {
-            border: 0;
+             border: 0;
             background: transparent;
-            color: var(--text-3);
+            color: var(--blue);
             font-size: 12px;
-            font-weight: 700;
+            font-weight: 900;
+            white-space: nowrap;
             cursor: pointer;
         }
         .indicator-scroll {
@@ -507,13 +508,14 @@
             grid-auto-columns: minmax(138px, 46%);
             gap: 8px;
             overflow-x: auto;
-            padding-bottom: 2px;
+            padding-bottom: 8px;
             margin-bottom: 12px;
             scroll-snap-type: x mandatory;
             scrollbar-width: none;
         }
         .package-tabs::-webkit-scrollbar { display: none; }
         .package-tab {
+            position: relative;
             min-height: 72px;
             padding: 11px 12px;
             border: 1px solid var(--line);
@@ -528,6 +530,18 @@
             border-color: rgba(47, 122, 246, 0.45);
             background: linear-gradient(180deg, #eef6ff, #ffffff);
             box-shadow: inset 0 0 0 1px rgba(47, 122, 246, 0.18);
+        }
+        .package-tab.active::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: -7px;
+            width: 12px;
+            height: 12px;
+            transform: translateX(-50%) rotate(45deg);
+            border-right: 1px solid rgba(47, 122, 246, 0.45);
+            border-bottom: 1px solid rgba(47, 122, 246, 0.45);
+            background: #ffffff;
         }
         .package-name {
             color: var(--text-1);
@@ -560,6 +574,97 @@
         }
         .freq-tag.green { background: var(--green-soft); color: var(--green); }
         .freq-tag.orange { background: var(--orange-soft); color: var(--orange); }
+        .service-project-list {
+            display: grid;
+            gap: 10px;
+        }
+        .service-project-card {
+            padding: 12px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: linear-gradient(180deg, #ffffff, #f8fbff);
+        }
+        .service-project-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .service-project-title {
+            color: var(--text-1);
+            font-size: 14px;
+            font-weight: 900;
+        }
+        .service-project-body {
+            display: grid;
+            gap: 8px;
+        }
+        .service-metric-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+        .service-metric {
+            padding: 9px 10px;
+            border-radius: 10px;
+            background: rgba(244, 248, 253, 0.9);
+        }
+        .service-metric-label {
+            color: var(--text-3);
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .service-metric-value {
+            color: var(--text-1);
+            font-size: 14px;
+            font-weight: 900;
+        }
+        .service-metric-value-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .service-detail-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            min-height: 30px;
+            color: var(--text-2);
+            font-size: 12px;
+        }
+        .service-date {
+            color: var(--text-1);
+            font-weight: 900;
+        }
+        .overdue-tag {
+            display: inline-flex;
+            align-items: center;
+            min-height: 20px;
+            margin-left: 6px;
+            padding: 2px 7px;
+            border-radius: 999px;
+            background: var(--red-soft);
+            color: var(--red);
+            font-size: 11px;
+            font-weight: 900;
+        }
+        .text-action {
+            border: 0;
+            background: transparent;
+            color: var(--blue);
+            font-size: 10px;
+            font-weight: 900;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .text-action i {
+            margin-left: 3px;
+            font-size: 10px;
+        }
         .check-plan { margin-top: 14px; }
         .plan-stats {
             display: grid;
@@ -696,6 +801,97 @@
         .system-group:first-of-type { border-top: 0; }
         .system-name { font-size: 14px; font-weight: 900; margin-bottom: 8px; }
         .complication { color: var(--text-2); font-size: 13px; line-height: 1.6; }
+        .floating-actions {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 850;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+            padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+            background: rgba(255, 255, 255, 0.9);
+            border-top: 1px solid rgba(118, 140, 165, 0.16);
+            box-shadow: 0 -12px 30px rgba(60, 101, 145, 0.12);
+            backdrop-filter: blur(14px);
+        }
+        .float-action {
+            min-width: 0;
+            height: 46px;
+            border: 1px solid rgba(47, 122, 246, 0.16);
+            border-radius: 12px;
+            background: #fff;
+            color: var(--blue);
+            font-size: 13px;
+            font-weight: 900;
+            cursor: pointer;
+        }
+        .float-action i { margin-right: 5px; }
+        .float-action.primary {
+            border-color: transparent;
+            background: linear-gradient(135deg, #2f7af6, #4fa0ff);
+            color: #fff;
+            box-shadow: 0 8px 18px rgba(47, 122, 246, 0.28);
+        }
+        .form-group { margin-top: 12px; }
+        .form-label {
+            display: block;
+            margin-bottom: 7px;
+            color: var(--text-2);
+            font-size: 13px;
+            font-weight: 800;
+        }
+        .form-label .required { color: var(--red); }
+        .form-input,
+        .form-select {
+            width: 100%;
+            height: 44px;
+            padding: 0 12px;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #f8fbff;
+            color: var(--text-1);
+            font-size: 14px;
+            outline: none;
+        }
+        .appointment-type-tabs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin: 4px 0 12px;
+        }
+        .appointment-type-tab {
+            height: 38px;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #f8fbff;
+            color: var(--text-2);
+            font-size: 13px;
+            font-weight: 900;
+            cursor: pointer;
+        }
+        .appointment-type-tab.active {
+            border-color: rgba(47, 122, 246, 0.42);
+            background: var(--blue-soft);
+            color: var(--blue);
+        }
+        .modal-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 16px;
+        }
+        .modal-btn {
+            height: 44px;
+            border: 0;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 900;
+            cursor: pointer;
+        }
+        .modal-btn.cancel { background: #f2f5f8; color: var(--text-2); }
+        .modal-btn.confirm { background: var(--blue); color: #fff; }
         @media (max-width: 360px) {
             .risk-list,
             .risk-grid,
@@ -707,6 +903,7 @@
             .plan-stat .period { font-size: 11px; }
             .plan-table { grid-template-columns: minmax(104px, 1.6fr) repeat(4, minmax(38px, 1fr)); }
             .plan-cell { padding: 7px 4px; font-size: 11px; }
+            .service-metric-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -927,15 +1124,15 @@
                         <div class="mini-row">
                             <span class="mini-icon red"><i class="fas fa-heart-pulse"></i></span>
                             <span class="mini-title">心血管风险</span>
-                            <span class="mini-value" style="color:var(--red)">高风险</span>
+                            <span class="mini-value" style="color:var(--red)">超高危</span>
                             <i class="fas fa-chevron-right date"></i>
                         </div>
-                        <div class="mini-desc">10年风险：24.5%</div>
+                        <div class="mini-desc">10年风险：--</div>
                     </div>
                     <div class="mini-card" onclick="openComplicationModal()">
                         <div class="mini-row">
                             <span class="mini-icon blue"><i class="fas fa-notes-medical"></i></span>
-                            <span class="mini-title">并发症筛查</span>
+                            <span class="mini-title">并发症情况</span>
                             <span class="mini-value" style="color:var(--orange)">密切观察</span>
                             <i class="fas fa-chevron-right date"></i>
                         </div>
@@ -946,8 +1143,8 @@
 
             <div class="section-card">
                 <div class="section-head">
-                    <div class="section-title">用药治疗</div>
-                    <button class="section-action" type="button" onclick="showToast('查看全部用药记录')">查看全部</button>
+                    <div class="section-title">疾病用药</div>
+                    <button class="section-action" type="button" onclick="showToast('查看全部用药记录')">查看全部 <i class="fas fa-chevron-right"></i></button>
                 </div>
                 <div class="label">近3个月内用药</div>
                 <div class="list">
@@ -956,7 +1153,7 @@
                     <div class="list-row"><span class="name">氨氯地平片</span><span class="dose">5mg</span><span class="freq">1次/日</span></div>
                 </div>
                 <div style="height:12px"></div>
-                <div class="timeline-dynamic"><span class="dynamic-type">09-19 调整：</span>「二甲双胍」剂量1.0g-&gt;1.5g 频次每日三次-&gt;每日1次</div>
+                <div class="timeline-dynamic"><span class="dynamic-type">09-19 续方：</span>「苯磺酸氨氯地平」，维持原用药方案</div>
             </div>
 
             <div class="section-card">
@@ -1033,14 +1230,54 @@
                 </div>
 
                 <div class="service-package-panel active" id="package-chronic">
-                    <table class="service-table">
-                        <thead><tr><th>服务项目</th><th>服务次数</th><th>服务频次</th></tr></thead>
-                        <tbody>
-                            <tr><td>定期随访</td><td>4次</td><td><span class="freq-tag">按需服务</span></td></tr>
-                            <tr><td>个性化健康指导</td><td>3次</td><td><span class="freq-tag green">每月1次</span></td></tr>
-                            <tr><td>检查计划</td><td>本月 2/3</td><td><span class="freq-tag orange">月/季/年</span></td></tr>
-                        </tbody>
-                    </table>
+                    <div class="service-project-list">
+                        <div class="service-project-card">
+                            <div class="service-project-head">
+                                <div class="service-project-title">定期健康随访</div>
+                                <span class="freq-tag">按需服务</span>
+                            </div>
+                            <div class="service-project-body">
+                                <div class="service-metric-grid">
+                                    <div class="service-metric">
+                                        <div class="service-metric-label">高危随访</div>
+                                        <div class="service-metric-value">2次</div>
+                                    </div>
+                                    <div class="service-metric">
+                                        <div class="service-metric-label">患者随访</div>
+                                        <div class="service-metric-value">4次</div>
+                                    </div>
+                                </div>
+                                <div class="service-detail-row">
+                                    <span>下次随访：<span class="service-date">2026-05-10</span><span class="overdue-tag">已逾期</span></span>
+                                    <button class="text-action" type="button" onclick="startPreFollowUp()">预随访 <i class="fas fa-chevron-right"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="service-project-card">
+                            <div class="service-project-head">
+                                <div class="service-project-title">个性化健康指导</div>
+                                <span class="freq-tag">按需服务</span>
+                            </div>
+                            <div class="service-project-body">
+                                <div class="service-metric-grid">
+                                    <div class="service-metric">
+                                        <div class="service-metric-label">健康指导次数</div>
+                                        <div class="service-metric-value">3次</div>
+                                    </div>
+                                    <div class="service-metric">
+                                        
+                                       
+                                        <div class="service-metric-value-row">
+                                            <div class="service-metric-label">上次开方</div>
+                                            <button class="text-action" type="button" onclick="showToast('查看健康处方详情')">查看详情 <i class="fas fa-chevron-right"></i></button>
+                                        </div>
+                                         <div class="service-metric-value">2026-04-18</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="check-plan">
                         <div class="section-head">
@@ -1163,7 +1400,56 @@
         </div>
     </div>
 
+    <div class="modal-mask" id="appointmentModal" onclick="closeAppointmentModal(event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-head">
+                <div class="modal-title">预约就诊</div>
+                <button class="modal-close" type="button" onclick="closeAppointmentModal(event)"><i class="fas fa-xmark"></i></button>
+            </div>
+            <div class="appointment-type-tabs">
+                <button class="appointment-type-tab active" type="button" data-appointment-type="visit" onclick="selectAppointmentType('visit')">就诊预约</button>
+                <button class="appointment-type-tab" type="button" data-appointment-type="referral" onclick="selectAppointmentType('referral')">转诊预约</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="appointmentDatetime">预约日期 <span class="required">*</span></label>
+                <input class="form-input" id="appointmentDatetime" type="datetime-local">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="appointmentOrg">预约机构 <span class="required">*</span></label>
+                <select class="form-select" id="appointmentOrg" onchange="onAppointmentOrgChange()"></select>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="appointmentDept">预约科室 <span class="required">*</span></label>
+                <select class="form-select" id="appointmentDept"></select>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn cancel" type="button" onclick="closeAppointmentModal()">取消</button>
+                <button class="modal-btn confirm" type="button" onclick="confirmAppointment()">确认预约</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="floating-actions">
+        <button class="float-action primary" type="button" onclick="openAppointmentModal()"><i class="fas fa-calendar-plus"></i>预约就诊</button>
+        <button class="float-action" type="button" onclick="openPatientMessage()"><i class="fas fa-comment-dots"></i>发送消息</button>
+        <button class="float-action" type="button" onclick="startPreFollowUp()"><i class="fas fa-clipboard-check"></i>预随访</button>
+    </div>
+
     <script>
+        const patientInfo = {
+            id: new URLSearchParams(window.location.search).get('id') || '1',
+            name: '张建国'
+        };
+        const appointmentOrgs = {
+            visit: [
+                { id: 'org001', name: '滨海社区卫生服务中心', departments: ['全科门诊', '慢病管理科', '中医科'] }
+            ],
+            referral: [
+                { id: 'org002', name: '临海市第一人民医院', departments: ['心内科', '内分泌科', '肾内科', '神经内科'] }
+            ]
+        };
+        let currentAppointmentType = 'visit';
+
         function goBack() {
             window.history.back();
         }
@@ -1188,6 +1474,80 @@
 
         function goAbnormalDetail() {
             window.location.href = 'abnormal-patient-detail.html?id=1';
+        }
+
+        function openAppointmentModal() {
+            document.getElementById('appointmentModal').classList.add('show');
+            initAppointmentForm();
+        }
+
+        function closeAppointmentModal(event) {
+            if (!event || event.target.id === 'appointmentModal' || event.currentTarget.classList.contains('modal-close')) {
+                document.getElementById('appointmentModal').classList.remove('show');
+            }
+        }
+
+        function initAppointmentForm() {
+            currentAppointmentType = 'visit';
+            updateAppointmentTypeTabs();
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(8, 0, 0, 0);
+            document.getElementById('appointmentDatetime').value = tomorrow.toISOString().slice(0, 16);
+            updateAppointmentOrgOptions();
+        }
+
+        function selectAppointmentType(type) {
+            currentAppointmentType = type;
+            updateAppointmentTypeTabs();
+            updateAppointmentOrgOptions();
+        }
+
+        function updateAppointmentTypeTabs() {
+            document.querySelectorAll('.appointment-type-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.appointmentType === currentAppointmentType);
+            });
+        }
+
+        function updateAppointmentOrgOptions() {
+            const orgSelect = document.getElementById('appointmentOrg');
+            orgSelect.innerHTML = appointmentOrgs[currentAppointmentType].map(org => `<option value="${org.id}">${org.name}</option>`).join('');
+            onAppointmentOrgChange();
+        }
+
+        function onAppointmentOrgChange() {
+            const orgId = document.getElementById('appointmentOrg').value;
+            const deptSelect = document.getElementById('appointmentDept');
+            const org = appointmentOrgs[currentAppointmentType].find(item => item.id === orgId);
+            deptSelect.innerHTML = '<option value="">请选择科室</option>' + (org ? org.departments.map(dept => `<option value="${dept}">${dept}</option>`).join('') : '');
+        }
+
+        function confirmAppointment() {
+            const datetime = document.getElementById('appointmentDatetime').value;
+            const orgId = document.getElementById('appointmentOrg').value;
+            const dept = document.getElementById('appointmentDept').value;
+            if (!datetime) {
+                showToast('请选择预约日期');
+                return;
+            }
+            if (!orgId) {
+                showToast('请选择预约机构');
+                return;
+            }
+            if (!dept) {
+                showToast('请选择预约科室');
+                return;
+            }
+            showToast('预约成功');
+            closeAppointmentModal();
+        }
+
+        function openPatientMessage() {
+            window.location.href = `patient-chat-session.html?residentId=${patientInfo.id}&name=${encodeURIComponent(patientInfo.name)}`;
+        }
+
+        function startPreFollowUp() {
+            window.location.href = `patient-pre-follow-up.html?id=${patientInfo.id}&name=${encodeURIComponent(patientInfo.name)}`;
         }
 
         function openComplicationModal() {

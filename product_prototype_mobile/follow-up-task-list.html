@@ -1160,6 +1160,10 @@ textarea {
                             计划日期 <span>${task.nextDate}</span>
                         </div>
                         <div class="card-actions">
+                            <button class="action-btn" onclick="viewHealthProfile(${task.id})">
+                                <i class="fas fa-user-circle"></i>
+                                <span>健康画像</span>
+                            </button>
                             <button class="action-btn" onclick="viewFollowUpRecords(${task.id}, '${typeText}')">
                                 <i class="fas fa-history"></i>
                                 <span>随访记录</span>
@@ -1184,6 +1188,11 @@ textarea {
         // 查看随访记录
         function viewFollowUpRecords(id, type) {
             window.location.href = `patient-follow-up-records.html?id=${id}&type=${encodeURIComponent(type)}`;
+        }
+
+        // 查看健康画像
+        function viewHealthProfile(id) {
+            window.location.href = `patient-health-profile.html?id=${id}`;
         }
 
         // 预随访
