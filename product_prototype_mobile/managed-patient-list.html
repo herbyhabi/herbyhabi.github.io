@@ -1,414 +1,785 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>我的患者</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --arcoblue-6: #165DFF; --arcoblue-1: #E8F3FF;
-            --text-1: #1D2129; --text-2: #4E5969; --text-3: #86909C; --text-4: #C9CDD4;
-            --bg-1: #F2F3F5; --bg-2: #FFFFFF; --border: #E5E6EB;
-            --radius-medium: 8px; --radius-large: 12px; --radius-xlarge: 20px;
-            --font-size-caption: 12px; --font-size-body-1: 14px; --font-size-title-1: 16px; --font-size-title-2: 18px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif; background: var(--bg-1); min-height: 100vh; padding-bottom: 70px; }
-        
+
+        :root {
+            --arcoblue-6: #165DFF;
+            --arcoblue-1: #E8F3FF;
+            --text-1: #1D2129;
+            --text-2: #4E5969;
+            --text-3: #86909C;
+            --text-4: #C9CDD4;
+            --bg-1: #F2F3F5;
+            --bg-2: #FFFFFF;
+            --border: #E5E6EB;
+            --radius-medium: 8px;
+            --radius-large: 12px;
+            --radius-xlarge: 20px;
+            --font-size-caption: 12px;
+            --font-size-body-1: 14px;
+            --font-size-title-1: 16px;
+            --font-size-title-2: 18px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif;
+            background: var(--bg-1);
+            min-height: 100vh;
+            padding-bottom: 70px;
+        }
+
         /* 导航栏 */
-        .navbar { background: linear-gradient(135deg, var(--arcoblue-6) 0%, #4080FF 100%); padding: 44px 16px 0; position: sticky; top: 0; z-index: 100; }
-        .navbar-content { display: flex; align-items: center; justify-content: center; padding-bottom: 16px; position: relative; }
-        .navbar-title { font-size: var(--font-size-title-2); font-weight: 600; color: white; }
-        .back-btn { position: absolute; left: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; cursor: pointer; }
-        
+        .navbar {
+            background: linear-gradient(135deg, var(--arcoblue-6) 0%, #4080FF 100%);
+            padding: 44px 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-bottom: 16px;
+            position: relative;
+        }
+
+        .navbar-title {
+            font-size: var(--font-size-title-2);
+            font-weight: 600;
+            color: white;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 0;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
         /* 页签 */
-        .tabs { display: flex; background: var(--bg-2); border-bottom: 1px solid var(--border); }
-        .tab-item { flex: 1; padding: 14px 0; text-align: center; font-size: var(--font-size-body-1); color: var(--text-2); cursor: pointer; position: relative; }
-        .tab-item.active { color: var(--arcoblue-6); font-weight: 600; }
-        .tab-item.active::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 40px; height: 3px; background: var(--arcoblue-6); border-radius: 2px; }
-        
+        .tabs {
+            display: flex;
+            background: var(--bg-2);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab-item {
+            flex: 1;
+            padding: 14px 0;
+            text-align: center;
+            font-size: var(--font-size-body-1);
+            color: var(--text-2);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .tab-item.active {
+            color: var(--arcoblue-6);
+            font-weight: 600;
+        }
+
+        .tab-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 3px;
+            background: var(--arcoblue-6);
+            border-radius: 2px;
+        }
+
         /* 搜索区域 */
-        .search-section { background: var(--bg-2); padding: 12px 16px; border-bottom: 1px solid var(--border); }
-        .search-box { display: flex; align-items: center; gap: 8px; background: var(--bg-1); padding: 10px 14px; border-radius: var(--radius-xlarge); }
-        .search-box i { color: var(--text-3); font-size: 16px; }
-        .search-box input { flex: 1; border: none; outline: none; background: transparent; font-size: var(--font-size-body-1); color: var(--text-1); }
-        .search-box input::placeholder { color: var(--text-4); }
-        
+        .search-section {
+            background: var(--bg-2);
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-1);
+            padding: 10px 14px;
+            border-radius: var(--radius-xlarge);
+        }
+
+        .search-box i {
+            color: var(--text-3);
+            font-size: 16px;
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: var(--font-size-body-1);
+            color: var(--text-1);
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-4);
+        }
+
         /* 筛选标签 */
-        .filter-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
-        .filter-tag { display: flex; align-items: center; gap: 4px; padding: 6px 12px; background: var(--bg-1); border: 1px solid var(--border); border-radius: var(--radius-xlarge); font-size: var(--font-size-caption); color: var(--text-2); cursor: pointer; transition: all 0.2s; }
-        .filter-tag.active { background: var(--arcoblue-1); border-color: var(--arcoblue-6); color: var(--arcoblue-6); }
-        .filter-tag i { font-size: 10px; }
-        
+        .filter-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .filter-tag {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
+            background: var(--bg-1);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xlarge);
+            font-size: var(--font-size-caption);
+            color: var(--text-2);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-tag.active {
+            background: var(--arcoblue-1);
+            border-color: var(--arcoblue-6);
+            color: var(--arcoblue-6);
+        }
+
+        .filter-tag i {
+            font-size: 10px;
+        }
+
         /* 页面容器 */
-        .page-container { display: none; }
-        .page-container.active { display: block; }
-        
+        .page-container {
+            display: none;
+        }
+
+        .page-container.active {
+            display: block;
+        }
+
         /* 统计信息 */
-        .stats-bar { padding: 12px 16px; font-size: var(--font-size-body-1); color: var(--text-2); background: var(--bg-2); border-bottom: 1px solid var(--border); }
-        .stats-bar span { color: var(--arcoblue-6); font-weight: 600; }
-        
+        .stats-bar {
+            padding: 12px 16px;
+            font-size: var(--font-size-body-1);
+            color: var(--text-2);
+            background: var(--bg-2);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .stats-bar span {
+            color: var(--arcoblue-6);
+            font-weight: 600;
+        }
+
         /* 患者列表 */
-        .patient-list { padding: 12px 16px; }
-        .patient-card { background: var(--bg-2); border-radius: var(--radius-large); padding: 16px; margin-bottom: 12px; }
-        
+        .patient-list {
+            padding: 12px 16px;
+        }
+
+        .patient-card {
+            background: var(--bg-2);
+            border-radius: var(--radius-large);
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
         /* 患者头部信息 */
-        .patient-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-        .patient-info { display: flex; align-items: center; gap: 8px; min-width: 0; }
-        .patient-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
-        .patient-avatar.male { background: var(--arcoblue-1); color: var(--arcoblue-6); }
-        .patient-avatar.female { background: #FFF0F0; color: #FF6B6B; }
-        .patient-basic { min-width: 0; }
-        .patient-name-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
-        .patient-name { font-size: var(--font-size-title-1); font-weight: 600; }
-        .patient-name.male { color: var(--arcoblue-6); }
-        .patient-name.female { color: #FF6B6B; }
-        .patient-age { font-size: var(--font-size-caption); color: var(--text-3); background: var(--bg-1); padding: 2px 8px; border-radius: 4px; }
-        .patient-idcard { font-size: var(--font-size-caption); color: var(--text-3); }
-        
+        .patient-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .patient-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .patient-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .patient-avatar.male {
+            background: var(--arcoblue-1);
+            color: var(--arcoblue-6);
+        }
+
+        .patient-avatar.female {
+            background: #FFF0F0;
+            color: #FF6B6B;
+        }
+
+        .patient-basic {
+            min-width: 0;
+        }
+
+        .patient-name-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .patient-name {
+            font-size: var(--font-size-title-1);
+            font-weight: 600;
+        }
+
+        .patient-name.male {
+            color: var(--arcoblue-6);
+        }
+
+        .patient-name.female {
+            color: #FF6B6B;
+        }
+
+        .patient-age {
+            font-size: var(--font-size-caption);
+            color: var(--text-3);
+            background: var(--bg-1);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .patient-idcard {
+            font-size: var(--font-size-caption);
+            color: var(--text-3);
+        }
+
         /* 联系方式 */
-        .patient-contact { display: flex; align-items: center; padding: 10px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 12px; }
-        .contact-label { font-size: var(--font-size-caption); color: var(--text-3); margin-right: 8px; }
-        .contact-value { flex: 1; font-size: var(--font-size-body-1); color: var(--text-1); }
-        .call-btn { width: 32px; height: 32px; border-radius: 50%; background: var(--arcoblue-1); display: flex; align-items: center; justify-content: center; color: var(--arcoblue-6); font-size: 14px; cursor: pointer; }
-        .phone-btn { display: flex; align-items: center; gap: 4px; padding: 6px 12px; background: #E8FFEA; color: #00B42A; border: none; border-radius: var(--radius-medium); font-size: var(--font-size-caption); cursor: pointer; }
-        .patient-details { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border); }
-        .detail-item { display: flex; align-items: center; gap: 8px; font-size: var(--font-size-body-1); }
-        .detail-label { color: var(--text-3); min-width: 60px; }
-        .detail-value { color: var(--text-2); }
-        
+        .patient-contact {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 12px;
+        }
+
+        .contact-label {
+            font-size: var(--font-size-caption);
+            color: var(--text-3);
+            margin-right: 8px;
+        }
+
+        .contact-value {
+            flex: 1;
+            font-size: var(--font-size-body-1);
+            color: var(--text-1);
+        }
+
+        .call-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--arcoblue-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--arcoblue-6);
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .phone-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
+            background: #E8FFEA;
+            color: #00B42A;
+            border: none;
+            border-radius: var(--radius-medium);
+            font-size: var(--font-size-caption);
+            cursor: pointer;
+        }
+
+        .patient-details {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed var(--border);
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: var(--font-size-body-1);
+        }
+
+        .detail-label {
+            color: var(--text-3);
+            min-width: 60px;
+        }
+
+        .detail-value {
+            color: var(--text-2);
+        }
+
         /* 在管信息 */
         .patient-manage,
-        .manage-info { margin-bottom: 12px; }
-        .manage-label { font-size: var(--font-size-caption); color: var(--text-3); margin-bottom: 6px; }
-        .manage-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-        .manage-tag { padding: 4px 10px; background: #FFF3E8; color: #FF7D00; font-size: var(--font-size-caption); border-radius: 4px; }
-        .manage-tag.high-risk { background: #FFF3E8; color: #FF7D00; }
-        
+        .manage-info {
+            margin-bottom: 12px;
+        }
+
+        .manage-label {
+            font-size: var(--font-size-caption);
+            color: var(--text-3);
+            margin-bottom: 6px;
+        }
+
+        .manage-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .manage-tag {
+            padding: 4px 10px;
+            background: #FFF3E8;
+            color: #FF7D00;
+            font-size: var(--font-size-caption);
+            border-radius: 4px;
+        }
+
+        .manage-tag.high-risk {
+            background: #FFF3E8;
+            color: #FF7D00;
+        }
+
         /* 操作按钮 */
         .patient-actions,
-        .card-actions { display: flex; gap: 12px; }
-        .action-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-medium); background: var(--bg-2); font-size: var(--font-size-body-1); color: var(--text-2); text-align: center; cursor: pointer; }
-        .action-btn.profile { background: var(--bg-2); color: var(--text-2); }
+        .card-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .action-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-medium);
+            background: var(--bg-2);
+            font-size: var(--font-size-body-1);
+            color: var(--text-2);
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .action-btn.profile {
+            background: var(--bg-2);
+            color: var(--text-2);
+        }
+
         .action-btn.followup,
-        .action-btn.primary { background: var(--arcoblue-6); border-color: var(--arcoblue-6); color: white; }
-        
+        .action-btn.primary {
+            background: var(--arcoblue-6);
+            border-color: var(--arcoblue-6);
+            color: white;
+        }
+
         /* 空状态 */
-        .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; }
-        .empty-icon { width: 80px; height: 80px; background: var(--bg-1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
-        .empty-icon i { font-size: 36px; color: var(--text-4); }
-        .empty-text { font-size: var(--font-size-body-1); color: var(--text-3); }
-        
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+        }
+
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--bg-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .empty-icon i {
+            font-size: 36px;
+            color: var(--text-4);
+        }
+
+        .empty-text {
+            font-size: var(--font-size-body-1);
+            color: var(--text-3);
+        }
+
         /* Toast 提示 */
-        .toast { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.7); color: white; padding: 12px 24px; border-radius: 8px; font-size: 14px; z-index: 1000; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
-        .toast.show { opacity: 1; }
-/* 首页风格统一覆盖 */
-body {
-    color: #0f1f33;
-    background:
-        radial-gradient(circle at 82% 2%, rgba(181, 213, 255, 0.8) 0 110px, transparent 220px),
-        linear-gradient(180deg, #d9ebff 0%, #f4faff 28%, #f7fbff 68%, #ffffff 100%) !important;
-    -webkit-font-smoothing: antialiased;
-}
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
 
-.navbar {
-    position: sticky;
-    top: 0;
-    overflow: hidden;
-    background: rgba(217, 235, 255, 0.82) !important;
-    border-bottom: 1px solid rgba(118, 140, 165, 0.12);
-    box-shadow: 0 10px 26px rgba(60, 101, 145, 0.08);
-    backdrop-filter: blur(14px);
-}
+        .toast.show {
+            opacity: 1;
+        }
 
-.navbar::before {
-    content: "";
-    position: absolute;
-    top: -58px;
-    right: -34px;
-    width: 170px;
-    height: 150px;
-    border-radius: 34px;
-    background: linear-gradient(135deg, rgba(67, 142, 255, 0.2), rgba(255, 255, 255, 0.06));
-    transform: rotate(-12deg);
-    pointer-events: none;
-}
+        /* 首页风格统一覆盖 */
+        body {
+            color: #0f1f33;
+            background:
+                radial-gradient(circle at 82% 2%, rgba(181, 213, 255, 0.8) 0 110px, transparent 220px),
+                linear-gradient(180deg, #d9ebff 0%, #f4faff 28%, #f7fbff 68%, #ffffff 100%) !important;
+            -webkit-font-smoothing: antialiased;
+        }
 
-.navbar-content,
-.navbar-title,
-.back-btn,
-.search-btn,
-.navbar-count {
-    position: relative;
-    z-index: 1;
-}
+        .navbar {
+            position: sticky;
+            top: 0;
+            overflow: hidden;
+            background: rgba(217, 235, 255, 0.82) !important;
+            border-bottom: 1px solid rgba(118, 140, 165, 0.12);
+            box-shadow: 0 10px 26px rgba(60, 101, 145, 0.08);
+            backdrop-filter: blur(14px);
+        }
 
-.navbar-title,
-.back-btn,
-.search-btn,
-.navbar-count {
-    color: #0f1f33 !important;
-}
+        .navbar::before {
+            content: "";
+            position: absolute;
+            top: -58px;
+            right: -34px;
+            width: 170px;
+            height: 150px;
+            border-radius: 34px;
+            background: linear-gradient(135deg, rgba(67, 142, 255, 0.2), rgba(255, 255, 255, 0.06));
+            transform: rotate(-12deg);
+            pointer-events: none;
+        }
 
-.navbar-title {
-    font-weight: 800 !important;
-}
+        .navbar-content,
+        .navbar-title,
+        .back-btn,
+        .search-btn,
+        .navbar-count {
+            position: relative;
+            z-index: 1;
+        }
 
-.tabs,
-.search-section,
-.stats-bar,
-.page-container,
-.session-list,
-.system-list {
-    background: transparent !important;
-}
+        .navbar-title,
+        .back-btn,
+        .search-btn,
+        .navbar-count {
+            color: #0f1f33 !important;
+        }
 
-.tab-item.active {
-    color: #2f7af6 !important;
-}
+        .navbar-title {
+            font-weight: 800 !important;
+        }
 
-.tab-item.active::after {
-    background: #2f7af6 !important;
-}
+        .tabs,
+        .search-section,
+        .stats-bar,
+        .page-container,
+        .session-list,
+        .system-list {
+            background: transparent !important;
+        }
 
-.patient-card,
-.user-card,
-.org-card,
-.menu-list,
-.info-card,
-.detail-card,
-.record-card,
-.task-card,
-.anomaly-card,
-.form-card,
-.card,
-.section-card,
-.profile-card,
-.health-card,
-.content-card,
-.result-item,
-.empty-icon,
-.modal-content {
-    background: rgba(255, 255, 255, 0.92) !important;
-    border: 1px solid rgba(123, 147, 176, 0.14) !important;
-    border-radius: 16px !important;
-    box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12) !important;
-    backdrop-filter: blur(12px);
-}
+        .tab-item.active {
+            color: #2f7af6 !important;
+        }
 
-.session-item,
-.system-item,
-.menu-item,
-.list-item,
-.record-item,
-.info-row {
-    border-color: rgba(119, 140, 166, 0.18) !important;
-}
+        .tab-item.active::after {
+            background: #2f7af6 !important;
+        }
 
-.search-box,
-.search-input-wrapper,
-input,
-select,
-textarea {
-    border-color: rgba(122, 150, 184, 0.13) !important;
-    box-shadow: inset 0 0 0 1px rgba(122, 150, 184, 0.08);
-}
+        .patient-card,
+        .user-card,
+        .org-card,
+        .menu-list,
+        .info-card,
+        .detail-card,
+        .record-card,
+        .task-card,
+        .anomaly-card,
+        .form-card,
+        .card,
+        .section-card,
+        .profile-card,
+        .health-card,
+        .content-card,
+        .result-item,
+        .empty-icon,
+        .modal-content {
+            background: rgba(255, 255, 255, 0.92) !important;
+            border: 1px solid rgba(123, 147, 176, 0.14) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12) !important;
+            backdrop-filter: blur(12px);
+        }
 
-.action-btn.primary,
-.submit-btn,
-.filter-btn.confirm,
-.modal-btn.confirm,
-.login-btn,
-.code-btn:not(:disabled) {
-    background: linear-gradient(145deg, #4b9bff, #2f7af6) !important;
-    color: #fff !important;
-    border: 0 !important;
-    box-shadow: 0 8px 16px rgba(45, 101, 170, 0.13);
-}
+        .session-item,
+        .system-item,
+        .menu-item,
+        .list-item,
+        .record-item,
+        .info-row {
+            border-color: rgba(119, 140, 166, 0.18) !important;
+        }
 
-.action-btn,
-.filter-btn.reset,
-.modal-btn.cancel,
-.popup-option,
-.phone-btn,
-.call-btn {
-    border-color: rgba(123, 147, 176, 0.14) !important;
-}
+        .search-box,
+        .search-input-wrapper,
+        input,
+        select,
+        textarea {
+            border-color: rgba(122, 150, 184, 0.13) !important;
+            box-shadow: inset 0 0 0 1px rgba(122, 150, 184, 0.08);
+        }
 
-.toast,
-.arco-toast {
-    background: rgba(12, 20, 34, 0.82) !important;
-    border-radius: 8px !important;
-}
-/* 首页风格补充覆盖 */
-.info-section,
-.info-list,
-.app-section,
-.form-section,
-.form-item,
-.filter-section,
-.disease-card,
-.indicator-item,
-.quick-action-item {
-    background: rgba(255, 255, 255, 0.92) !important;
-    border: 1px solid rgba(123, 147, 176, 0.14) !important;
-    border-radius: 16px !important;
-    box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12) !important;
-    backdrop-filter: blur(12px);
-}
+        .action-btn.primary,
+        .submit-btn,
+        .filter-btn.confirm,
+        .modal-btn.confirm,
+        .login-btn,
+        .code-btn:not(:disabled) {
+            background: linear-gradient(145deg, #4b9bff, #2f7af6) !important;
+            color: #fff !important;
+            border: 0 !important;
+            box-shadow: 0 8px 16px rgba(45, 101, 170, 0.13);
+        }
 
-.patient-list,
-.task-list,
-.record-list,
-.search-results {
-    position: relative;
-    z-index: 1;
-}
+        .action-btn,
+        .filter-btn.reset,
+        .modal-btn.cancel,
+        .popup-option,
+        .phone-btn,
+        .call-btn {
+            border-color: rgba(123, 147, 176, 0.14) !important;
+        }
 
-.action-btn,
-.submit-btn,
-.code-btn,
-.filter-btn,
-.modal-btn,
-.phone-btn,
-.call-btn {
-    border-radius: 10px !important;
-    font-weight: 700;
-}
+        .toast,
+        .arco-toast {
+            background: rgba(12, 20, 34, 0.82) !important;
+            border-radius: 8px !important;
+        }
 
-.navbar + .tabs,
-.tabs {
-    border-bottom-color: rgba(118, 140, 165, 0.16) !important;
-    backdrop-filter: blur(10px);
-}
+        /* 首页风格补充覆盖 */
+        .info-section,
+        .info-list,
+        .app-section,
+        .form-section,
+        .form-item,
+        .filter-section,
+        .disease-card,
+        .indicator-item,
+        .quick-action-item {
+            background: rgba(255, 255, 255, 0.92) !important;
+            border: 1px solid rgba(123, 147, 176, 0.14) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12) !important;
+            backdrop-filter: blur(12px);
+        }
+
+        .patient-list,
+        .task-list,
+        .record-list,
+        .search-results {
+            position: relative;
+            z-index: 1;
+        }
+
+        .action-btn,
+        .submit-btn,
+        .code-btn,
+        .filter-btn,
+        .modal-btn,
+        .phone-btn,
+        .call-btn {
+            border-radius: 10px !important;
+            font-weight: 700;
+        }
+
+        .navbar+.tabs,
+        .tabs {
+            border-bottom-color: rgba(118, 140, 165, 0.16) !important;
+            backdrop-filter: blur(10px);
+        }
 
 
-/* 全局顶部与查询框统一 */
-.navbar {
-    position: sticky !important;
-    top: 0 !important;
-    min-height: 92px;
-    padding: 44px 16px 12px !important;
-    z-index: 100 !important;
-}
+        /* 全局顶部与查询框统一 */
+        .navbar {
+            position: sticky !important;
+            top: 0 !important;
+            min-height: 92px;
+            padding: 44px 16px 12px !important;
+            z-index: 100 !important;
+        }
 
-.navbar-content {
-    position: relative !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    min-height: 36px;
-    padding-bottom: 0 !important;
-}
+        .navbar-content {
+            position: relative !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            min-height: 36px;
+            padding-bottom: 0 !important;
+        }
 
-.navbar-content .back-btn {
-    position: absolute !important;
-    left: 0 !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    margin: 0 !important;
-    z-index: 2 !important;
-}
+        .navbar-content .back-btn {
+            position: absolute !important;
+            left: 0 !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            margin: 0 !important;
+            z-index: 2 !important;
+        }
 
-.navbar > .back-btn {
-    position: absolute !important;
-    left: 16px !important;
-    bottom: 12px !important;
-    margin: 0 !important;
-    z-index: 2 !important;
-}
+        .navbar>.back-btn {
+            position: absolute !important;
+            left: 16px !important;
+            bottom: 12px !important;
+            margin: 0 !important;
+            z-index: 2 !important;
+        }
 
-.navbar-title,
-.navbar-content .navbar-title,
-.navbar > .navbar-title {
-    position: absolute !important;
-    left: 50% !important;
-    top: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    width: calc(100% - 128px) !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    text-align: center !important;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    pointer-events: none;
-    z-index: 1 !important;
-}
+        .navbar-title,
+        .navbar-content .navbar-title,
+        .navbar>.navbar-title {
+            position: absolute !important;
+            left: 50% !important;
+            top: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            width: calc(100% - 128px) !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            text-align: center !important;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            pointer-events: none;
+            z-index: 1 !important;
+        }
 
-.navbar > .navbar-title {
-    top: auto !important;
-    bottom: 19px !important;
-    transform: translateX(-50%) !important;
-}
+        .navbar>.navbar-title {
+            top: auto !important;
+            bottom: 19px !important;
+            transform: translateX(-50%) !important;
+        }
 
-.search-btn,
-.navbar-count {
-    position: absolute !important;
-    right: 0 !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    margin: 0 !important;
-    z-index: 2 !important;
-}
+        .search-btn,
+        .navbar-count {
+            position: absolute !important;
+            right: 0 !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            margin: 0 !important;
+            z-index: 2 !important;
+        }
 
-.navbar > .search-btn,
-.navbar > .navbar-count {
-    right: 16px !important;
-    top: auto !important;
-    bottom: 12px !important;
-    transform: none !important;
-}
+        .navbar>.search-btn,
+        .navbar>.navbar-count {
+            right: 16px !important;
+            top: auto !important;
+            bottom: 12px !important;
+            transform: none !important;
+        }
 
-.search-section,
-.filter-section,
-.search-header {
-    background: transparent !important;
-}
+        .search-section,
+        .filter-section,
+        .search-header {
+            background: transparent !important;
+        }
 
-.search-box,
-.search-input-wrapper {
-    min-height: 52px !important;
-    height: 52px !important;
-    border: 0 !important;
-    border-radius: 24px !important;
-    background: rgba(255, 255, 255, 0.96) !important;
-    box-shadow: inset 0 0 0 1px rgba(122, 150, 184, 0.13), 0 10px 28px rgba(85, 127, 174, 0.1) !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 13px !important;
-    padding: 0 20px !important;
-}
+        .search-box,
+        .search-input-wrapper {
+            min-height: 52px !important;
+            height: 52px !important;
+            border: 0 !important;
+            border-radius: 24px !important;
+            background: rgba(255, 255, 255, 0.96) !important;
+            box-shadow: inset 0 0 0 1px rgba(122, 150, 184, 0.13), 0 10px 28px rgba(85, 127, 174, 0.1) !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 13px !important;
+            padding: 0 20px !important;
+        }
 
-.search-box i,
-.search-input-wrapper i {
-    color: #5f6d7d !important;
-    font-size: 20px !important;
-    flex: 0 0 auto;
-}
+        .search-box i,
+        .search-input-wrapper i {
+            color: #5f6d7d !important;
+            font-size: 20px !important;
+            flex: 0 0 auto;
+        }
 
-.search-box input,
-.search-input-wrapper input {
-    width: 100% !important;
-    flex: 1 1 auto !important;
-    min-width: 0;
-    border: 0 !important;
-    outline: 0 !important;
-    color: #29384b !important;
-    font-size: 16px !important;
-    background: transparent !important;
-    box-shadow: none !important;
-    font-family: var(--font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif) !important;
-}
+        .search-box input,
+        .search-input-wrapper input {
+            width: 100% !important;
+            flex: 1 1 auto !important;
+            min-width: 0;
+            border: 0 !important;
+            outline: 0 !important;
+            color: #29384b !important;
+            font-size: 16px !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            font-family: var(--font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif) !important;
+        }
 
-.search-box input::placeholder,
-.search-input-wrapper input::placeholder {
-    color: #a0a8b1 !important;
-}
-
+        .search-box input::placeholder,
+        .search-input-wrapper input::placeholder {
+            color: #a0a8b1 !important;
+        }
     </style>
 </head>
+
 <body>
     <!-- Toast 容器 -->
     <div class="toast" id="toast"></div>
@@ -468,17 +839,17 @@ textarea {
 
         // 在管患者数据
         const managedPatients = [
-            { id: 1, name: '王建国', gender: '男', age: 68, phone: '138****1234', idCard: '330326195601011234', diseases: [{name: '高血压', level: '一级'}, {name: '糖尿病', level: '二级'}] },
-            { id: 2, name: '李秀英', gender: '女', age: 72, phone: '139****5678', idCard: '330326195201025678', diseases: [{name: '高血压', level: '二级'}] },
-            { id: 3, name: '张大山', gender: '男', age: 65, phone: '137****9012', idCard: '330326195801019012', diseases: [{name: '糖尿病', level: '一级'}] },
-            { id: 4, name: '陈美丽', gender: '女', age: 58, phone: '136****3456', idCard: '330326196601023456', diseases: [{name: '高血压', level: '一级'}, {name: '冠心病', level: '二级'}] }
+            { id: 1, name: '王建国', gender: '男', age: 68, phone: '138****1234', idCard: '330326195601011234', diseases: [{ name: '高血压', level: '一级' }, { name: '糖尿病', level: '二级' }] },
+            { id: 2, name: '李秀英', gender: '女', age: 72, phone: '139****5678', idCard: '330326195201025678', diseases: [{ name: '高血压', level: '二级' }] },
+            { id: 3, name: '张大山', gender: '男', age: 65, phone: '137****9012', idCard: '330326195801019012', diseases: [{ name: '糖尿病', level: '一级' }] },
+            { id: 4, name: '陈美丽', gender: '女', age: 58, phone: '136****3456', idCard: '330326196601023456', diseases: [{ name: '高血压', level: '一级' }, { name: '冠心病', level: '二级' }] }
         ];
 
         // 在管高危数据
         const highRiskPatients = [
-            { id: 5, name: '刘志强', gender: '男', age: 70, phone: '135****7890', idCard: '330326195401017890', diseases: [{name: '高血压', level: '高危'}, {name: '脑卒中', level: '高危'}] },
-            { id: 6, name: '赵淑芬', gender: '女', age: 75, phone: '133****2468', idCard: '330326194901023456', diseases: [{name: '糖尿病', level: '高危'}, {name: '肾病', level: '高危'}] },
-            { id: 7, name: '孙大伟', gender: '男', age: 62, phone: '132****1357', idCard: '330326196201015678', diseases: [{name: '冠心病', level: '高危'}] }
+            { id: 5, name: '刘志强', gender: '男', age: 70, phone: '135****7890', idCard: '330326195401017890', diseases: [{ name: '高血压', level: '高危' }, { name: '脑卒中', level: '高危' }] },
+            { id: 6, name: '赵淑芬', gender: '女', age: 75, phone: '133****2468', idCard: '330326194901023456', diseases: [{ name: '糖尿病', level: '高危' }, { name: '肾病', level: '高危' }] },
+            { id: 7, name: '孙大伟', gender: '男', age: 62, phone: '132****1357', idCard: '330326196201015678', diseases: [{ name: '冠心病', level: '高危' }] }
         ];
 
         // 当前筛选条件
@@ -486,10 +857,10 @@ textarea {
         let searchKeyword = '';
 
         // 初始化
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const urlParams = new URLSearchParams(window.location.search);
             const defaultTab = urlParams.get('tab') || 'managed';
-            
+
             renderManagedPatients();
             renderHighRiskPatients();
             switchTab(defaultTab);
@@ -500,7 +871,7 @@ textarea {
             const filtered = filterPatients(managedPatients);
             document.getElementById('managedCount').textContent = filtered.length;
             const container = document.getElementById('managedList');
-            
+
             if (filtered.length === 0) {
                 container.innerHTML = renderEmptyState();
             } else {
@@ -513,7 +884,7 @@ textarea {
             const filtered = filterPatients(highRiskPatients);
             document.getElementById('highRiskCount').textContent = filtered.length;
             const container = document.getElementById('highRiskList');
-            
+
             if (filtered.length === 0) {
                 container.innerHTML = renderEmptyState();
             } else {
@@ -525,11 +896,11 @@ textarea {
         function filterPatients(patients) {
             return patients.filter(p => {
                 // 关键词搜索
-                const matchKeyword = !searchKeyword || 
-                    p.name.includes(searchKeyword) || 
-                    p.phone.includes(searchKeyword) || 
+                const matchKeyword = !searchKeyword ||
+                    p.name.includes(searchKeyword) ||
+                    p.phone.includes(searchKeyword) ||
                     p.idCard.includes(searchKeyword);
-                
+
                 // 病种筛选
                 let matchFilter = true;
                 if (currentFilter !== 'all') {
@@ -541,7 +912,7 @@ textarea {
                     const targetDisease = diseaseMap[currentFilter];
                     matchFilter = p.diseases.some(d => d.name === targetDisease);
                 }
-                
+
                 return matchKeyword && matchFilter;
             });
         }
@@ -563,12 +934,12 @@ textarea {
             const isFemale = patient.gender === '女';
             const genderClass = isFemale ? 'female' : 'male';
             const avatarIcon = isFemale ? 'fa-female' : 'fa-male';
-            
+
             const diseaseTags = patient.diseases.map(d => {
                 const tagClass = isHighRisk ? 'manage-tag high-risk' : 'manage-tag';
                 return `<span class="${tagClass}">${d.name} · ${d.level}</span>`;
             }).join('');
-            
+
             return `
                 <div class="patient-card">
                     <div class="patient-header">
@@ -620,7 +991,7 @@ textarea {
         function switchTab(tab) {
             document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
             document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
-            
+
             document.querySelectorAll('.page-container').forEach(p => p.classList.remove('active'));
             document.getElementById(tab === 'managed' ? 'managedPage' : 'highRiskPage').classList.add('active');
         }
@@ -662,4 +1033,5 @@ textarea {
         }
     </script>
 </body>
+
 </html>

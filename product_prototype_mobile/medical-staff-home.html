@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -333,8 +334,8 @@
             cursor: pointer;
         }
 
-        .todo-item + .todo-item,
-        .patient-metric + .patient-metric {
+        .todo-item+.todo-item,
+        .patient-metric+.patient-metric {
             border-left: 1px solid var(--line);
         }
 
@@ -535,14 +536,37 @@
             white-space: nowrap;
         }
 
-        .bg-teal { background: linear-gradient(145deg, #20cdbd, #20b8af); }
-        .bg-blue { background: linear-gradient(145deg, #4b9bff, #2f7af6); }
-        .bg-orange { background: linear-gradient(145deg, #ffa751, #ff8a33); }
-        .bg-purple { background: linear-gradient(145deg, #9364f4, #754fe6); }
-        .bg-green { background: linear-gradient(145deg, #38ce6b, #24a951); }
-        .bg-indigo { background: linear-gradient(145deg, #628cf6, #4672e9); }
-        .bg-cyan { background: linear-gradient(145deg, #31c8cd, #21aebb); }
-        .bg-gray { background: linear-gradient(145deg, #a8b5c9, #8998ad); }
+        .bg-teal {
+            background: linear-gradient(145deg, #20cdbd, #20b8af);
+        }
+
+        .bg-blue {
+            background: linear-gradient(145deg, #4b9bff, #2f7af6);
+        }
+
+        .bg-orange {
+            background: linear-gradient(145deg, #ffa751, #ff8a33);
+        }
+
+        .bg-purple {
+            background: linear-gradient(145deg, #9364f4, #754fe6);
+        }
+
+        .bg-green {
+            background: linear-gradient(145deg, #38ce6b, #24a951);
+        }
+
+        .bg-indigo {
+            background: linear-gradient(145deg, #628cf6, #4672e9);
+        }
+
+        .bg-cyan {
+            background: linear-gradient(145deg, #31c8cd, #21aebb);
+        }
+
+        .bg-gray {
+            background: linear-gradient(145deg, #a8b5c9, #8998ad);
+        }
 
         .tabbar {
             position: fixed;
@@ -832,6 +856,7 @@
         }
     </style>
 </head>
+
 <body>
     <main class="page">
         <div class="status-bar">
@@ -1088,11 +1113,12 @@
             showToast('敬请期待');
         }
 
-        function goToHome() {}
+        function goToHome() { }
 
         function goToPersonalInfo() {
             window.location.href = 'medical-staff-personal-info.html';
         }
     </script>
 </body>
+
 </html>
