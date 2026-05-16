@@ -93,6 +93,33 @@
         }
         .back-btn { left: 0; }
         .more-btn { right: 0; }
+        .workbench-switch {
+            position: relative;
+            z-index: 1;
+            margin: 8px auto 0;
+            min-height: 30px;
+            padding: 0 12px;
+            border: 1px solid rgba(47, 122, 246, 0.16);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.78);
+            color: var(--text-2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 800;
+            box-shadow: 0 8px 18px rgba(60, 101, 145, 0.08);
+            cursor: pointer;
+        }
+        .workbench-switch strong {
+            color: var(--blue);
+            font-weight: 900;
+        }
+        .workbench-switch i {
+            color: var(--text-3);
+            font-size: 11px;
+        }
         .page { padding: 12px 12px 0; }
         .profile-hero,
         .section-card {
@@ -118,6 +145,12 @@
         .name-row { display: flex; align-items: center; gap: 7px; margin-bottom: 6px; }
         .patient-name { font-size: 17px; font-weight: 800; }
         .meta { color: var(--text-2); font-size: 12px; }
+        .customer-card-tag {
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 900;
+            white-space: nowrap;
+        }
         .self-badge {
             padding: 2px 7px;
             border-radius: 999px;
@@ -125,15 +158,6 @@
             color: var(--blue);
             font-size: 11px;
             font-weight: 800;
-        }
-        .edit-link {
-            margin-left: auto;
-            border: 0;
-            background: transparent;
-            color: var(--text-2);
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
         }
         .info-grid {
             display: grid;
@@ -178,6 +202,7 @@
         }
         .manage-strip strong.red { color: var(--red); }
         .manage-strip strong.green { color: var(--green); }
+        .manage-strip strong.orange { color: var(--orange); }
         .tag-row {
             display: flex;
             align-items: center;
@@ -188,6 +213,7 @@
         }
         .tags {
             flex: 1;
+            min-width: 0;
             display: flex;
             gap: 6px;
             overflow: hidden;
@@ -203,8 +229,14 @@
             font-size: 11px;
             font-weight: 700;
         }
-        .tag.source { background: #fff7e8; color: #c66a00; }
-        .tag.add { background: var(--blue-soft); color: var(--blue); border: 0; cursor: pointer; }
+        /* .tag.source { background: #fff7e8; color: #c66a00; } */
+        .tag.add {
+            flex: 0 0 auto;
+            border: 0;
+            background: var(--blue-soft);
+            color: var(--blue);
+            cursor: pointer;
+        }
         .expand-tags {
             flex: 0 0 auto;
             border: 0;
@@ -221,7 +253,7 @@
         .value.green { color: var(--green); }
         .tabs {
             position: sticky;
-            top: 92px;
+            top: 130px;
             z-index: 80;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -271,7 +303,8 @@
             font-weight: 600;
         }
         .section-action {
-             border: 0;
+            border: 0;
+            margin-left: auto;
             background: transparent;
             color: var(--blue);
             font-size: 12px;
@@ -667,7 +700,21 @@
             margin-left: 3px;
             font-size: 10px;
         }
-        .check-plan { margin-top: 14px; }
+        .check-plan {
+            margin-top: 10px;
+            padding: 12px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: linear-gradient(180deg, #ffffff, #f8fbff);
+        }
+        .check-plan .section-head {
+            margin-bottom: 10px;
+        }
+        .check-plan .section-title {
+            color: var(--text-1);
+            font-size: 14px;
+            font-weight: 900;
+        }
         .plan-stats {
             display: grid;
             grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -796,9 +843,91 @@
             border-radius: 20px 20px 0 0;
             background: #fff;
         }
-        .modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+        .modal-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
         .modal-title { font-size: 16px; font-weight: 900; }
         .modal-close { border: 0; background: transparent; color: var(--text-2); font-size: 18px; }
+        .tag-search {
+            position: relative;
+            margin: 4px 0 12px;
+        }
+        .tag-search i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-3);
+            font-size: 13px;
+            pointer-events: none;
+        }
+        .tag-search input {
+            width: 100%;
+            height: 44px;
+            padding: 0 12px 0 36px;
+            border: 1px solid rgba(47, 122, 246, 0.22);
+            border-radius: 12px;
+            background: #f8fbff;
+            color: var(--text-1);
+            font-size: 14px;
+            outline: none;
+        }
+        .tag-search input:focus {
+            border-color: rgba(47, 122, 246, 0.58);
+            box-shadow: 0 0 0 3px rgba(47, 122, 246, 0.1);
+        }
+        .tag-helper {
+            color: var(--text-3);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+        .tag-results {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .tag-option,
+        .tag-create {
+            width: 100%;
+            min-height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px 12px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: #fff;
+            color: var(--text-1);
+            font-size: 14px;
+            font-weight: 800;
+            text-align: left;
+            cursor: pointer;
+        }
+        .tag-option span,
+        .tag-create span {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .tag-option i,
+        .tag-create i {
+            flex: 0 0 auto;
+            color: var(--blue);
+            font-size: 13px;
+        }
+        .tag-create {
+            border-color: rgba(47, 122, 246, 0.18);
+            background: var(--blue-soft);
+            color: var(--blue);
+        }
+        .tag-empty {
+            grid-column: 1 / -1;
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 12px;
+            background: #f8fbff;
+        }
         .system-group { padding: 12px 0; border-top: 1px solid var(--line); }
         .system-group:first-of-type { border-top: 0; }
         .system-name { font-size: 14px; font-weight: 900; margin-bottom: 8px; }
@@ -903,6 +1032,49 @@
         }
         .modal-btn.cancel { background: #f2f5f8; color: var(--text-2); }
         .modal-btn.confirm { background: var(--blue); color: #fff; }
+        .workbench-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .workbench-item {
+            width: 100%;
+            min-height: 76px;
+            padding: 14px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+            cursor: pointer;
+        }
+        .workbench-item.active {
+            border-color: rgba(47, 122, 246, 0.42);
+            background: var(--blue-soft);
+        }
+        .workbench-icon {
+            width: 42px;
+            height: 42px;
+            flex: 0 0 auto;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            font-size: 18px;
+        }
+        .workbench-item.specialist .workbench-icon { background: #eaf3ff; color: var(--blue); }
+        .workbench-item.public-health .workbench-icon { background: var(--green-soft); color: var(--green); }
+        .workbench-item.operation .workbench-icon { background: #fff4e2; color: var(--orange); }
+        .workbench-info { flex: 1; min-width: 0; }
+        .workbench-name { display: block; color: var(--text-1); font-size: 15px; font-weight: 900; }
+        .workbench-desc {
+            margin-top: 4px;
+            color: var(--text-3);
+            font-size: 12px;
+            line-height: 1.35;
+        }
+        .workbench-arrow { color: var(--text-3); font-size: 13px; }
         @media (max-width: 360px) {
             .risk-list,
             .risk-grid,
@@ -926,6 +1098,11 @@
             <div class="navbar-title">健康画像</div>
             <!-- <button class="more-btn" type="button" onclick="showToast('更多操作')"><i class="fas fa-ellipsis"></i></button> -->
         </div>
+        <button class="workbench-switch" type="button" onclick="showWorkbenchModal()">
+            <span>当前工作台(演示用)</span>
+            <strong id="currentWorkbench">公卫慢病</strong>
+            <i class="fas fa-chevron-down"></i>
+        </button>
     </div>
 
     <div class="page">
@@ -939,41 +1116,39 @@
                         <span class="patient-name">张建国</span>
                         <span class="meta">男</span>
                         <span class="meta">67岁</span>
-                        <span class="self-badge">老</span><span class="self-badge">高</span><span class="self-badge">糖</span><span class="self-badge">低</span>
-                        <button class="edit-link" type="button" data-workspace="operation" onclick="editInfo()" hidden>编辑信息 &gt;</button>
+                        <span class="customer-card-tag" data-workspace="operation" hidden>@微信</span>
+                        <span class="self-badge" data-workspace="clinical">老</span><span class="self-badge" data-workspace="clinical">高</span><span class="self-badge" data-workspace="clinical">糖</span><span class="self-badge" data-workspace="clinical">低</span>
+                        <button class="section-action" type="button" data-workspace="operation" onclick="editInfo()" hidden>编辑信息 &gt;</button>
                     </div>
                     
                     <div class="info-grid">
                         <div class="info-item">联系号码：13811115678<a href="tel:13812345678" class="phone-link"><i class="fas fa-phone"></i></a></div>
-                        <div class="info-item">归属网格：滨海网格</div>
-                        <div class="info-item">基层在管：高,糖,肺</div>
-                        <div class="info-item">医院在管：高,糖</div>
+                        <div class="info-item" data-workspace="clinical">归属网格：滨海网格</div>
+                        <div class="info-item" data-workspace="clinical">基层在管：高,糖,肺</div>
+                        <div class="info-item" data-workspace="clinical">医院在管：高,糖</div>
                         <div class="info-item full">居住地址：浙江省杭州市余杭区闲林街道海滨南路88号</div>
                     </div>
                 </div>
             </div>
             <div class="tag-row">
                 <div class="tags" id="tags">
-                    <span class="tag source">有赞助手-高意向</span>
+                    <span class="tag source">依从性差</span>
                     <span class="tag">糖尿病</span>
                     <span class="tag">高血压</span>
                     <span class="tag">低盐饮食</span>
                     <span class="tag">独居</span>
-                    <button class="tag add" type="button" onclick="showToast('添加居民标签')">+ 添加</button>
                 </div>
-                <button class="expand-tags" type="button" onclick="toggleTags(event)">全部</button>
+                <button class="tag add" type="button" onclick="openTagModal()">+ 添加</button>
+                <button class="expand-tags" type="button" onclick="toggleTags(event)">展开</button>
             </div>
-            <div class="manage-strip">
+            <div class="manage-strip" data-workspace="clinical">
                 <div class="status-item">综合管理 <strong class="red">强化管理</strong></div>
                 <div class="status-item">当前状态 <strong class="green">在管</strong></div>
             </div>
-            <div class="mini-card" data-workspace="operation" style="margin-top:10px" hidden>
-                <div class="mini-row">
-                    <span class="mini-icon blue"><i class="fas fa-address-card"></i></span>
-                    <span class="mini-title">客户名片</span>
-                    <span class="value green" style="font-size:12px">稳定复购</span>
-                </div>
-                <div class="mini-desc">当前阶段：慢病管理服务期｜客户来源：有赞助手</div>
+            <div class="manage-strip" data-workspace="operation" hidden>
+                 <div class="status-item">当前阶段 <strong class="green">成交客户</strong></div>
+                <div class="status-item">好友关系 <strong class="orange">1好友 | 4群聊</strong><i class="fas fa-chevron-right date"></i></div>
+               
             </div>
         </div>
 
@@ -1405,6 +1580,58 @@
         </div>
     </div>
 
+    <div class="modal-mask" id="tagModal" onclick="closeTagModal(event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-head">
+                <div class="modal-title">添加标签</div>
+                <button class="modal-close" type="button" onclick="closeTagModal(event)"><i class="fas fa-xmark"></i></button>
+            </div>
+            <div class="tag-search">
+                <i class="fas fa-magnifying-glass"></i>
+                <input id="tagSearchInput" type="search" placeholder="输入关键词后回车查询" autocomplete="off" onkeydown="handleTagSearchKeydown(event)">
+            </div>
+            <div class="tag-results" id="tagResults"></div>
+        </div>
+    </div>
+
+    <div class="modal-mask" id="workbenchModal" onclick="closeWorkbenchModal(event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-head">
+                <div>
+                    <div class="modal-title">切换工作台</div>
+                    <div class="tag-helper">请选择要演示的场景</div>
+                </div>
+                <button class="modal-close" type="button" onclick="closeWorkbenchModal(event)"><i class="fas fa-xmark"></i></button>
+            </div>
+            <div class="workbench-list">
+                <button class="workbench-item specialist" type="button" data-workbench-option="specialist" onclick="selectWorkbench('specialist')">
+                    <span class="workbench-icon"><i class="fas fa-stethoscope"></i></span>
+                    <span class="workbench-info">
+                        <span class="workbench-name">专科慢病</span>
+                        <span class="workbench-desc">专科医生慢病管理场景</span>
+                    </span>
+                    <i class="fas fa-chevron-right workbench-arrow"></i>
+                </button>
+                <button class="workbench-item public-health" type="button" data-workbench-option="public-health" onclick="selectWorkbench('public-health')">
+                    <span class="workbench-icon"><i class="fas fa-hospital"></i></span>
+                    <span class="workbench-info">
+                        <span class="workbench-name">公卫慢病</span>
+                        <span class="workbench-desc">基层公卫慢病管理场景</span>
+                    </span>
+                    <i class="fas fa-chevron-right workbench-arrow"></i>
+                </button>
+                <button class="workbench-item operation" type="button" data-workbench-option="operation" onclick="selectWorkbench('operation')">
+                    <span class="workbench-icon"><i class="fas fa-headset"></i></span>
+                    <span class="workbench-info">
+                        <span class="workbench-name">运营中心</span>
+                        <span class="workbench-desc">客户运营与档案跟进场景</span>
+                    </span>
+                    <i class="fas fa-chevron-right workbench-arrow"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div class="floating-actions">
         <button class="float-action primary" type="button" onclick="openAppointmentModal()"><i class="fas fa-calendar-plus"></i><span>预约</span></button>
         <button class="float-action" type="button" onclick="openPatientMessage()"><i class="fas fa-comment-dots"></i><span>消息</span></button>
@@ -1416,6 +1643,11 @@
             id: new URLSearchParams(window.location.search).get('id') || '1',
             name: '张建国'
         };
+        const workbenchNames = {
+            'specialist': '专科慢病',
+            'public-health': '公卫慢病',
+            'operation': '运营中心'
+        };
         const appointmentOrgs = {
             visit: [
                 { id: 'org001', name: '滨海社区卫生服务中心', departments: ['全科门诊', '慢病管理科', '中医科'] }
@@ -1425,6 +1657,10 @@
             ]
         };
         let currentAppointmentType = 'visit';
+        const availableTags = [
+            '糖尿病', '高血压', '低盐饮食', '独居', '高脂血症', '冠心病', '规律服药',
+            '血糖波动', '复诊逾期', '运动不足', '睡眠欠佳', '高意向', '需随访', '营养干预'
+        ];
 
         function goBack() {
             window.history.back();
@@ -1438,7 +1674,36 @@
         }
 
         function editInfo() {
-            showToast('进入客户信息编辑页面');
+            window.location.href = `customer-info-edit.html?id=${patientInfo.id}`;
+        }
+
+        function getInitialWorkbench() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('workspace') === 'operation') return 'operation';
+            const savedWorkbench = localStorage.getItem('selectedWorkbench');
+            return workbenchNames[savedWorkbench] ? savedWorkbench : 'public-health';
+        }
+
+        function showWorkbenchModal() {
+            document.getElementById('workbenchModal').classList.add('show');
+        }
+
+        function closeWorkbenchModal(event) {
+            const shouldClose = !event
+                || event.target.id === 'workbenchModal'
+                || (event.currentTarget && event.currentTarget.classList.contains('modal-close'));
+            if (shouldClose) {
+                document.getElementById('workbenchModal').classList.remove('show');
+            }
+        }
+
+        function selectWorkbench(type) {
+            const workbenchType = workbenchNames[type] ? type : 'public-health';
+            localStorage.setItem('selectedWorkbench', workbenchType);
+            localStorage.setItem('workbenchName', workbenchNames[workbenchType]);
+            applyWorkspaceMode(workbenchType);
+            closeWorkbenchModal();
+            showToast('已切换到' + workbenchNames[workbenchType]);
         }
 
         function toggleTags(event) {
@@ -1446,6 +1711,106 @@
             const btn = event.currentTarget;
             tags.classList.toggle('expanded');
             btn.textContent = tags.classList.contains('expanded') ? '收起' : '全部';
+        }
+
+        function openTagModal() {
+            const modal = document.getElementById('tagModal');
+            const input = document.getElementById('tagSearchInput');
+            modal.classList.add('show');
+            input.value = '';
+            renderTagInitialState();
+            setTimeout(() => input.focus(), 80);
+        }
+
+        function closeTagModal(event) {
+            const shouldClose = !event
+                || event.target.id === 'tagModal'
+                || (event.currentTarget && event.currentTarget.classList.contains('modal-close'));
+            if (shouldClose) {
+                document.getElementById('tagModal').classList.remove('show');
+            }
+        }
+
+        function handleTagSearchKeydown(event) {
+            if (event.key !== 'Enter') return;
+            event.preventDefault();
+            searchTag();
+        }
+
+        function searchTag() {
+            const keyword = document.getElementById('tagSearchInput').value.trim();
+            const results = document.getElementById('tagResults');
+            if (!keyword) {
+                renderTagInitialState();
+                return;
+            }
+            const currentTags = getCurrentTagNames();
+            const matchedTags = availableTags.filter(tag => tag.includes(keyword) && !currentTags.includes(tag));
+            results.innerHTML = matchedTags.length
+                ? matchedTags.map(tag => getTagOptionHTML(tag)).join('')
+                : `
+                    <div class="tag-empty">
+                        <div class="tag-helper">未找到“${escapeHTML(keyword)}”</div>
+                        <button class="tag-create" type="button" onclick="createResidentTagFromSearch()">
+                            <span>新建标签：${escapeHTML(keyword)}</span>
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                `;
+        }
+
+        function renderTagInitialState() {
+            const currentTags = getCurrentTagNames();
+            const results = document.getElementById('tagResults');
+            results.innerHTML = availableTags
+                .filter(tag => !currentTags.includes(tag))
+                .slice(0, 6)
+                .map(tag => getTagOptionHTML(tag))
+                .join('');
+        }
+
+        function createResidentTagFromSearch() {
+            const keyword = document.getElementById('tagSearchInput').value.trim();
+            if (!keyword) return;
+            addResidentTag(keyword);
+        }
+
+        function addResidentTag(tagName) {
+            const cleanName = tagName.trim();
+            if (!cleanName) return;
+            if (getCurrentTagNames().includes(cleanName)) {
+                showToast('标签已存在');
+                return;
+            }
+            const tag = document.createElement('span');
+            tag.className = 'tag';
+            tag.textContent = cleanName;
+            document.getElementById('tags').appendChild(tag);
+            closeTagModal();
+            showToast('标签已添加');
+        }
+
+        function getCurrentTagNames() {
+            return Array.from(document.querySelectorAll('#tags .tag')).map(tag => tag.textContent.trim());
+        }
+
+        function getTagOptionHTML(tag) {
+            return `
+                <button class="tag-option" type="button" onclick="addResidentTag(${escapeHTML(JSON.stringify(tag))})">
+                    <span>${escapeHTML(tag)}</span>
+                    <i class="fas fa-plus"></i>
+                </button>
+            `;
+        }
+
+        function escapeHTML(value) {
+            return value.replace(/[&<>"']/g, char => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            }[char]));
         }
 
         function goAbnormalDetail() {
@@ -1541,11 +1906,17 @@
             }
         }
 
-        function applyWorkspaceMode() {
-            const params = new URLSearchParams(window.location.search);
-            const isOperation = params.get('workspace') === 'operation';
+        function applyWorkspaceMode(type = getInitialWorkbench()) {
+            const isOperation = type === 'operation';
+            document.getElementById('currentWorkbench').textContent = workbenchNames[type];
             document.querySelectorAll('[data-workspace="operation"]').forEach(item => {
                 item.hidden = !isOperation;
+            });
+            document.querySelectorAll('[data-workspace="clinical"]').forEach(item => {
+                item.hidden = isOperation;
+            });
+            document.querySelectorAll('[data-workbench-option]').forEach(item => {
+                item.classList.toggle('active', item.dataset.workbenchOption === type);
             });
         }
 

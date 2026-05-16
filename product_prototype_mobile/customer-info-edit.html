@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>客户信息编辑</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
+    <header class="sticky top-0 z-20 border-b border-slate-200/70 bg-white/90 px-4 pb-3 pt-11 backdrop-blur">
+        <div class="flex items-center justify-between">
+            <button class="flex h-9 w-9 items-center justify-center rounded-full text-slate-700" type="button" onclick="history.back()">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <h1 class="text-base font-black">客户信息编辑</h1>
+            <button class="rounded-full px-3 py-1.5 text-sm font-bold text-blue-600" type="button" onclick="saveCustomerInfo()">保存</button>
+        </div>
+    </header>
+
+    <main class="space-y-3 p-3 pb-24">
+        <section class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div class="mb-4 flex items-center gap-3">
+                <img class="h-14 w-14 rounded-full object-cover ring-2 ring-blue-50" src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&amp;fit=crop&amp;w=160&amp;q=80" alt="居民头像">
+                <div>
+                    <div class="text-lg font-black">张建国</div>
+                    <div class="mt-1 text-xs font-semibold text-slate-500">运营中心客户档案</div>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <label class="block">
+                    <span class="text-xs font-bold text-slate-500">姓名</span>
+                    <input class="mt-1 h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-semibold outline-none focus:border-blue-400" value="张建国">
+                </label>
+                <label class="block">
+                    <span class="text-xs font-bold text-slate-500">性别</span>
+                    <select class="mt-1 h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-semibold outline-none focus:border-blue-400">
+                        <option>男</option>
+                        <option>女</option>
+                    </select>
+                </label>
+                <label class="block">
+                    <span class="text-xs font-bold text-slate-500">年龄</span>
+                    <input class="mt-1 h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-semibold outline-none focus:border-blue-400" value="67岁">
+                </label>
+                <label class="block">
+                    <span class="text-xs font-bold text-slate-500">联系号码</span>
+                    <input class="mt-1 h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-semibold outline-none focus:border-blue-400" value="13811115678">
+                </label>
+                <label class="col-span-2 block">
+                    <span class="text-xs font-bold text-slate-500">居住地址</span>
+                    <textarea class="mt-1 min-h-20 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold leading-6 outline-none focus:border-blue-400">浙江省杭州市余杭区闲林街道海滨南路88号</textarea>
+                </label>
+            </div>
+        </section>
+
+        <section class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <h2 class="mb-3 text-sm font-black">客户名片</h2>
+            <div class="grid grid-cols-2 gap-3">
+                <label class="block">
+                    <span class="text-xs font-bold text-slate-500">客户阶段</span>
+                    <select class="mt-1 h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-semibold outline-none focus:border-blue-400">
+                        <option>慢病管理服务期</option>
+                        <option>初次建档</option>
+                        <option>复购培育</option>
+                    </select>
+                </label>
+                <label class="block">
+                    <span class="text-xs font-bold text-slate-500">客户来源</span>
+                    <input class="mt-1 h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-semibold outline-none focus:border-blue-400" value="有赞助手">
+                </label>
+                <label class="col-span-2 block">
+                    <span class="text-xs font-bold text-slate-500">运营备注</span>
+                    <textarea class="mt-1 min-h-24 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold leading-6 outline-none focus:border-blue-400">稳定复购，近期重点跟进营养干预服务。</textarea>
+                </label>
+            </div>
+        </section>
+    </main>
+
+    <div id="toast" class="pointer-events-none fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-slate-900/85 px-5 py-3 text-sm font-bold text-white opacity-0 transition-opacity">已保存</div>
+
+    <script>
+        function saveCustomerInfo() {
+            const toast = document.getElementById('toast');
+            toast.classList.remove('opacity-0');
+            setTimeout(() => toast.classList.add('opacity-0'), 1500);
+        }
+    </script>
+</body>
+</html>

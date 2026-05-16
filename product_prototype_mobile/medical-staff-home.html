@@ -738,6 +738,11 @@
             color: #00b42a;
         }
 
+        .workbench-item.operation .workbench-icon {
+            background: #fff7e8;
+            color: #ff7d00;
+        }
+
         .workbench-info {
             flex: 1;
             min-width: 0;
@@ -1020,6 +1025,16 @@
                     </div>
                     <i class="fas fa-chevron-right workbench-arrow"></i>
                 </div>
+                <div class="workbench-item operation" onclick="selectWorkbench('operation')">
+                    <div class="workbench-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <div class="workbench-info">
+                        <div class="workbench-name">运营中心</div>
+                        <div class="workbench-desc">客户运营与档案跟进工作台</div>
+                    </div>
+                    <i class="fas fa-chevron-right workbench-arrow"></i>
+                </div>
             </div>
             <button class="popup-cancel" type="button" onclick="closeWorkbenchPopup()">取消</button>
         </div>
@@ -1049,7 +1064,8 @@
         function selectWorkbench(type) {
             const names = {
                 'specialist': '专科慢病',
-                'public-health': '公卫慢病'
+                'public-health': '公卫慢病',
+                'operation': '运营中心'
             };
 
             const workbenchName = names[type] || names['public-health'];
