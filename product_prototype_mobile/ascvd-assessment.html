@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ASCVD评估</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background:
+                radial-gradient(circle at 82% 2%, rgba(181, 213, 255, 0.8) 0 110px, transparent 220px),
+                linear-gradient(180deg, #d9ebff 0%, #f4faff 28%, #f7fbff 68%, #ffffff 100%);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .page-card {
+            background: rgba(255, 255, 255, 0.94);
+            border: 1px solid rgba(123, 147, 176, 0.14);
+            box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12);
+            backdrop-filter: blur(12px);
+        }
+
+        .chip input:checked + span {
+            border-color: #2f7af6;
+            background: #eaf3ff;
+            color: #1d5fd7;
+            box-shadow: inset 0 0 0 1px rgba(47, 122, 246, 0.16);
+        }
+
+        .input-shell:focus-within {
+            border-color: rgba(47, 122, 246, 0.7);
+            box-shadow: 0 0 0 3px rgba(47, 122, 246, 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-900 antialiased">
+    <header class="sticky top-0 z-20 border-b border-slate-200/50 bg-sky-100/80 px-4 pb-3 pt-11 shadow-[0_10px_26px_rgba(60,101,145,0.08)] backdrop-blur">
+        <div class="flex items-center justify-between">
+            <button class="flex h-9 w-9 items-center justify-center rounded-full text-slate-800" type="button" onclick="history.back()" aria-label="返回">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <h1 class="text-base font-black">ASCVD评估</h1>
+            <span class="h-9 w-9" aria-hidden="true"></span>
+        </div>
+    </header>
+
+    <main class="space-y-3 p-3 pb-28">
+        <section class="page-card rounded-2xl p-4">
+            <div class="flex items-start justify-between gap-3">
+                <div>
+                    <p class="text-xs font-black text-blue-600">动脉粥样硬化性心血管疾病</p>
+                    <h2 class="mt-1 text-2xl font-black tracking-normal">ASCVD风险评估</h2>
+                    <!-- <p class="mt-2 text-sm font-semibold leading-6 text-slate-500">录入血脂、血压及疾病史信息，形成患者风险画像。</p> -->
+                </div>
+                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-xl text-blue-600">
+                    <i class="fas fa-heart-pulse"></i>
+                </div>
+            </div>
+            <!-- <div class="mt-4 grid grid-cols-3 gap-2">
+                <div class="rounded-xl bg-slate-50 p-3 text-center">
+                    <div class="text-lg font-black text-slate-900" id="selectedCount">0</div>
+                    <div class="mt-0.5 text-[11px] font-bold text-slate-500">已选风险项</div>
+                </div>
+                <div class="rounded-xl bg-blue-50 p-3 text-center">
+                    <div class="text-lg font-black text-blue-600" id="bpStageBrief">待判定</div>
+                    <div class="mt-0.5 text-[11px] font-bold text-blue-500">血压分级</div>
+                </div>
+                <div class="rounded-xl bg-emerald-50 p-3 text-center">
+                    <div class="text-lg font-black text-emerald-600">评估中</div>
+                    <div class="mt-0.5 text-[11px] font-bold text-emerald-500">当前状态</div>
+                </div>
+            </div> -->
+        </section>
+
+        <section class="page-card rounded-2xl p-4">
+            <div class="mb-3 flex items-center justify-between">
+                <h2 class="text-sm font-black">核心指标</h2>
+                <span class="rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-black text-blue-600">必填</span>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <div class="mb-2 flex items-center gap-2 text-sm font-black">
+                        <span class="flex h-6 w-6 items-center justify-center rounded-lg bg-blue-50 text-blue-600"><i class="fas fa-vial text-xs"></i></span>
+                        血脂指标
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="block">
+                            <span class="text-xs font-bold text-slate-500">LDL-C</span>
+                            <div class="input-shell mt-1 flex h-11 items-center rounded-xl border border-slate-200 bg-slate-50 px-3">
+                                <input class="w-full bg-transparent text-sm font-bold outline-none" type="number" step="0.01" placeholder="请输入">
+                                <span class="text-[11px] font-bold text-slate-400">mmol/L</span>
+                            </div>
+                        </label>
+                        <label class="block">
+                            <span class="text-xs font-bold text-slate-500">TC</span>
+                            <div class="input-shell mt-1 flex h-11 items-center rounded-xl border border-slate-200 bg-slate-50 px-3">
+                                <input class="w-full bg-transparent text-sm font-bold outline-none" type="number" step="0.01" placeholder="请输入">
+                                <span class="text-[11px] font-bold text-slate-400">mmol/L</span>
+                            </div>
+                        </label>
+                        <label class="block">
+                            <span class="text-xs font-bold text-slate-500">HDL-C</span>
+                            <div class="input-shell mt-1 flex h-11 items-center rounded-xl border border-slate-200 bg-slate-50 px-3">
+                                <input class="w-full bg-transparent text-sm font-bold outline-none" type="number" step="0.01" placeholder="请输入">
+                                <span class="text-[11px] font-bold text-slate-400">mmol/L</span>
+                            </div>
+                        </label>
+                        <label class="block">
+                            <span class="text-xs font-bold text-slate-500">TG</span>
+                            <div class="input-shell mt-1 flex h-11 items-center rounded-xl border border-slate-200 bg-slate-50 px-3">
+                                <input class="w-full bg-transparent text-sm font-bold outline-none" type="number" step="0.01" placeholder="请输入">
+                                <span class="text-[11px] font-bold text-slate-400">mmol/L</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-100 pt-4">
+                    <div class="mb-2 flex items-center gap-2 text-sm font-black">
+                        <span class="flex h-6 w-6 items-center justify-center rounded-lg bg-rose-50 text-rose-600"><i class="fas fa-stethoscope text-xs"></i></span>
+                        血压指标
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="block">
+                            <span class="text-xs font-bold text-slate-500">收缩压</span>
+                            <div class="input-shell mt-1 flex h-11 items-center rounded-xl border border-slate-200 bg-slate-50 px-3">
+                                <input id="sbpInput" class="w-full bg-transparent text-sm font-bold outline-none" type="number" placeholder="请输入" oninput="updateBloodPressure()">
+                                <span class="text-[11px] font-bold text-slate-400">mmHg</span>
+                            </div>
+                        </label>
+                        <label class="block">
+                            <span class="text-xs font-bold text-slate-500">舒张压</span>
+                            <div class="input-shell mt-1 flex h-11 items-center rounded-xl border border-slate-200 bg-slate-50 px-3">
+                                <input id="dbpInput" class="w-full bg-transparent text-sm font-bold outline-none" type="number" placeholder="请输入" oninput="updateBloodPressure()">
+                                <span class="text-[11px] font-bold text-slate-400">mmHg</span>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="mt-3 grid grid-cols-2 gap-3">
+                        <div class="rounded-xl bg-slate-50 p-3">
+                            <div class="text-xs font-bold text-slate-500">血压状态</div>
+                            <div class="mt-1 text-sm font-black text-slate-900" id="bpStatus">正常高值血压</div>
+                        </div>
+                        <div class="rounded-xl bg-slate-50 p-3">
+                            <div class="text-xs font-bold text-slate-500">血压水平分级</div>
+                            <div class="mt-1 text-sm font-black text-blue-600" id="bpStage">自动判定展示</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="page-card rounded-2xl p-4">
+            <h2 class="text-sm font-black">ASCVD疾病史</h2>
+            <div class="mt-3 grid grid-cols-2 gap-2" data-countable>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">血运重建术后</span></label>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">缺血性心肌病</span></label>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">缺血性脑卒中</span></label>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">短暂缺血发作（TIA）</span></label>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">外周动脉粥样硬化</span></label>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">急性冠脉综合征</span></label>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">稳定性冠心病</span></label>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">其他</span></label>
+            </div>
+            <textarea class="mt-3 min-h-20 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold leading-6 outline-none focus:border-blue-400" placeholder="请输入其他疾病史"></textarea>
+        </section>
+
+        <section class="page-card rounded-2xl p-4">
+            <h2 class="text-sm font-black">严重ASCVD事件</h2>
+            <div class="mt-3 grid grid-cols-1 gap-2" data-countable>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">既往心肌梗死病史</span></label>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">缺血性脑卒中史</span></label>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">有症状的周围血管病变，既往接受过血运重建或截肢</span></label>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">1年内发生急性冠脉综合征（ACS）</span></label>
+            </div>
+        </section>
+
+        <section class="page-card rounded-2xl p-4">
+            <h2 class="text-sm font-black">危险因素</h2>
+            <div class="mt-3 grid grid-cols-1 gap-2" data-countable>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">男性≥45岁或女性≥55岁</span></label>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">吸烟</span></label>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">低高密度脂蛋白胆固醇（HDL-C＜1.0mmol/L）</span></label>
+            </div>
+        </section>
+
+        <section class="page-card rounded-2xl p-4">
+            <h2 class="text-sm font-black">高危险因素</h2>
+            <div class="mt-3 grid grid-cols-1 gap-2" data-countable>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">早发冠心病（男＜55岁，女＜65岁）</span></label>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">家族性高胆固醇血症或基线LDL-C≥4.9mmol/L</span></label>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">既往有冠脉搭桥术（CABG）或冠脉介入手术史</span></label>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">糖尿病</span></label>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">高血压</span></label>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">慢性肾病（CKD）3-4期</span></label>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">吸烟</span></label>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">LDL-C≤1.8mmol/L，再次发生严重的ASCVD事件</span></label>
+            </div>
+        </section>
+
+        <section class="page-card rounded-2xl p-4">
+            <h2 class="text-sm font-black">高危人群</h2>
+            <div class="mt-3 grid grid-cols-1 gap-2" data-countable>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">糖尿病（≥40岁）</span></label>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">LDL-C≥4.9mmol/L或TC≥7.2mmol/L</span></label>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">收缩压≥180mmHg或舒张压≥110mmHg</span></label>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">重度吸烟（吸烟≥30支/d）</span></label>
+                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">高血压伴靶器官损害或CKD分期≥3期</span></label>
+            </div>
+        </section>
+    </main>
+
+    <footer class="fixed inset-x-0 bottom-0 z-30 border-t border-slate-200/70 bg-white/92 px-3 pb-[calc(12px+env(safe-area-inset-bottom,0px))] pt-3 backdrop-blur">
+        <div class="flex gap-3">
+            <button class="h-12 flex-1 rounded-xl border border-slate-200 bg-white text-sm font-black text-slate-600" type="button" onclick="resetAssessment()">重置</button>
+            <button class="h-12 flex-[2] rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-sm font-black text-white shadow-lg shadow-blue-500/20" type="button" onclick="saveAssessment()">完成评估</button>
+        </div>
+    </footer>
+
+    <div id="toast" class="pointer-events-none fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-slate-900/85 px-5 py-3 text-sm font-bold text-white opacity-0 transition-opacity">已保存评估</div>
+
+    <script>
+        function updateBloodPressure() {
+            const sbp = Number(document.getElementById('sbpInput').value);
+            const dbp = Number(document.getElementById('dbpInput').value);
+            const stage = document.getElementById('bpStage');
+            const brief = document.getElementById('bpStageBrief');
+            const status = document.getElementById('bpStatus');
+
+            if (!sbp && !dbp) {
+                status.textContent = '正常高值血压';
+                stage.textContent = '自动判定展示';
+                brief.textContent = '待判定';
+                return;
+            }
+
+            let result = '正常血压';
+            let state = '正常血压';
+            if (sbp >= 180 || dbp >= 110) {
+                result = '3级高血压';
+                state = '高血压';
+            } else if (sbp >= 160 || dbp >= 100) {
+                result = '2级高血压';
+                state = '高血压';
+            } else if (sbp >= 140 || dbp >= 90) {
+                result = '1级高血压';
+                state = '高血压';
+            } else if (sbp >= 120 || dbp >= 80) {
+                result = '正常高值血压';
+                state = '正常高值血压';
+            }
+
+            status.textContent = state;
+            stage.textContent = result;
+            brief.textContent = result.replace('高血压', '级');
+        }
+
+        function updateSelectedCount() {
+            const checked = document.querySelectorAll('[data-countable] input[type="checkbox"]:checked').length;
+            document.getElementById('selectedCount').textContent = checked;
+        }
+
+        function showToast(text) {
+            const toast = document.getElementById('toast');
+            toast.textContent = text;
+            toast.classList.remove('opacity-0');
+            setTimeout(() => toast.classList.add('opacity-0'), 1500);
+        }
+
+        function saveAssessment() {
+            showToast('已保存评估');
+        }
+
+        function resetAssessment() {
+            document.querySelectorAll('input').forEach(input => {
+                if (input.type === 'checkbox') {
+                    input.checked = false;
+                } else {
+                    input.value = '';
+                }
+            });
+            document.querySelectorAll('textarea').forEach(textarea => textarea.value = '');
+            updateBloodPressure();
+            updateSelectedCount();
+            showToast('已重置');
+        }
+    </script>
+</body>
+</html>
