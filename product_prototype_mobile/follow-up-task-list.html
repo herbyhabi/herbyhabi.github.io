@@ -51,7 +51,7 @@
         /* 导航栏 */
         .navbar {
             background: linear-gradient(135deg, var(--arcoblue-6) 0%, #4080FF 100%);
-            padding: 44px 16px 16px;
+            padding: 8px 16px;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -684,8 +684,8 @@ textarea {
 .navbar {
     position: sticky !important;
     top: 0 !important;
-    min-height: 92px;
-    padding: 44px 16px 12px !important;
+    min-height: 52px;
+    padding: 8px 16px !important;
     z-index: 100 !important;
 }
 
@@ -804,17 +804,11 @@ textarea {
 }
 
     </style>
+    <script src="../components/mobile/mobile-title-bar.js" defer></script>
 </head>
 <body>
     <!-- 导航栏 -->
-    <nav class="navbar">
-        <div class="navbar-content">
-            <div class="back-btn" onclick="goBack()">
-                <i class="fas fa-chevron-left"></i>
-            </div>
-            <div class="navbar-title">随访任务</div>
-        </div>
-    </nav>
+    <mobile-title-bar title="随访任务" back-action="goBack()"></mobile-title-bar>
 
     <!-- 页签 -->
     <div class="tabs-container">

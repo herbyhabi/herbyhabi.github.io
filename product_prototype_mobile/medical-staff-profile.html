@@ -17,7 +17,7 @@
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif; background: var(--bg-1); min-height: 100vh; padding-bottom: calc(86px + env(safe-area-inset-bottom, 0px)); }
         
         /* 导航栏 */
-        .navbar { background: linear-gradient(135deg, var(--arcoblue-6) 0%, #4080FF 100%); padding: 44px 16px 0; position: sticky; top: 0; z-index: 100; }
+        .navbar { background: linear-gradient(135deg, var(--arcoblue-6) 0%, #4080FF 100%); padding: 8px 16px; position: sticky; top: 0; z-index: 100; }
         .navbar-content { display: flex; align-items: center; justify-content: center; padding-bottom: 16px; position: relative; }
         .navbar-title { font-size: var(--font-size-title-2); font-weight: 600; color: white; }
         .back-btn { position: absolute; left: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; cursor: pointer; }
@@ -243,8 +243,8 @@ textarea {
 .navbar {
     position: sticky !important;
     top: 0 !important;
-    min-height: 92px;
-    padding: 44px 16px 12px !important;
+    min-height: 52px;
+    padding: 8px 16px !important;
     z-index: 100 !important;
 }
 
@@ -468,20 +468,14 @@ textarea {
 }
 
     </style>
+    <script src="../components/mobile/mobile-title-bar.js" defer></script>
 </head>
 <body>
     <!-- Toast 容器 -->
     <div class="toast" id="toast"></div>
 
     <!-- 导航栏 -->
-    <div class="navbar">
-        <div class="navbar-content">
-            <div class="back-btn" onclick="goBack()">
-                <i class="fas fa-chevron-left"></i>
-            </div>
-            <h1 class="navbar-title">我的</h1>
-        </div>
-    </div>
+    <mobile-title-bar title="我的" back-action="goBack()"></mobile-title-bar>
 
     <!-- 用户信息卡片（点击进入个人资料） -->
     <div class="user-card" onclick="goToPersonalInfo()">

@@ -38,8 +38,8 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            min-height: 92px;
-            padding: 44px 16px 12px;
+            height: 44px;
+            padding: 0 12px;
             overflow: hidden;
             background: rgba(217, 235, 255, 0.82);
             border-bottom: 1px solid rgba(118, 140, 165, 0.12);
@@ -63,11 +63,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 36px;
+            height: 44px;
             z-index: 1;
         }
         .navbar-title {
-            width: calc(100% - 128px);
+            max-width: 112px;
             text-align: center;
             font-size: 18px;
             font-weight: 800;
@@ -94,11 +94,14 @@
         .back-btn { left: 0; }
         .more-btn { right: 0; }
         .workbench-switch {
-            position: relative;
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
             z-index: 1;
-            margin: 8px auto 0;
-            min-height: 30px;
-            padding: 0 12px;
+            max-width: calc(50% - 22px);
+            min-height: 28px;
+            padding: 0 9px;
             border: 1px solid rgba(47, 122, 246, 0.16);
             border-radius: 999px;
             background: rgba(255, 255, 255, 0.78);
@@ -112,7 +115,14 @@
             box-shadow: 0 8px 18px rgba(60, 101, 145, 0.08);
             cursor: pointer;
         }
+        .workbench-switch span {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
         .workbench-switch strong {
+            flex: 0 0 auto;
             color: var(--blue);
             font-weight: 900;
         }
@@ -267,7 +277,7 @@
         .value.green { color: var(--green); }
         .tabs {
             position: sticky;
-            top: 130px;
+            top: 44px;
             z-index: 80;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -1355,21 +1365,13 @@
             .service-metric-grid { grid-template-columns: 1fr; }
         }
     </style>
+    <script src="../components/mobile/mobile-title-bar.js" defer></script>
 </head>
 <body>
     <div class="toast" id="toast"></div>
-    <div class="navbar">
-        <div class="navbar-content">
-            <button class="back-btn" type="button" onclick="goBack()"><i class="fas fa-chevron-left"></i></button>
-            <div class="navbar-title">健康画像</div>
-            <!-- <button class="more-btn" type="button" onclick="showToast('更多操作')"><i class="fas fa-ellipsis"></i></button> -->
-        </div>
-        <button class="workbench-switch" type="button" onclick="showWorkbenchModal()">
-            <span>当前工作台(演示用)</span>
-            <strong id="currentWorkbench">公卫慢病</strong>
-            <i class="fas fa-chevron-down"></i>
-        </button>
-    </div>
+    <!-- <button class="more-btn" type="button" onclick="showToast('更多操作')"><i class="fas fa-ellipsis"></i></button> -->
+    <!-- <span>当前工作台(演示用)</span> -->
+    <mobile-title-bar title="健康画像" back-action="goBack()" workbench="公卫慢病" workbench-action="showWorkbenchModal()"></mobile-title-bar>
 
     <div class="page">
         <div class="profile-hero">

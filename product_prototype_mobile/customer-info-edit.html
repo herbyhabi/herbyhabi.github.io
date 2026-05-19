@@ -6,17 +6,10 @@
     <title>客户信息编辑</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="../components/mobile/mobile-title-bar.js" defer></script>
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
-    <header class="sticky top-0 z-20 border-b border-slate-200/70 bg-white/90 px-4 pb-3 pt-11 backdrop-blur">
-        <div class="flex items-center justify-between">
-            <button class="flex h-9 w-9 items-center justify-center rounded-full text-slate-700" type="button" onclick="history.back()">
-                <i class="fas fa-chevron-left"></i>
-            </button>
-            <h1 class="text-base font-black">客户信息编辑</h1>
-            <button class="rounded-full px-3 py-1.5 text-sm font-bold text-blue-600" type="button" onclick="saveCustomerInfo()">保存</button>
-        </div>
-    </header>
+    <mobile-title-bar title="客户信息编辑" right-text="保存" right-action="saveCustomerInfo()"></mobile-title-bar>
 
     <main class="space-y-3 p-3 pb-24">
         <section class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">

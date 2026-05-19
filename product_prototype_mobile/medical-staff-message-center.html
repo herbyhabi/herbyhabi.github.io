@@ -42,7 +42,7 @@
         /* 导航栏 */
         .navbar {
             background: linear-gradient(135deg, var(--arcoblue-6) 0%, #4080FF 100%);
-            padding: 44px 16px 0;
+            padding: 8px 16px;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -154,7 +154,7 @@
 
         .search-header {
             background: var(--bg-2);
-            padding: 44px 16px 12px;
+            padding: 8px 16px;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -926,8 +926,8 @@
         .navbar {
             position: sticky !important;
             top: 0 !important;
-            min-height: 92px;
-            padding: 44px 16px 12px !important;
+            min-height: 52px;
+            padding: 8px 16px !important;
             z-index: 100 !important;
         }
 
@@ -1052,17 +1052,14 @@
             color: #a0a8b1 !important;
         }
     </style>
+    <script src="../components/mobile/mobile-title-bar.js" defer></script>
 </head>
 
 <body>
     <!-- Toast 容器 -->
     <div class="toast" id="toast"></div>
     <!-- 导航栏 -->
-    <div class="navbar">
-        <div class="navbar-content">
-            <div class="navbar-title">消息中心</div>
-        </div>
-    </div>
+    <mobile-title-bar title="消息中心" back="false"></mobile-title-bar>
 
     <!-- 页签 -->
     <div class="tabs">

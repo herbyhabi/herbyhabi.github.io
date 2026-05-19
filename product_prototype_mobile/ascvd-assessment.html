@@ -33,17 +33,10 @@
             box-shadow: 0 0 0 3px rgba(47, 122, 246, 0.1);
         }
     </style>
+    <script src="../components/mobile/mobile-title-bar.js" defer></script>
 </head>
 <body class="min-h-screen text-slate-900 antialiased">
-    <header class="sticky top-0 z-20 border-b border-slate-200/50 bg-sky-100/80 px-4 pb-3 pt-11 shadow-[0_10px_26px_rgba(60,101,145,0.08)] backdrop-blur">
-        <div class="flex items-center justify-between">
-            <button class="flex h-9 w-9 items-center justify-center rounded-full text-slate-800" type="button" onclick="history.back()" aria-label="返回">
-                <i class="fas fa-chevron-left"></i>
-            </button>
-            <h1 class="text-base font-black">ASCVD评估</h1>
-            <span class="h-9 w-9" aria-hidden="true"></span>
-        </div>
-    </header>
+    <mobile-title-bar title="ASCVD评估"></mobile-title-bar>
 
     <main class="space-y-3 p-3 pb-28">
         <section class="page-card rounded-2xl p-4">
