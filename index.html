@@ -463,7 +463,7 @@
                 showToast(`正在进入${config.name}...`, 'fa-spinner fa-spin');
                 setTimeout(() => {
                     window.location.href = config.url;
-                }, 800);
+                }, 100);
             } else {
                 // 未开放的模块，显示提示
                 showToast('暂未开放', 'fa-clock');
@@ -494,7 +494,7 @@
             toastTimer = setTimeout(() => {
                 arcoToast.classList.remove('show');
                 toastTimer = null;
-            }, 2000);
+            }, 100);
         }
     </script>
 </body>
