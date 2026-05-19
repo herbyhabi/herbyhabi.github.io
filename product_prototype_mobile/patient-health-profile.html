@@ -344,8 +344,8 @@
         }
         .indicator-scroll::-webkit-scrollbar { display: none; }
         .metric-card {
-            min-height: 134px;
-            padding: 10px 8px;
+            min-height: 88px;
+            padding: 10px 8px 9px;
             border: 1px solid var(--line);
             border-radius: 12px;
             background: linear-gradient(180deg, #ffffff, #f8fbff);
@@ -358,7 +358,7 @@
             align-items: flex-start;
             justify-content: space-between;
             gap: 4px;
-            margin-top: 9px;
+            margin-top: 7px;
         }
         .metric-value-group {
             display: flex;
@@ -392,17 +392,21 @@
             flex-shrink: 0;
         }
         .metric-status.red { background: var(--red-soft); color: var(--red); }
+        .metric-status.orange { background: var(--orange-soft); color: var(--orange); }
         .metric-status.green { background: var(--green-soft); color: var(--green); }
-        .metric-range { margin-top: 6px; color: var(--text-3); font-size: 10px; line-height: 1.25; }
-        .sparkline { width: 100%; height: 28px; margin-top: 8px; }
-        .sparkline path { fill: none; stroke-width: 2.2; stroke-linecap: round; }
+        .metric-reading status-tag { flex-shrink: 0; }
+        .metric-range { margin-top: 5px; color: var(--text-3); font-size: 10px; line-height: 1.25; }
         .risk-grid,
         .risk-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
         .risk-list .mini-card { padding: 11px 12px; }
-        .risk-list .mini-row { min-height: 32px; }
+        .risk-list .mini-row { min-height: 40px; align-items: center; }
+        .risk-list .mini-content {
+            flex: 1;
+            min-width: 0;
+        }
         .risk-list .mini-value {
-            flex: 0 0 auto;
-            margin-top: 0;
+            display: block;
+            margin-top: 4px;
             font-size: 13px;
         }
         .risk-list .mini-desc {
@@ -1354,7 +1358,7 @@
             <div class="todo-list" id="todoList"></div>
         </div>
 
-        <div class="section-card" style="margin-top:10px">
+        <!-- <div class="section-card" style="margin-top:10px">
             <div class="section-head">
                 <div class="section-title">异常提醒<span class="badge-count">12</span></div>
                 <button class="section-action" type="button" onclick="goAbnormalDetail()">查看更多 &gt;</button>
@@ -1371,13 +1375,13 @@
                 <span class="date">05-10</span>
                 <i class="fas fa-chevron-right date"></i>
             </div>
-            <!-- <div class="abnormal-row" onclick="goAbnormalDetail()">
+            <div class="abnormal-row" onclick="goAbnormalDetail()">
                 <span class="warn-icon"><i class="fas fa-triangle-exclamation"></i></span>
                 <span class="abnormal-text">2026-05-04未到院复诊</span>
                 <span class="date">05-04</span>
                 <i class="fas fa-chevron-right date"></i>
-            </div> -->
-        </div>
+            </div>
+        </div> -->
 
         <div class="tabs">
             <button class="tab active" type="button" data-tab="control">健康动态</button>
@@ -1387,7 +1391,7 @@
         <div class="panel active" id="control">
             <div class="section-card">
                 <div class="section-head">
-                    <div class="section-title">核心指标<span class="hint">可左右滑动查看</span></div>
+                    <div class="section-title">核心指标<span class="hint">（支持左右滑动查看）</span></div>
                 </div>
                 <div class="indicator-scroll">
                     <div class="metric-card">
@@ -1397,22 +1401,20 @@
                                 <span class="metric-value">142</span>
                                 <span class="metric-unit">mmHg</span>
                             </div>
-                            <span class="metric-status red">偏高</span>
+                            <status-tag color="red" size="small">偏高</status-tag>
                         </div>
                         <div class="metric-range">目标：&lt;130</div>
-                        <svg class="sparkline" viewBox="0 0 92 28"><path d="M2 23 C12 20,16 7,25 15 S42 19,50 14 S66 18,74 12 S84 13,90 7" stroke="#f53f3f"/></svg>
                     </div>
                     <div class="metric-card">
                         <div class="metric-name">舒张压</div>
                         <div class="metric-reading">
                             <div class="metric-value-group">
-                                <span class="metric-value">88</span>
+                                <span class="metric-value">54</span>
                                 <span class="metric-unit">mmHg</span>
                             </div>
-                            <span class="metric-status red">偏高</span>
+                            <status-tag color="orange" size="small">偏低</status-tag>
                         </div>
                         <div class="metric-range">目标：&lt;80</div>
-                        <svg class="sparkline" viewBox="0 0 92 28"><path d="M2 19 C12 16,21 18,31 12 S49 16,58 13 S72 17,90 9" stroke="#f53f3f"/></svg>
                     </div>
                     <div class="metric-card">
                         <div class="metric-name">空腹血糖</div>
@@ -1421,10 +1423,9 @@
                                 <span class="metric-value">8.2</span>
                                 <span class="metric-unit">mmol/L</span>
                             </div>
-                            <span class="metric-status red">偏高</span>
+                            <status-tag color="red" size="small">偏高</status-tag>
                         </div>
                         <div class="metric-range">目标：4.4-7.0</div>
-                        <svg class="sparkline" viewBox="0 0 92 28"><path d="M2 22 C12 18,14 10,24 16 S40 20,48 13 S62 17,70 11 S82 14,90 6" stroke="#f53f3f"/></svg>
                     </div>
                     <div class="metric-card">
                         <div class="metric-name">餐后血糖</div>
@@ -1433,10 +1434,9 @@
                                 <span class="metric-value">10.6</span>
                                 <span class="metric-unit">mmol/L</span>
                             </div>
-                            <span class="metric-status red">偏高</span>
+                            <status-tag color="red" size="small">偏高</status-tag>
                         </div>
                         <div class="metric-range">目标：&lt;10.0</div>
-                        <svg class="sparkline" viewBox="0 0 92 28"><path d="M2 21 C12 16,20 11,30 18 S46 14,56 10 S70 18,90 7" stroke="#f53f3f"/></svg>
                     </div>
                     <div class="metric-card">
                         <div class="metric-name">糖化血红蛋白</div>
@@ -1445,22 +1445,20 @@
                                 <span class="metric-value">7.9</span>
                                 <span class="metric-unit">%</span>
                             </div>
-                            <span class="metric-status red">偏高</span>
+                            <status-tag color="red" size="small">偏高</status-tag>
                         </div>
                         <div class="metric-range">目标：&lt;7.0%</div>
-                        <svg class="sparkline" viewBox="0 0 92 28"><path d="M2 15 C12 8,20 18,30 13 S48 12,56 18 S70 17,78 12 S86 9,90 6" stroke="#f53f3f"/></svg>
                     </div>
                     <div class="metric-card">
-                        <div class="metric-name">体重</div>
+                        <div class="metric-name">BMI</div>
                         <div class="metric-reading">
                             <div class="metric-value-group">
-                                <span class="metric-value">76.5</span>
-                                <span class="metric-unit">kg</span>
+                                <span class="metric-value">22.3</span>
+                                <span class="metric-unit">kg/m²</span>
                             </div>
-                            <span class="metric-status green">正常</span>
+                            <status-tag color="green" size="small">正常</status-tag>
                         </div>
-                        <div class="metric-range">目标：-</div>
-                        <svg class="sparkline" viewBox="0 0 92 28"><path d="M2 20 C14 19,24 17,34 18 S50 15,58 16 S74 10,90 11" stroke="#13b66b"/></svg>
+                        <div class="metric-range">目标：18.5-23.9</div>
                     </div>
                     <div class="metric-card">
                         <div class="metric-name">腰围</div>
@@ -1469,10 +1467,9 @@
                                 <span class="metric-value">91</span>
                                 <span class="metric-unit">cm</span>
                             </div>
-                            <span class="metric-status red">偏高</span>
+                            <status-tag color="red" size="small">偏高</status-tag>
                         </div>
                         <div class="metric-range">目标：&lt;90</div>
-                        <svg class="sparkline" viewBox="0 0 92 28"><path d="M2 18 C16 17,24 15,34 16 S52 12,62 14 S78 10,90 9" stroke="#f53f3f"/></svg>
                     </div>
                     <div class="metric-card">
                         <div class="metric-name">低密度脂蛋白</div>
@@ -1481,22 +1478,20 @@
                                 <span class="metric-value">3.6</span>
                                 <span class="metric-unit">mmol/L</span>
                             </div>
-                            <span class="metric-status red">偏高</span>
+                            <status-tag color="red" size="small">偏高</status-tag>
                         </div>
                         <div class="metric-range">目标：&lt;2.6</div>
-                        <svg class="sparkline" viewBox="0 0 92 28"><path d="M2 18 C14 12,22 15,32 10 S48 17,58 12 S72 16,90 8" stroke="#f53f3f"/></svg>
                     </div>
                     <div class="metric-card">
                         <div class="metric-name">血尿酸</div>
                         <div class="metric-reading">
                             <div class="metric-value-group">
-                                <span class="metric-value">420</span>
+                                <span class="metric-value">--</span>
                                 <span class="metric-unit">umol/L</span>
                             </div>
-                            <span class="metric-status red">偏高</span>
+                            <!-- <span class="metric-status orange">偏低</span> -->
                         </div>
                         <div class="metric-range">目标：&lt;420</div>
-                        <svg class="sparkline" viewBox="0 0 92 28"><path d="M2 19 C13 21,22 14,32 16 S49 11,58 13 S72 9,90 8" stroke="#f53f3f"/></svg>
                     </div>
                 </div>
             </div>
@@ -1509,20 +1504,22 @@
                     <div class="mini-card" onclick="location.href='ascvd-assessment.html'">
                         <div class="mini-row">
                             <span class="mini-icon red"><i class="fas fa-heart-pulse"></i></span>
-                            <span class="mini-title">心血管风险</span>
-                            <span class="mini-value" style="color:var(--red)">超高危</span>
+                            <div class="mini-content">
+                                <span class="mini-title">心血管病风险</span>
+                                <span class="mini-value" style="color:var(--red)">超高危人群</span>
+                            </div>
                             <i class="fas fa-chevron-right date"></i>
                         </div>
-                        <div class="mini-desc">10年风险：--</div>
                     </div>
                     <div class="mini-card" onclick="openComplicationModal()">
                         <div class="mini-row">
                             <span class="mini-icon blue"><i class="fas fa-notes-medical"></i></span>
-                            <span class="mini-title">并发症情况</span>
-                            <span class="mini-value" style="color:var(--orange)">密切观察</span>
+                            <div class="mini-content">
+                                <span class="mini-title">既往史情况</span>
+                                <span class="mini-value" style="color:var(--orange)">密切观察</span>
+                            </div>
                             <i class="fas fa-chevron-right date"></i>
                         </div>
-                        <div class="mini-desc">2个身体系统异常</div>
                     </div>
                 </div>
             </div>
@@ -1867,6 +1864,7 @@
         <button class="float-action" type="button" onclick="startPreFollowUp()"><i class="fas fa-clipboard-check"></i><span>预随访</span></button>
     </div>
 
+    <script src="../components/shared/status-tag.js"></script>
     <script src="../modules/resident-tag-modal.js"></script>
     <script>
         const patientInfo = {

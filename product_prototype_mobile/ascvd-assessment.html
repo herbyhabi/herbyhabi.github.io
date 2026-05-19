@@ -41,44 +41,12 @@
 
     <main class="space-y-3 p-3 pb-28">
         <section class="page-card rounded-2xl p-4">
-            <div class="flex items-start justify-between gap-3">
-                <div>
-                    <p class="text-xs font-black text-blue-600">动脉粥样硬化性心血管疾病</p>
-                    <h2 class="mt-1 text-2xl font-black tracking-normal">ASCVD风险评估</h2>
-                    <!-- <p class="mt-2 text-sm font-semibold leading-6 text-slate-500">录入血脂、血压及疾病史信息，形成患者风险画像。</p> -->
-                </div>
-                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-xl text-blue-600">
-                    <i class="fas fa-heart-pulse"></i>
-                </div>
-            </div>
-            <!-- <div class="mt-4 grid grid-cols-3 gap-2">
-                <div class="rounded-xl bg-slate-50 p-3 text-center">
-                    <div class="text-lg font-black text-slate-900" id="selectedCount">0</div>
-                    <div class="mt-0.5 text-[11px] font-bold text-slate-500">已选风险项</div>
-                </div>
-                <div class="rounded-xl bg-blue-50 p-3 text-center">
-                    <div class="text-lg font-black text-blue-600" id="bpStageBrief">待判定</div>
-                    <div class="mt-0.5 text-[11px] font-bold text-blue-500">血压分级</div>
-                </div>
-                <div class="rounded-xl bg-emerald-50 p-3 text-center">
-                    <div class="text-lg font-black text-emerald-600">评估中</div>
-                    <div class="mt-0.5 text-[11px] font-bold text-emerald-500">当前状态</div>
-                </div>
-            </div> -->
-        </section>
-
-        <section class="page-card rounded-2xl p-4">
             <div class="mb-3 flex items-center justify-between">
                 <h2 class="text-sm font-black">核心指标</h2>
-                <span class="rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-black text-blue-600">必填</span>
             </div>
 
             <div class="space-y-4">
                 <div>
-                    <div class="mb-2 flex items-center gap-2 text-sm font-black">
-                        <span class="flex h-6 w-6 items-center justify-center rounded-lg bg-blue-50 text-blue-600"><i class="fas fa-vial text-xs"></i></span>
-                        血脂指标
-                    </div>
                     <div class="grid grid-cols-2 gap-3">
                         <label class="block">
                             <span class="text-xs font-bold text-slate-500">LDL-C</span>
@@ -108,39 +76,34 @@
                                 <span class="text-[11px] font-bold text-slate-400">mmol/L</span>
                             </div>
                         </label>
-                    </div>
-                </div>
-
-                <div class="border-t border-slate-100 pt-4">
-                    <div class="mb-2 flex items-center gap-2 text-sm font-black">
-                        <span class="flex h-6 w-6 items-center justify-center rounded-lg bg-rose-50 text-rose-600"><i class="fas fa-stethoscope text-xs"></i></span>
-                        血压指标
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
                         <label class="block">
                             <span class="text-xs font-bold text-slate-500">收缩压</span>
                             <div class="input-shell mt-1 flex h-11 items-center rounded-xl border border-slate-200 bg-slate-50 px-3">
-                                <input id="sbpInput" class="w-full bg-transparent text-sm font-bold outline-none" type="number" placeholder="请输入" oninput="updateBloodPressure()">
+                                <input id="sbpInput" class="w-full bg-transparent text-sm font-bold outline-none" type="number" placeholder="请输入">
                                 <span class="text-[11px] font-bold text-slate-400">mmHg</span>
                             </div>
                         </label>
                         <label class="block">
                             <span class="text-xs font-bold text-slate-500">舒张压</span>
                             <div class="input-shell mt-1 flex h-11 items-center rounded-xl border border-slate-200 bg-slate-50 px-3">
-                                <input id="dbpInput" class="w-full bg-transparent text-sm font-bold outline-none" type="number" placeholder="请输入" oninput="updateBloodPressure()">
+                                <input id="dbpInput" class="w-full bg-transparent text-sm font-bold outline-none" type="number" placeholder="请输入">
                                 <span class="text-[11px] font-bold text-slate-400">mmHg</span>
                             </div>
                         </label>
                     </div>
                     <div class="mt-3 grid grid-cols-2 gap-3">
-                        <div class="rounded-xl bg-slate-50 p-3">
-                            <div class="text-xs font-bold text-slate-500">血压状态</div>
-                            <div class="mt-1 text-sm font-black text-slate-900" id="bpStatus">正常高值血压</div>
-                        </div>
-                        <div class="rounded-xl bg-slate-50 p-3">
-                            <div class="text-xs font-bold text-slate-500">血压水平分级</div>
-                            <div class="mt-1 text-sm font-black text-blue-600" id="bpStage">自动判定展示</div>
-                        </div>
+                        <label class="block">
+                            <span class="text-xs font-bold text-slate-500">血压水平分级</span>
+                            <div class="input-shell mt-1 flex h-11 items-center rounded-xl border border-slate-200 bg-slate-50 px-3">
+                                <select id="bpStage" class="w-full appearance-none bg-transparent text-sm font-bold text-slate-700 outline-none">
+                                    <option value="">请选择</option>
+                                    <option value="1级高血压">1级高血压</option>
+                                    <option value="2级高血压">2级高血压</option>
+                                    <option value="3级高血压">3级高血压</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down text-[11px] text-slate-400"></i>
+                            </div>
+                        </label>
                     </div>
                 </div>
             </div>
@@ -156,7 +119,6 @@
                 <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">外周动脉粥样硬化</span></label>
                 <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">急性冠脉综合征</span></label>
                 <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">稳定性冠心病</span></label>
-                <label class="chip"><input class="hidden" type="checkbox" onchange="updateSelectedCount()"><span class="block rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600">其他</span></label>
             </div>
             <textarea class="mt-3 min-h-20 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold leading-6 outline-none focus:border-blue-400" placeholder="请输入其他疾病史"></textarea>
         </section>
@@ -216,44 +178,12 @@
     <div id="toast" class="pointer-events-none fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-slate-900/85 px-5 py-3 text-sm font-bold text-white opacity-0 transition-opacity">已保存评估</div>
 
     <script>
-        function updateBloodPressure() {
-            const sbp = Number(document.getElementById('sbpInput').value);
-            const dbp = Number(document.getElementById('dbpInput').value);
-            const stage = document.getElementById('bpStage');
-            const brief = document.getElementById('bpStageBrief');
-            const status = document.getElementById('bpStatus');
-
-            if (!sbp && !dbp) {
-                status.textContent = '正常高值血压';
-                stage.textContent = '自动判定展示';
-                brief.textContent = '待判定';
-                return;
-            }
-
-            let result = '正常血压';
-            let state = '正常血压';
-            if (sbp >= 180 || dbp >= 110) {
-                result = '3级高血压';
-                state = '高血压';
-            } else if (sbp >= 160 || dbp >= 100) {
-                result = '2级高血压';
-                state = '高血压';
-            } else if (sbp >= 140 || dbp >= 90) {
-                result = '1级高血压';
-                state = '高血压';
-            } else if (sbp >= 120 || dbp >= 80) {
-                result = '正常高值血压';
-                state = '正常高值血压';
-            }
-
-            status.textContent = state;
-            stage.textContent = result;
-            brief.textContent = result.replace('高血压', '级');
-        }
-
         function updateSelectedCount() {
             const checked = document.querySelectorAll('[data-countable] input[type="checkbox"]:checked').length;
-            document.getElementById('selectedCount').textContent = checked;
+            const selectedCount = document.getElementById('selectedCount');
+            if (selectedCount) {
+                selectedCount.textContent = checked;
+            }
         }
 
         function showToast(text) {
@@ -275,8 +205,8 @@
                     input.value = '';
                 }
             });
+            document.querySelectorAll('select').forEach(select => select.value = '');
             document.querySelectorAll('textarea').forEach(textarea => textarea.value = '');
-            updateBloodPressure();
             updateSelectedCount();
             showToast('已重置');
         }
