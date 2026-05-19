@@ -239,11 +239,9 @@
             flex: 1;
             min-width: 0;
             display: flex;
+            flex-wrap: wrap;
             gap: 6px;
-            overflow: hidden;
-            white-space: nowrap;
         }
-        .tags.expanded { flex-wrap: wrap; white-space: normal; overflow: visible; }
         .tag {
             flex: 0 0 auto;
             padding: 4px 8px;
@@ -254,20 +252,18 @@
             font-weight: 700;
         }
         /* .tag.source { background: #fff7e8; color: #c66a00; } */
-        .tag.add {
+        .tag-arrow {
             flex: 0 0 auto;
-            border: 0;
-            background: var(--blue-soft);
-            color: var(--blue);
-            cursor: pointer;
-        }
-        .expand-tags {
-            flex: 0 0 auto;
+            width: 25px;
+            height: 25px;
+            padding: 0;
             border: 0;
             background: transparent;
             color: var(--blue);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             font-size: 12px;
-            font-weight: 800;
             cursor: pointer;
         }
         .label { color: var(--text-3); font-size: 12px; margin-bottom: 5px; }
@@ -1028,87 +1024,10 @@
         .modal-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
         .modal-title { font-size: 16px; font-weight: 900; }
         .modal-close { border: 0; background: transparent; color: var(--text-2); font-size: 18px; }
-        .tag-search {
-            position: relative;
-            margin: 4px 0 12px;
-        }
-        .tag-search i {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-3);
-            font-size: 13px;
-            pointer-events: none;
-        }
-        .tag-search input {
-            width: 100%;
-            height: 44px;
-            padding: 0 12px 0 36px;
-            border: 1px solid rgba(47, 122, 246, 0.22);
-            border-radius: 12px;
-            background: #f8fbff;
-            color: var(--text-1);
-            font-size: 14px;
-            outline: none;
-        }
-        .tag-search input:focus {
-            border-color: rgba(47, 122, 246, 0.58);
-            box-shadow: 0 0 0 3px rgba(47, 122, 246, 0.1);
-        }
         .tag-helper {
             color: var(--text-3);
             font-size: 12px;
             line-height: 1.5;
-        }
-        .tag-results {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 8px;
-            margin-top: 12px;
-        }
-        .tag-option,
-        .tag-create {
-            width: 100%;
-            min-height: 42px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            padding: 10px 12px;
-            border: 1px solid var(--line);
-            border-radius: 12px;
-            background: #fff;
-            color: var(--text-1);
-            font-size: 14px;
-            font-weight: 800;
-            text-align: left;
-            cursor: pointer;
-        }
-        .tag-option span,
-        .tag-create span {
-            min-width: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .tag-option i,
-        .tag-create i {
-            flex: 0 0 auto;
-            color: var(--blue);
-            font-size: 13px;
-        }
-        .tag-create {
-            border-color: rgba(47, 122, 246, 0.18);
-            background: var(--blue-soft);
-            color: var(--blue);
-        }
-        .tag-empty {
-            grid-column: 1 / -1;
-            margin-top: 12px;
-            padding: 12px;
-            border-radius: 12px;
-            background: #f8fbff;
         }
         .complication-modal {
             padding: 0;
@@ -1366,6 +1285,7 @@
         }
     </style>
     <script src="../components/mobile/mobile-title-bar.js" defer></script>
+    <script src="../components/mobile/mobile-search.js"></script>
 </head>
 <body>
     <div class="toast" id="toast"></div>
@@ -1408,9 +1328,13 @@
                     <span class="tag">高血压</span>
                     <span class="tag">低盐饮食</span>
                     <span class="tag">独居</span>
+                    <span class="tag">慢阻肺</span>
+                    <span class="tag">高尿酸</span>
+                    <span class="tag">不运动</span>
+                    <span class="tag">吸烟</span>
+                    <span class="tag">饮食不规律</span>
                 </div>
-                <button class="tag add" type="button" onclick="openTagModal()">+ 添加</button>
-                <button class="expand-tags" type="button" onclick="toggleTags(event)">展开</button>
+                <button class="tag-arrow" type="button" onclick="openTagModal()" aria-label="添加标签"><i class="fas fa-chevron-right"></i></button>
             </div>
             <div class="manage-strip" data-workspace="clinical">
                 <div class="status-item">综合管理 <strong class="red">强化管理</strong></div>
@@ -1899,20 +1823,6 @@
         </div>
     </div>
 
-    <div class="modal-mask" id="tagModal" onclick="closeTagModal(event)">
-        <div class="modal" onclick="event.stopPropagation()">
-            <div class="modal-head">
-                <div class="modal-title">添加标签</div>
-                <button class="modal-close" type="button" onclick="closeTagModal(event)"><i class="fas fa-xmark"></i></button>
-            </div>
-            <div class="tag-search">
-                <i class="fas fa-magnifying-glass"></i>
-                <input id="tagSearchInput" type="search" placeholder="输入关键词后回车查询" autocomplete="off" onkeydown="handleTagSearchKeydown(event)">
-            </div>
-            <div class="tag-results" id="tagResults"></div>
-        </div>
-    </div>
-
     <div class="modal-mask" id="workbenchModal" onclick="closeWorkbenchModal(event)">
         <div class="modal" onclick="event.stopPropagation()">
             <div class="modal-head">
@@ -1957,6 +1867,7 @@
         <button class="float-action" type="button" onclick="startPreFollowUp()"><i class="fas fa-clipboard-check"></i><span>预随访</span></button>
     </div>
 
+    <script src="../modules/resident-tag-modal.js"></script>
     <script>
         const patientInfo = {
             id: new URLSearchParams(window.location.search).get('id') || '1',
@@ -1976,10 +1887,6 @@
             ]
         };
         let currentAppointmentType = 'visit';
-        const availableTags = [
-            '糖尿病', '高血压', '低盐饮食', '独居', '高脂血症', '冠心病', '规律服药',
-            '血糖波动', '复诊逾期', '运动不足', '睡眠欠佳', '高意向', '需随访', '营养干预'
-        ];
         const servicePackageCheckinTasks = [
             {
                 id: 'checkin-bp-20260518',
@@ -2058,101 +1965,27 @@
             showToast('已切换到' + workbenchNames[workbenchType]);
         }
 
-        function toggleTags(event) {
-            const tags = document.getElementById('tags');
-            const btn = event.currentTarget;
-            tags.classList.toggle('expanded');
-            btn.textContent = tags.classList.contains('expanded') ? '收起' : '全部';
-        }
-
         function openTagModal() {
-            const modal = document.getElementById('tagModal');
-            const input = document.getElementById('tagSearchInput');
-            modal.classList.add('show');
-            input.value = '';
-            renderTagInitialState();
-            setTimeout(() => input.focus(), 80);
-        }
-
-        function closeTagModal(event) {
-            const shouldClose = !event
-                || event.target.id === 'tagModal'
-                || (event.currentTarget && event.currentTarget.classList.contains('modal-close'));
-            if (shouldClose) {
-                document.getElementById('tagModal').classList.remove('show');
-            }
-        }
-
-        function handleTagSearchKeydown(event) {
-            if (event.key !== 'Enter') return;
-            event.preventDefault();
-            searchTag();
-        }
-
-        function searchTag() {
-            const keyword = document.getElementById('tagSearchInput').value.trim();
-            const results = document.getElementById('tagResults');
-            if (!keyword) {
-                renderTagInitialState();
-                return;
-            }
-            const currentTags = getCurrentTagNames();
-            const matchedTags = availableTags.filter(tag => tag.includes(keyword) && !currentTags.includes(tag));
-            results.innerHTML = matchedTags.length
-                ? matchedTags.map(tag => getTagOptionHTML(tag)).join('')
-                : `
-                    <div class="tag-empty">
-                        <div class="tag-helper">未找到“${escapeHTML(keyword)}”</div>
-                        <button class="tag-create" type="button" onclick="createResidentTagFromSearch()">
-                            <span>新建标签：${escapeHTML(keyword)}</span>
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                `;
-        }
-
-        function renderTagInitialState() {
-            const currentTags = getCurrentTagNames();
-            const results = document.getElementById('tagResults');
-            results.innerHTML = availableTags
-                .filter(tag => !currentTags.includes(tag))
-                .slice(0, 6)
-                .map(tag => getTagOptionHTML(tag))
-                .join('');
-        }
-
-        function createResidentTagFromSearch() {
-            const keyword = document.getElementById('tagSearchInput').value.trim();
-            if (!keyword) return;
-            addResidentTag(keyword);
+            ResidentTagModal.open();
         }
 
         function addResidentTag(tagName) {
             const cleanName = tagName.trim();
-            if (!cleanName) return;
+            if (!cleanName) return false;
             if (getCurrentTagNames().includes(cleanName)) {
                 showToast('标签已存在');
-                return;
+                return false;
             }
             const tag = document.createElement('span');
             tag.className = 'tag';
             tag.textContent = cleanName;
             document.getElementById('tags').appendChild(tag);
-            closeTagModal();
             showToast('标签已添加');
+            return true;
         }
 
         function getCurrentTagNames() {
             return Array.from(document.querySelectorAll('#tags .tag')).map(tag => tag.textContent.trim());
-        }
-
-        function getTagOptionHTML(tag) {
-            return `
-                <button class="tag-option" type="button" onclick="addResidentTag(${escapeHTML(JSON.stringify(tag))})">
-                    <span>${escapeHTML(tag)}</span>
-                    <i class="fas fa-plus"></i>
-                </button>
-            `;
         }
 
         function escapeHTML(value) {
@@ -2390,6 +2223,10 @@
         });
 
         applyWorkspaceMode();
+        ResidentTagModal.init({
+            getCurrentTags: getCurrentTagNames,
+            onAddTag: addResidentTag
+        });
         renderTodoSection();
     </script>
 </body>
