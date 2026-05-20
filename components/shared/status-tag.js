@@ -34,9 +34,9 @@
     };
     const sizeMap = {
         small: {
-            height: '22px',
-            padding: '0 7px',
-            fontSize: '12px',
+            height: '20px',
+            padding: '0 6px',
+            fontSize: '11px',
             lineHeight: '20px',
             fontWeight: '700'
         },

@@ -28,7 +28,7 @@
                 overflow: hidden;
                 color: var(--mobile-title-bar-color);
                 background: var(--mobile-title-bar-bg);
-                border-bottom: 1px solid var(--mobile-title-bar-border);
+                border-bottom: 0px solid var(--mobile-title-bar-border);
                 box-shadow: var(--mobile-title-bar-shadow);
                 backdrop-filter: blur(14px);
                 -webkit-backdrop-filter: blur(14px);

@@ -4,22 +4,14 @@
         '血糖波动', '复诊逾期', '运动不足', '睡眠欠佳', '高意向', '需随访', '营养干预'
     ];
 
-    const modalHTML = `
-        <div class="modal-mask resident-tag-modal-mask" id="residentTagModal" onclick="ResidentTagModal.close(event)">
-            <div class="modal" onclick="event.stopPropagation()">
-                <div class="modal-head">
-                    <div class="modal-title">设置标签</div>
-                    <button class="modal-close" type="button" onclick="ResidentTagModal.close(event)"><i class="fas fa-xmark"></i></button>
-                </div>
-                <div class="resident-tag-search">
-                    <i class="fas fa-magnifying-glass"></i>
-                    <input id="residentTagSearchInput" type="search" placeholder="输入关键词后回车查询" autocomplete="off">
-                </div>
-                <div class="resident-tag-results" id="residentTagResults"></div>
-                <div class="resident-tag-actions">
-                    <button class="resident-tag-confirm" type="button" id="residentTagConfirm">确认</button>
-                </div>
-            </div>
+    const modalContentHTML = `
+        <div class="resident-tag-search">
+            <i class="fas fa-magnifying-glass"></i>
+            <input id="residentTagSearchInput" type="search" placeholder="输入关键词后回车查询" autocomplete="off">
+        </div>
+        <div class="resident-tag-results" id="residentTagResults"></div>
+        <div class="resident-tag-actions">
+            <button class="resident-tag-confirm" type="button" id="residentTagConfirm">确认</button>
         </div>
     `;
 
@@ -106,6 +98,7 @@
     };
     let selectedTags = new Set();
     let initialTags = new Set();
+    let modalInstance = null;
 
     function init(options = {}) {
         config = {
@@ -122,23 +115,17 @@
         injectStyle();
         injectModal();
         bindEvents();
-        const modal = document.getElementById('residentTagModal');
         const input = document.getElementById('residentTagSearchInput');
         initialTags = new Set(config.getCurrentTags());
         selectedTags = new Set(initialTags);
-        modal.classList.add('show');
+        modalInstance.open();
         input.value = '';
         renderInitialState();
         setTimeout(() => input.focus(), 80);
     }
 
-    function close(event) {
-        const shouldClose = !event
-            || event.target.id === 'residentTagModal'
-            || (event.currentTarget && event.currentTarget.classList.contains('modal-close'));
-        if (shouldClose) {
-            document.getElementById('residentTagModal').classList.remove('show');
-        }
+    function close() {
+        if (modalInstance) modalInstance.close();
     }
 
     function injectStyle() {
@@ -150,8 +137,22 @@
     }
 
     function injectModal() {
-        if (document.getElementById('residentTagModal')) return;
-        document.body.insertAdjacentHTML('beforeend', modalHTML);
+        if (modalInstance) return;
+        if (!window.MobileModal) {
+            throw new Error('ResidentTagModal requires components/mobile/mobile-modal.js');
+        }
+        modalInstance = MobileModal.create({
+            id: 'residentTagModal',
+            type: 'bottomSheet',
+            title: '设置标签',
+            className: 'resident-tag-modal-mask',
+            content: modalContentHTML,
+            rightAction: {
+                icon: 'fas fa-xmark',
+                close: true,
+                ariaLabel: '关闭'
+            }
+        });
     }
 
     function bindEvents() {

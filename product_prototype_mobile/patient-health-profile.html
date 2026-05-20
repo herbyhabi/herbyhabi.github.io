@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>健康画像</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
             --blue: #2f7af6;
             --blue-soft: #eaf3ff;
@@ -24,6 +30,7 @@
             --card: rgba(255, 255, 255, 0.94);
             --shadow: 0 12px 32px rgba(60, 101, 145, 0.12);
         }
+
         body {
             min-height: 100vh;
             padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
@@ -34,6 +41,7 @@
                 linear-gradient(180deg, #d9ebff 0%, #f4faff 28%, #f7fbff 68%, #ffffff 100%);
             -webkit-font-smoothing: antialiased;
         }
+
         .navbar {
             position: sticky;
             top: 0;
@@ -46,6 +54,7 @@
             box-shadow: 0 10px 26px rgba(60, 101, 145, 0.08);
             backdrop-filter: blur(14px);
         }
+
         .navbar::before {
             content: "";
             position: absolute;
@@ -58,6 +67,7 @@
             transform: rotate(-12deg);
             pointer-events: none;
         }
+
         .navbar-content {
             position: relative;
             display: flex;
@@ -66,6 +76,7 @@
             height: 44px;
             z-index: 1;
         }
+
         .navbar-title {
             max-width: 112px;
             text-align: center;
@@ -75,6 +86,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
         .back-btn,
         .more-btn {
             position: absolute;
@@ -91,8 +103,15 @@
             font-size: 18px;
             cursor: pointer;
         }
-        .back-btn { left: 0; }
-        .more-btn { right: 0; }
+
+        .back-btn {
+            left: 0;
+        }
+
+        .more-btn {
+            right: 0;
+        }
+
         .workbench-switch {
             position: absolute;
             top: 50%;
@@ -115,22 +134,29 @@
             box-shadow: 0 8px 18px rgba(60, 101, 145, 0.08);
             cursor: pointer;
         }
+
         .workbench-switch span {
             min-width: 0;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+
         .workbench-switch strong {
             flex: 0 0 auto;
             color: var(--blue);
             font-weight: 900;
         }
+
         .workbench-switch i {
             color: var(--text-3);
             font-size: 11px;
         }
-        .page { padding: 12px 12px 0; }
+
+        .page {
+            padding: 12px 12px 0;
+        }
+
         .profile-hero,
         .section-card {
             background: var(--card);
@@ -139,8 +165,17 @@
             box-shadow: var(--shadow);
             backdrop-filter: blur(12px);
         }
-        .profile-hero { padding: 14px; }
-        .patient-top { display: flex; gap: 9px; align-items: flex-start; }
+
+        .profile-hero {
+            padding: 14px;
+        }
+
+        .patient-top {
+            display: flex;
+            gap: 9px;
+            align-items: flex-start;
+        }
+
         .avatar {
             width: 44px;
             height: 44px;
@@ -150,17 +185,42 @@
             background: linear-gradient(145deg, #d8ecff, #ffffff);
             border: 2px solid rgba(255, 255, 255, 0.88);
         }
-        .avatar img { width: 100%; height: 100%; object-fit: cover; }
-        .patient-main { flex: 1; min-width: 0; }
-        .name-row { display: flex; align-items: center; gap: 7px; margin-bottom: 6px; }
-        .patient-name { font-size: 17px; font-weight: 800; }
-        .meta { color: var(--text-2); font-size: 12px; }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .patient-main {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .name-row {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            margin-bottom: 6px;
+        }
+
+        .patient-name {
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .meta {
+            color: var(--text-2);
+            font-size: 12px;
+        }
+
         .customer-card-tag {
             color: var(--green);
             font-size: 12px;
             font-weight: 900;
             white-space: nowrap;
         }
+
         .self-badge {
             padding: 2px 7px;
             border-radius: 999px;
@@ -169,6 +229,7 @@
             font-size: 11px;
             font-weight: 800;
         }
+
         .info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -178,9 +239,23 @@
             font-size: 12px;
             line-height: 1.35;
         }
-        .info-item { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .info-item.full { grid-column: 1 / -1; }
-        .info-item strong { color: var(--text-1); font-weight: 700; }
+
+        .info-item {
+            min-width: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .info-item.full {
+            grid-column: 1 / -1;
+        }
+
+        .info-item strong {
+            color: var(--text-1);
+            font-weight: 700;
+        }
+
         .profile-call-btn {
             display: flex;
             align-items: center;
@@ -196,8 +271,17 @@
             font-weight: 800;
             cursor: pointer;
         }
-        .profile-call-btn i { font-size: 12px; }
-        .address-row { margin: 6px 0 4px; color: var(--text-2); font-size: 12px; }
+
+        .profile-call-btn i {
+            font-size: 12px;
+        }
+
+        .address-row {
+            margin: 6px 0 4px;
+            color: var(--text-2);
+            font-size: 12px;
+        }
+
         .manage-strip {
             display: flex;
             align-items: center;
@@ -208,6 +292,7 @@
             color: var(--text-3);
             font-size: 12px;
         }
+
         .manage-strip .status-item {
             flex: 1;
             min-width: 0;
@@ -217,6 +302,7 @@
             white-space: nowrap;
             overflow: hidden;
         }
+
         .manage-strip strong {
             min-width: 0;
             overflow: hidden;
@@ -224,9 +310,19 @@
             color: var(--text-2);
             font-weight: 800;
         }
-        .manage-strip strong.red { color: var(--red); }
-        .manage-strip strong.green { color: var(--green); }
-        .manage-strip strong.orange { color: var(--orange); }
+
+        .manage-strip strong.red {
+            color: var(--red);
+        }
+
+        .manage-strip strong.green {
+            color: var(--green);
+        }
+
+        .manage-strip strong.orange {
+            color: var(--orange);
+        }
+
         .tag-row {
             display: flex;
             align-items: center;
@@ -235,6 +331,7 @@
             padding-top: 12px;
             border-top: 1px solid var(--line);
         }
+
         .tags {
             flex: 1;
             min-width: 0;
@@ -242,6 +339,7 @@
             flex-wrap: wrap;
             gap: 6px;
         }
+
         .tag {
             flex: 0 0 auto;
             padding: 4px 8px;
@@ -251,6 +349,7 @@
             font-size: 11px;
             font-weight: 700;
         }
+
         /* .tag.source { background: #fff7e8; color: #c66a00; } */
         .tag-arrow {
             flex: 0 0 auto;
@@ -266,11 +365,31 @@
             font-size: 12px;
             cursor: pointer;
         }
-        .label { color: var(--text-3); font-size: 12px; margin-bottom: 5px; }
-        .value { color: var(--text-1); font-size: 14px; font-weight: 800; }
-        .value.red { color: var(--red); }
-        .value.orange { color: var(--orange); }
-        .value.green { color: var(--green); }
+
+        .label {
+            color: var(--text-3);
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .value {
+            color: var(--text-1);
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .value.red {
+            color: var(--red);
+        }
+
+        .value.orange {
+            color: var(--orange);
+        }
+
+        .value.green {
+            color: var(--green);
+        }
+
         .tabs {
             position: sticky;
             top: 44px;
@@ -283,6 +402,7 @@
             border-bottom: 1px solid rgba(118, 140, 165, 0.16);
             backdrop-filter: blur(10px);
         }
+
         .tab {
             position: relative;
             height: 44px;
@@ -293,7 +413,11 @@
             font-weight: 700;
             cursor: pointer;
         }
-        .tab.active { color: var(--blue); }
+
+        .tab.active {
+            color: var(--blue);
+        }
+
         .tab.active::after {
             content: "";
             position: absolute;
@@ -305,9 +429,21 @@
             background: var(--blue);
             border-radius: 999px;
         }
-        .panel { display: none; padding-top: 10px; }
-        .panel.active { display: block; }
-        .section-card { padding: 14px; margin-bottom: 10px; }
+
+        .panel {
+            display: none;
+            padding-top: 10px;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        .section-card {
+            padding: 14px;
+            margin-bottom: 10px;
+        }
+
         .section-head {
             display: flex;
             align-items: center;
@@ -315,23 +451,30 @@
             gap: 10px;
             margin-bottom: 12px;
         }
-        .section-title { font-size: 15px; font-weight: 900; }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 900;
+        }
+
         .section-title .hint {
             margin-left: 8px;
             color: var(--text-3);
             font-size: 11px;
             font-weight: 600;
         }
+
         .section-action {
             border: 0;
             margin-left: auto;
             background: transparent;
             color: var(--blue);
             font-size: 12px;
-            font-weight: 900;
+            font-weight: 500;
             white-space: nowrap;
             cursor: pointer;
         }
+
         .indicator-scroll {
             display: grid;
             grid-auto-flow: column;
@@ -342,7 +485,11 @@
             scroll-snap-type: x mandatory;
             scrollbar-width: none;
         }
-        .indicator-scroll::-webkit-scrollbar { display: none; }
+
+        .indicator-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
         .metric-card {
             min-height: 88px;
             padding: 10px 8px 9px;
@@ -352,7 +499,16 @@
             min-width: 0;
             scroll-snap-align: start;
         }
-        .metric-name { color: var(--text-2); font-size: 11px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .metric-name {
+            color: var(--text-2);
+            font-size: 11px;
+            font-weight: 800;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         .metric-reading {
             display: flex;
             align-items: flex-start;
@@ -360,11 +516,13 @@
             gap: 4px;
             margin-top: 7px;
         }
+
         .metric-value-group {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
         }
+
         .metric-value {
             min-width: 0;
             font-size: 20px;
@@ -373,6 +531,7 @@
             line-height: 1.05;
             white-space: nowrap;
         }
+
         .metric-unit {
             display: block;
             margin-top: 2px;
@@ -381,6 +540,7 @@
             font-weight: 600;
             white-space: nowrap;
         }
+
         .metric-status {
             display: inline-flex;
             align-items: center;
@@ -391,30 +551,68 @@
             white-space: nowrap;
             flex-shrink: 0;
         }
-        .metric-status.red { background: var(--red-soft); color: var(--red); }
-        .metric-status.orange { background: var(--orange-soft); color: var(--orange); }
-        .metric-status.green { background: var(--green-soft); color: var(--green); }
-        .metric-reading status-tag { flex-shrink: 0; }
-        .metric-range { margin-top: 5px; color: var(--text-3); font-size: 10px; line-height: 1.25; }
+
+        .metric-status.red {
+            background: var(--red-soft);
+            color: var(--red);
+        }
+
+        .metric-status.orange {
+            background: var(--orange-soft);
+            color: var(--orange);
+        }
+
+        .metric-status.green {
+            background: var(--green-soft);
+            color: var(--green);
+        }
+
+        .metric-reading status-tag {
+            flex-shrink: 0;
+        }
+
+        .metric-range {
+            margin-top: 5px;
+            color: var(--text-3);
+            font-size: 10px;
+            line-height: 1.25;
+        }
+
         .risk-grid,
-        .risk-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
-        .risk-list .mini-card { padding: 11px 12px; }
-        .risk-list .mini-row { min-height: 40px; align-items: center; }
+        .risk-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 8px;
+        }
+
+        .risk-list .mini-card {
+            padding: 11px 12px;
+        }
+
+        .risk-list .mini-row {
+            min-height: 40px;
+            align-items: center;
+        }
+
         .risk-list .mini-content {
             flex: 1;
             min-width: 0;
         }
+
         .risk-list .mini-value {
             display: block;
             margin-top: 4px;
-            font-size: 13px;
+            font-size: 12px;
+            font-weight: 500;
         }
+
         .risk-list .mini-desc {
             margin: 4px 0 0 36px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
         .mini-card {
             padding: 12px;
             border: 1px solid var(--line);
@@ -422,7 +620,13 @@
             background: linear-gradient(180deg, #ffffff, #f8fbff);
             cursor: pointer;
         }
-        .mini-row { display: flex; align-items: center; gap: 8px; }
+
+        .mini-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         .mini-icon {
             width: 28px;
             height: 28px;
@@ -432,14 +636,52 @@
             justify-content: center;
             font-size: 13px;
         }
-        .mini-icon.red { background: var(--red-soft); color: var(--red); }
-        .mini-icon.blue { background: var(--blue-soft); color: var(--blue); }
-        .mini-title { flex: 1; min-width: 0; font-size: 12px; font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .mini-value { margin-top: 9px; font-size: 13px; font-weight: 900; }
-        .mini-value.green { color: var(--green); }
-        .mini-value.orange { color: var(--orange); }
-        .mini-desc { margin-top: 5px; color: var(--text-3); font-size: 11px; line-height: 1.35; }
-        .list { border-top: 1px solid var(--line); }
+
+        .mini-icon.red {
+            background: var(--red-soft);
+            color: var(--red);
+        }
+
+        .mini-icon.blue {
+            background: var(--blue-soft);
+            color: var(--blue);
+        }
+
+        .mini-title {
+            flex: 1;
+            min-width: 0;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .mini-value {
+            margin-top: 9px;
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        .mini-value.green {
+            color: var(--green);
+        }
+
+        .mini-value.orange {
+            color: var(--orange);
+        }
+
+        .mini-desc {
+            margin-top: 5px;
+            color: var(--text-3);
+            font-size: 11px;
+            line-height: 1.35;
+        }
+
+        .list {
+            border-top: 1px solid var(--line);
+        }
+
         .list-row {
             display: flex;
             align-items: center;
@@ -449,12 +691,38 @@
             color: var(--text-2);
             font-size: 13px;
         }
-        .list-row:last-child { border-bottom: 0; }
-        .list-row .name { flex: 1; min-width: 0; color: var(--text-1); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .list-row:last-child {
+            border-bottom: 0;
+        }
+
+        .list-row .name {
+            flex: 1;
+            min-width: 0;
+            color: var(--text-1);
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         .list-row .dose,
-        .list-row .freq { min-width: 58px; text-align: right; }
-        .list-row i { color: var(--text-3); font-size: 11px; }
-        .adherence { color: var(--green); font-size: 12px; font-weight: 900; }
+        .list-row .freq {
+            min-width: 58px;
+            text-align: right;
+        }
+
+        .list-row i {
+            color: var(--text-3);
+            font-size: 11px;
+        }
+
+        .adherence {
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 900;
+        }
+
         .timeline-dynamic {
             display: flex;
             align-items: center;
@@ -467,6 +735,7 @@
                 repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.36) 0 1px, transparent 1px 56px);
             box-shadow: 0 10px 26px rgba(89, 126, 190, 0.16);
         }
+
         .dynamic-icon {
             width: 34px;
             height: 34px;
@@ -481,6 +750,7 @@
             box-shadow: 0 7px 14px rgba(255, 150, 46, 0.24);
             transform: rotate(-10deg);
         }
+
         .dynamic-content {
             flex: 1;
             min-width: 0;
@@ -493,10 +763,12 @@
             line-height: 1.45;
             box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.74);
         }
+
         .dynamic-type {
             color: var(--blue);
             font-weight: 900;
         }
+
         .dynamic-action {
             min-height: 34px;
             padding: 0 13px;
@@ -510,16 +782,41 @@
             box-shadow: 0 8px 15px rgba(109, 80, 233, 0.34);
             cursor: pointer;
         }
+
         @media (max-width: 360px) {
-            .timeline-dynamic { gap: 8px; padding: 8px; }
-            .dynamic-content { padding: 9px 10px; font-size: 12px; }
-            .dynamic-action { padding: 0 10px; }
+            .timeline-dynamic {
+                gap: 8px;
+                padding: 8px;
+            }
+
+            .dynamic-content {
+                padding: 9px 10px;
+                font-size: 12px;
+            }
+
+            .dynamic-action {
+                padding: 0 10px;
+            }
         }
-        .record-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-        .record-grid-3col { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+
+        .record-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .record-grid-3col {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+        }
+
         @media (max-width: 360px) {
-            .record-grid-3col { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .record-grid-3col {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
         }
+
         .record-item {
             min-height: 92px;
             padding: 10px 8px;
@@ -527,6 +824,7 @@
             background: linear-gradient(180deg, #ffffff, #f7faff);
             border: 1px solid var(--line);
         }
+
         .record-icon {
             width: 24px;
             height: 24px;
@@ -539,12 +837,14 @@
             font-size: 12px;
             flex: 0 0 auto;
         }
+
         .record-main {
             display: flex;
             align-items: center;
             gap: 7px;
             margin-bottom: 8px;
         }
+
         .record-title {
             min-width: 0;
             color: var(--text-1);
@@ -554,8 +854,14 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
         .record-date,
-        .record-desc { color: var(--text-2); font-size: 11px; line-height: 1.35; }
+        .record-desc {
+            color: var(--text-2);
+            font-size: 11px;
+            line-height: 1.35;
+        }
+
         .abnormal-row {
             display: flex;
             align-items: center;
@@ -565,7 +871,11 @@
             border-top: 1px solid var(--line);
             cursor: pointer;
         }
-        .abnormal-row:first-of-type { border-top: 0; }
+
+        .abnormal-row:first-of-type {
+            border-top: 0;
+        }
+
         .warn-icon {
             width: 22px;
             height: 22px;
@@ -578,8 +888,21 @@
             font-size: 11px;
             flex: 0 0 auto;
         }
-        .abnormal-text { flex: 1; min-width: 0; color: var(--text-1); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .todo-list { border-top: 1px solid var(--line); }
+
+        .abnormal-text {
+            flex: 1;
+            min-width: 0;
+            color: var(--text-1);
+            font-size: 13px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .todo-list {
+            border-top: 1px solid var(--line);
+        }
+
         .todo-row {
             display: flex;
             align-items: center;
@@ -588,7 +911,11 @@
             padding: 8px 0;
             border-bottom: 1px solid var(--line);
         }
-        .todo-row:last-child { border-bottom: 0; }
+
+        .todo-row:last-child {
+            border-bottom: 0;
+        }
+
         .todo-icon {
             width: 28px;
             height: 28px;
@@ -601,10 +928,12 @@
             color: var(--orange);
             font-size: 13px;
         }
+
         .todo-icon.checkin {
             background: var(--blue-soft);
             color: var(--blue);
         }
+
         .todo-main {
             flex: 1;
             min-width: 0;
@@ -612,6 +941,7 @@
             align-items: center;
             min-height: 28px;
         }
+
         .todo-title {
             display: block;
             min-width: 0;
@@ -623,6 +953,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
         .todo-actions {
             display: flex;
             align-items: center;
@@ -632,6 +963,7 @@
             flex: 0 0 auto;
             max-width: 120px;
         }
+
         .todo-action {
             min-height: 28px;
             padding: 5px 8px;
@@ -644,18 +976,28 @@
             white-space: nowrap;
             cursor: pointer;
         }
+
         .todo-action.ghost {
             background: #f2f5f8;
             color: var(--text-2);
         }
+
         @media (max-width: 360px) {
-            .todo-row { align-items: stretch; }
+            .todo-row {
+                align-items: stretch;
+            }
+
             .todo-actions {
                 max-width: 92px;
                 align-content: flex-start;
             }
         }
-        .date { color: var(--text-3); font-size: 11px; }
+
+        .date {
+            color: var(--text-3);
+            font-size: 11px;
+        }
+
         .badge-count {
             display: inline-flex;
             min-width: 16px;
@@ -670,6 +1012,7 @@
             font-size: 10px;
             vertical-align: 1px;
         }
+
         .service-table {
             width: 100%;
             border-collapse: collapse;
@@ -677,31 +1020,47 @@
             border-radius: 12px;
             font-size: 12px;
         }
+
         .service-table th,
         .service-table td {
             padding: 10px 8px;
             border-bottom: 1px solid var(--line);
             text-align: left;
         }
-        .service-table th { color: var(--text-3); font-weight: 800; background: #f7faff; }
-        .service-table td { color: var(--text-2); }
-        .service-table tr:last-child td { border-bottom: 0; }
+
+        .service-table th {
+            color: var(--text-3);
+            font-weight: 800;
+            background: #f7faff;
+        }
+
+        .service-table td {
+            color: var(--text-2);
+        }
+
+        .service-table tr:last-child td {
+            border-bottom: 0;
+        }
+
         .service-item-list {
             display: grid;
             gap: 10px;
         }
+
         .service-item-row {
             padding: 12px;
             border: 1px solid var(--line);
             border-radius: 12px;
             background: linear-gradient(180deg, #ffffff, #f8fbff);
         }
+
         .service-item-main {
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 10px;
         }
+
         .service-item-name {
             min-width: 0;
             color: var(--text-1);
@@ -711,12 +1070,14 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
         .service-item-times {
             margin-top: 8px;
             color: var(--text-3);
             font-size: 12px;
             font-weight: 700;
         }
+
         .package-tabs {
             display: grid;
             grid-auto-flow: column;
@@ -728,7 +1089,11 @@
             scroll-snap-type: x mandatory;
             scrollbar-width: none;
         }
-        .package-tabs::-webkit-scrollbar { display: none; }
+
+        .package-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
         .package-tab {
             position: relative;
             min-height: 72px;
@@ -741,11 +1106,13 @@
             cursor: pointer;
             scroll-snap-align: start;
         }
+
         .package-tab.active {
             border-color: rgba(47, 122, 246, 0.45);
             background: linear-gradient(180deg, #eef6ff, #ffffff);
             box-shadow: inset 0 0 0 1px rgba(47, 122, 246, 0.18);
         }
+
         .package-tab.active::after {
             content: "";
             position: absolute;
@@ -758,6 +1125,7 @@
             border-bottom: 1px solid rgba(47, 122, 246, 0.45);
             background: #ffffff;
         }
+
         .package-name {
             display: block;
             color: var(--text-1);
@@ -767,6 +1135,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
         .package-meta {
             display: block;
             margin-top: 7px;
@@ -774,8 +1143,15 @@
             font-size: 11px;
             font-weight: 700;
         }
-        .service-package-panel { display: none; }
-        .service-package-panel.active { display: block; }
+
+        .service-package-panel {
+            display: none;
+        }
+
+        .service-package-panel.active {
+            display: block;
+        }
+
         .freq-tag {
             display: inline-flex;
             align-items: center;
@@ -789,18 +1165,29 @@
             font-weight: 900;
             white-space: nowrap;
         }
-        .freq-tag.green { background: var(--green-soft); color: var(--green); }
-        .freq-tag.orange { background: var(--orange-soft); color: var(--orange); }
+
+        .freq-tag.green {
+            background: var(--green-soft);
+            color: var(--green);
+        }
+
+        .freq-tag.orange {
+            background: var(--orange-soft);
+            color: var(--orange);
+        }
+
         .service-project-list {
             display: grid;
             gap: 10px;
         }
+
         .service-project-card {
             padding: 12px;
             border: 1px solid var(--line);
             border-radius: 12px;
             background: linear-gradient(180deg, #ffffff, #f8fbff);
         }
+
         .service-project-head {
             display: flex;
             align-items: center;
@@ -808,42 +1195,50 @@
             gap: 10px;
             margin-bottom: 10px;
         }
+
         .service-project-title {
             color: var(--text-1);
             font-size: 14px;
             font-weight: 900;
         }
+
         .service-project-body {
             display: grid;
             gap: 8px;
         }
+
         .service-metric-grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 8px;
         }
+
         .service-metric {
             padding: 9px 10px;
             border-radius: 10px;
             background: rgba(244, 248, 253, 0.9);
         }
+
         .service-metric-label {
             color: var(--text-3);
             font-size: 11px;
             font-weight: 700;
             margin-bottom: 5px;
         }
+
         .service-metric-value {
             color: var(--text-1);
             font-size: 14px;
             font-weight: 900;
         }
+
         .service-metric-value-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 8px;
         }
+
         .service-detail-row {
             display: flex;
             align-items: center;
@@ -853,10 +1248,12 @@
             color: var(--text-2);
             font-size: 12px;
         }
+
         .service-date {
             color: var(--text-1);
             font-weight: 900;
         }
+
         .overdue-tag {
             display: inline-flex;
             align-items: center;
@@ -869,6 +1266,7 @@
             font-size: 11px;
             font-weight: 900;
         }
+
         .text-action {
             border: 0;
             background: transparent;
@@ -878,10 +1276,12 @@
             white-space: nowrap;
             cursor: pointer;
         }
+
         .text-action i {
             margin-left: 3px;
             font-size: 10px;
         }
+
         .check-plan {
             margin-top: 10px;
             padding: 12px;
@@ -889,20 +1289,24 @@
             border-radius: 12px;
             background: linear-gradient(180deg, #ffffff, #f8fbff);
         }
+
         .check-plan .section-head {
             margin-bottom: 10px;
         }
+
         .check-plan .section-title {
             color: var(--text-1);
             font-size: 14px;
             font-weight: 900;
         }
+
         .plan-stats {
             display: grid;
             grid-template-columns: repeat(4, minmax(0, 1fr));
             gap: 8px;
             margin-bottom: 12px;
         }
+
         .plan-stat {
             overflow: hidden;
             border: 1px solid var(--line);
@@ -910,6 +1314,7 @@
             background: #fff;
             text-align: center;
         }
+
         .plan-stat .num {
             padding: 9px 2px 7px;
             color: var(--text-1);
@@ -917,6 +1322,7 @@
             font-weight: 500;
             line-height: 1;
         }
+
         .plan-stat .period {
             padding: 7px 2px;
             color: #fff;
@@ -924,14 +1330,37 @@
             font-weight: 900;
             white-space: nowrap;
         }
-        .plan-stat.month { background: #eafff6; border-color: #c8f2df; }
+
+        .plan-stat.month {
+            background: #eafff6;
+            border-color: #c8f2df;
+        }
+
         .plan-stat.quarter,
-        .plan-stat.half { background: #fff8e9; border-color: #f6e8c5; }
-        .plan-stat.year { background: #f7f8fa; border-color: #e4e8ed; }
-        .plan-stat.month .period { background: #45d59a; }
+        .plan-stat.half {
+            background: #fff8e9;
+            border-color: #f6e8c5;
+        }
+
+        .plan-stat.year {
+            background: #f7f8fa;
+            border-color: #e4e8ed;
+        }
+
+        .plan-stat.month .period {
+            background: #45d59a;
+        }
+
         .plan-stat.quarter .period,
-        .plan-stat.half .period { background: #ffc13d; }
-        .plan-stat.year .period { background: #e9edf2; color: #8792a1; }
+        .plan-stat.half .period {
+            background: #ffc13d;
+        }
+
+        .plan-stat.year .period {
+            background: #e9edf2;
+            color: #8792a1;
+        }
+
         .plan-table {
             display: grid;
             grid-template-columns: minmax(118px, 1.7fr) repeat(4, minmax(44px, 1fr));
@@ -940,6 +1369,7 @@
             border-radius: 12px;
             background: #fff;
         }
+
         .plan-cell {
             min-height: 48px;
             display: flex;
@@ -953,25 +1383,35 @@
             font-weight: 800;
             text-align: center;
         }
-        .plan-cell:nth-child(5n) { border-right: 0; }
-        .plan-cell:nth-last-child(-n + 5) { border-bottom: 0; }
+
+        .plan-cell:nth-child(5n) {
+            border-right: 0;
+        }
+
+        .plan-cell:nth-last-child(-n + 5) {
+            border-bottom: 0;
+        }
+
         .plan-head {
             min-height: 46px;
             color: var(--text-3);
             font-size: 13px;
             background: #fbfcff;
         }
+
         .plan-item-name {
             justify-content: center;
             color: var(--text-1);
             line-height: 1.35;
         }
+
         .plan-item-name span {
             display: -webkit-box;
             /* -webkit-line-clamp: 2; */
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
+
         .check-dot {
             width: 22px;
             height: 22px;
@@ -983,15 +1423,28 @@
             color: #fff;
             font-size: 12px;
         }
-        .check-dot.done { background: #2f8ff0; }
-        .dash { color: var(--text-2); font-size: 16px; font-weight: 900; }
+
+        .check-dot.done {
+            background: #2f8ff0;
+        }
+
+        .dash {
+            color: var(--text-2);
+            font-size: 16px;
+            font-weight: 900;
+        }
+
         .empty {
             padding: 18px 12px;
             text-align: center;
             color: var(--text-3);
             font-size: 13px;
         }
-        [hidden] { display: none !important; }
+
+        [hidden] {
+            display: none !important;
+        }
+
         .toast {
             position: fixed;
             left: 50%;
@@ -1007,7 +1460,11 @@
             pointer-events: none;
             transition: opacity 0.2s ease;
         }
-        .toast.show { opacity: 1; }
+
+        .toast.show {
+            opacity: 1;
+        }
+
         .modal-mask {
             position: fixed;
             inset: 0;
@@ -1016,7 +1473,11 @@
             align-items: flex-end;
             background: rgba(14, 25, 42, 0.38);
         }
-        .modal-mask.show { display: flex; }
+
+        .modal-mask.show {
+            display: flex;
+        }
+
         .modal {
             width: 100%;
             max-height: 72vh;
@@ -1025,112 +1486,33 @@
             border-radius: 20px 20px 0 0;
             background: #fff;
         }
-        .modal-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
-        .modal-title { font-size: 16px; font-weight: 900; }
-        .modal-close { border: 0; background: transparent; color: var(--text-2); font-size: 18px; }
+
+        .modal-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: 900;
+        }
+
+        .modal-close {
+            border: 0;
+            background: transparent;
+            color: var(--text-2);
+            font-size: 18px;
+        }
+
         .tag-helper {
             color: var(--text-3);
             font-size: 12px;
             line-height: 1.5;
         }
-        .complication-modal {
-            padding: 0;
-            background: #eef2f6;
-        }
-        .complication-modal .modal-head {
-            position: sticky;
-            top: 0;
-            z-index: 1;
-            margin: 0;
-            padding: 16px 16px 12px;
-            background: #eef2f6;
-        }
-        .complication-list {
-            display: grid;
-            gap: 14px;
-            padding: 0 16px 18px;
-        }
-        .system-group {
-            display: grid;
-            gap: 8px;
-        }
-        .system-name {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 0 6px;
-            color: var(--text-2);
-            font-size: 13px;
-            font-weight: 900;
-        }
-        .system-count {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 24px;
-            height: 18px;
-            padding: 0 7px;
-            border-radius: 999px;
-            background: rgba(47, 122, 246, 0.1);
-            color: var(--blue);
-            font-size: 11px;
-            font-weight: 900;
-            line-height: 1;
-        }
-        .complication-card {
-            position: relative;
-            min-height: 104px;
-            padding: 16px 16px 10px;
-            overflow: hidden;
-            border-radius: 18px;
-            background: #fff;
-            box-shadow: 0 8px 20px rgba(76, 95, 118, 0.06);
-        }
-        .complication-source {
-            position: absolute;
-            top: 0;
-            right: 0;
-            min-width: 76px;
-            height: 34px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 14px;
-            border-radius: 0 18px 0 8px;
-            background: #f2f3f3;
-            color: #6f777f;
-            font-size: 14px;
-            font-weight: 800;
-        }
-        .complication-title {
-            padding-right: 78px;
-            color: #2f3338;
-            font-size: 17px;
-            font-weight: 900;
-            line-height: 1.35;
-        }
-        .complication-meta {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            margin-top: 16px;
-            padding-top: 11px;
-            border-top: 1px dashed #dde2e6;
-            color: #7b828a;
-            font-size: 15px;
-            line-height: 1.35;
-        }
-        .complication-date,
-        .complication-hospital {
-            min-width: 0;
-            white-space: nowrap;
-        }
-        .complication-hospital {
-            overflow: hidden;
-            text-align: right;
-            text-overflow: ellipsis;
-        }
+
         .floating-actions {
             position: fixed;
             left: 0;
@@ -1146,6 +1528,7 @@
             box-shadow: 0 -12px 30px rgba(60, 101, 145, 0.12);
             backdrop-filter: blur(14px);
         }
+
         .float-action {
             min-width: 0;
             height: 46px;
@@ -1160,20 +1543,29 @@
             font-weight: 900;
             cursor: pointer;
         }
+
         .float-action span {
             min-width: 0;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
-        .float-action i { margin-right: 5px; }
+
+        .float-action i {
+            margin-right: 5px;
+        }
+
         .float-action.primary {
             border-color: transparent;
             background: linear-gradient(135deg, #2f7af6, #4fa0ff);
             color: #fff;
             box-shadow: 0 8px 18px rgba(47, 122, 246, 0.28);
         }
-        .form-group { margin-top: 12px; }
+
+        .form-group {
+            margin-top: 12px;
+        }
+
         .form-label {
             display: block;
             margin-bottom: 7px;
@@ -1181,7 +1573,11 @@
             font-size: 13px;
             font-weight: 800;
         }
-        .form-label .required { color: var(--red); }
+
+        .form-label .required {
+            color: var(--red);
+        }
+
         .form-input,
         .form-select {
             width: 100%;
@@ -1194,12 +1590,14 @@
             font-size: 14px;
             outline: none;
         }
+
         .appointment-type-tabs {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 8px;
             margin: 4px 0 12px;
         }
+
         .appointment-type-tab {
             height: 38px;
             border: 1px solid var(--line);
@@ -1210,17 +1608,20 @@
             font-weight: 900;
             cursor: pointer;
         }
+
         .appointment-type-tab.active {
             border-color: rgba(47, 122, 246, 0.42);
             background: var(--blue-soft);
             color: var(--blue);
         }
+
         .modal-actions {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
             margin-top: 16px;
         }
+
         .modal-btn {
             height: 44px;
             border: 0;
@@ -1229,13 +1630,23 @@
             font-weight: 900;
             cursor: pointer;
         }
-        .modal-btn.cancel { background: #f2f5f8; color: var(--text-2); }
-        .modal-btn.confirm { background: var(--blue); color: #fff; }
+
+        .modal-btn.cancel {
+            background: #f2f5f8;
+            color: var(--text-2);
+        }
+
+        .modal-btn.confirm {
+            background: var(--blue);
+            color: #fff;
+        }
+
         .workbench-list {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
+
         .workbench-item {
             width: 100%;
             min-height: 76px;
@@ -1249,10 +1660,12 @@
             text-align: left;
             cursor: pointer;
         }
+
         .workbench-item.active {
             border-color: rgba(47, 122, 246, 0.42);
             background: var(--blue-soft);
         }
+
         .workbench-icon {
             width: 42px;
             height: 42px;
@@ -1262,46 +1675,107 @@
             place-items: center;
             font-size: 18px;
         }
-        .workbench-item.specialist .workbench-icon { background: #eaf3ff; color: var(--blue); }
-        .workbench-item.public-health .workbench-icon { background: var(--green-soft); color: var(--green); }
-        .workbench-item.operation .workbench-icon { background: #fff4e2; color: var(--orange); }
-        .workbench-info { flex: 1; min-width: 0; }
-        .workbench-name { display: block; color: var(--text-1); font-size: 15px; font-weight: 900; }
+
+        .workbench-item.specialist .workbench-icon {
+            background: #eaf3ff;
+            color: var(--blue);
+        }
+
+        .workbench-item.public-health .workbench-icon {
+            background: var(--green-soft);
+            color: var(--green);
+        }
+
+        .workbench-item.operation .workbench-icon {
+            background: #fff4e2;
+            color: var(--orange);
+        }
+
+        .workbench-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .workbench-name {
+            display: block;
+            color: var(--text-1);
+            font-size: 15px;
+            font-weight: 900;
+        }
+
         .workbench-desc {
             margin-top: 4px;
             color: var(--text-3);
             font-size: 12px;
             line-height: 1.35;
         }
-        .workbench-arrow { color: var(--text-3); font-size: 13px; }
+
+        .workbench-arrow {
+            color: var(--text-3);
+            font-size: 13px;
+        }
+
         @media (max-width: 360px) {
-            .record-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .record-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
             .risk-list,
-            .risk-grid { grid-template-columns: 1fr; }
-            .indicator-scroll { grid-auto-columns: calc((100% - 16px) / 3); }
-            .metric-value { font-size: 18px; }
-            .plan-stats { gap: 6px; }
-            .plan-stat .num { font-size: 17px; }
-            .plan-stat .period { font-size: 11px; }
-            .plan-table { grid-template-columns: minmax(104px, 1.6fr) repeat(4, minmax(38px, 1fr)); }
-            .plan-cell { padding: 7px 4px; font-size: 11px; }
-            .service-metric-grid { grid-template-columns: 1fr; }
+            .risk-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .indicator-scroll {
+                grid-auto-columns: calc((100% - 16px) / 3);
+            }
+
+            .metric-value {
+                font-size: 18px;
+            }
+
+            .plan-stats {
+                gap: 6px;
+            }
+
+            .plan-stat .num {
+                font-size: 17px;
+            }
+
+            .plan-stat .period {
+                font-size: 11px;
+            }
+
+            .plan-table {
+                grid-template-columns: minmax(104px, 1.6fr) repeat(4, minmax(38px, 1fr));
+            }
+
+            .plan-cell {
+                padding: 7px 4px;
+                font-size: 11px;
+            }
+
+            .service-metric-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
     <script src="../components/mobile/mobile-title-bar.js" defer></script>
     <script src="../components/mobile/mobile-search.js"></script>
 </head>
+
 <body>
     <div class="toast" id="toast"></div>
     <!-- <button class="more-btn" type="button" onclick="showToast('更多操作')"><i class="fas fa-ellipsis"></i></button> -->
     <!-- <span>当前工作台(演示用)</span> -->
-    <mobile-title-bar title="健康画像" back-action="goBack()" workbench="公卫慢病" workbench-action="showWorkbenchModal()"></mobile-title-bar>
+    <mobile-title-bar title="健康画像" back-action="goBack()" workbench="公卫慢病"
+        workbench-action="showWorkbenchModal()"></mobile-title-bar>
 
     <div class="page">
         <div class="profile-hero">
             <div class="patient-top">
                 <div class="avatar">
-                    <img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&amp;fit=crop&amp;w=160&amp;q=80" alt="居民头像">
+                    <img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&amp;fit=crop&amp;w=160&amp;q=80"
+                        alt="居民头像">
                 </div>
                 <div class="patient-main">
                     <div class="name-row">
@@ -1309,13 +1783,15 @@
                         <span class="meta">男</span>
                         <span class="meta">67岁</span>
                         <span class="customer-card-tag" data-workspace="operation" hidden>@微信</span>
-                        <button class="profile-call-btn" type="button" onclick="callPatient('13811115678', patientInfo.name)">
+                        <button class="profile-call-btn" type="button"
+                            onclick="callPatient('13811115678', patientInfo.name)">
                             <i class="fas fa-phone"></i>
                             <span>呼叫</span>
                         </button>
-                        <button class="section-action" type="button" data-workspace="operation" onclick="editInfo()" hidden>编辑信息 &gt;</button>
+                        <button class="section-action" type="button" data-workspace="operation" onclick="editInfo()"
+                            hidden>编辑信息 &gt;</button>
                     </div>
-                    
+
                     <div class="info-grid">
                         <div class="info-item">联系号码：13811115678</div>
                         <div class="info-item" data-workspace="clinical">归属网格：滨海网格</div>
@@ -1338,16 +1814,18 @@
                     <span class="tag">吸烟</span>
                     <span class="tag">饮食不规律</span>
                 </div>
-                <button class="tag-arrow" type="button" onclick="openTagModal()" aria-label="添加标签"><i class="fas fa-chevron-right"></i></button>
+                <button class="tag-arrow" type="button" onclick="openTagModal()" aria-label="添加标签"><i
+                        class="fas fa-chevron-right"></i></button>
             </div>
             <div class="manage-strip" data-workspace="clinical">
                 <div class="status-item">综合管理 <strong class="red">强化管理</strong></div>
                 <div class="status-item">当前状态 <strong class="green">在管</strong></div>
             </div>
             <div class="manage-strip" data-workspace="operation" hidden>
-                 <div class="status-item">当前阶段 <strong class="green">成交客户</strong></div>
-                <div class="status-item">好友关系 <strong class="orange">1好友 | 4群聊</strong><i class="fas fa-chevron-right date"></i></div>
-               
+                <div class="status-item">当前阶段 <strong class="green">成交客户</strong></div>
+                <div class="status-item">好友关系 <strong class="orange">1好友 | 4群聊</strong><i
+                        class="fas fa-chevron-right date"></i></div>
+
             </div>
         </div>
 
@@ -1516,7 +1994,7 @@
                             <span class="mini-icon blue"><i class="fas fa-notes-medical"></i></span>
                             <div class="mini-content">
                                 <span class="mini-title">既往史情况</span>
-                                <span class="mini-value" style="color:var(--orange)">密切观察</span>
+                                <span class="mini-value" style="color:var(--orange)">新增5项疾病</span>
                             </div>
                             <i class="fas fa-chevron-right date"></i>
                         </div>
@@ -1527,13 +2005,17 @@
             <div class="section-card">
                 <div class="section-head">
                     <div class="section-title">疾病用药</div>
-                    <button class="section-action" type="button" onclick="showToast('查看全部用药记录')">查看全部 <i class="fas fa-chevron-right"></i></button>
+                    <button class="section-action" type="button" onclick="showToast('查看全部用药记录')">查看全部 <i
+                            class="fas fa-chevron-right"></i></button>
                 </div>
-                <div class="label">近3个月内用药</div>
+                <div class="label">最近用药：2026-01-13</div>
                 <div class="list">
-                    <div class="list-row"><span class="name">二甲双胍缓释片</span><span class="dose">0.5g</span><span class="freq">2次/日</span></div>
-                    <div class="list-row"><span class="name">阿卡波糖片</span><span class="dose">50mg</span><span class="freq">3次/日</span></div>
-                    <div class="list-row"><span class="name">氨氯地平片</span><span class="dose">5mg</span><span class="freq">1次/日</span></div>
+                    <div class="list-row"><span class="name">二甲双胍缓释片</span><span class="dose">0.5g</span><span
+                            class="freq">2次/日</span></div>
+                    <div class="list-row"><span class="name">阿卡波糖片</span><span class="dose">50mg</span><span
+                            class="freq">3次/日</span></div>
+                    <div class="list-row"><span class="name">氨氯地平片</span><span class="dose">5mg</span><span
+                            class="freq">1次/日</span></div>
                 </div>
                 <div style="height:12px"></div>
                 <div class="timeline-dynamic">
@@ -1612,8 +2094,10 @@
                                     </div>
                                 </div>
                                 <div class="service-detail-row">
-                                    <span>下次随访：<span class="service-date">2026-05-10</span><span class="overdue-tag">已逾期</span></span>
-                                    <button class="text-action" type="button" onclick="startPreFollowUp()">预随访 <i class="fas fa-chevron-right"></i></button>
+                                    <span>下次随访：<span class="service-date">2026-05-10</span><span
+                                            class="overdue-tag">已逾期</span></span>
+                                    <button class="text-action" type="button" onclick="startPreFollowUp()">预随访 <i
+                                            class="fas fa-chevron-right"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -1630,13 +2114,15 @@
                                         <div class="service-metric-value">3次</div>
                                     </div>
                                     <div class="service-metric">
-                                        
-                                       
+
+
                                         <div class="service-metric-value-row">
                                             <div class="service-metric-label">上次开方</div>
-                                            <button class="text-action" type="button" onclick="showToast('查看健康处方详情（样式同居民端）')">查看详情<i class="fas fa-chevron-right"></i></button>
+                                            <button class="text-action" type="button"
+                                                onclick="showToast('查看健康处方详情（样式同居民端）')">查看详情<i
+                                                    class="fas fa-chevron-right"></i></button>
                                         </div>
-                                         <div class="service-metric-value">2026-04-18</div>
+                                        <div class="service-metric-value">2026-04-18</div>
                                     </div>
                                 </div>
                             </div>
@@ -1679,19 +2165,23 @@
                             <div class="plan-cell"><span class="check-dot"><i class="fas fa-check"></i></span></div>
 
                             <div class="plan-cell plan-item-name"><span>空腹血糖</span></div>
-                            <div class="plan-cell"><span class="check-dot done"><i class="fas fa-check"></i></span></div>
+                            <div class="plan-cell"><span class="check-dot done"><i class="fas fa-check"></i></span>
+                            </div>
                             <div class="plan-cell"><span class="dash">-</span></div>
-                            <div class="plan-cell"><span class="check-dot done"><i class="fas fa-check"></i></span></div>
+                            <div class="plan-cell"><span class="check-dot done"><i class="fas fa-check"></i></span>
+                            </div>
                             <div class="plan-cell"><span class="dash">-</span></div>
 
                             <div class="plan-cell plan-item-name"><span>尿微量白蛋白</span></div>
-                            <div class="plan-cell"><span class="check-dot done"><i class="fas fa-check"></i></span></div>
+                            <div class="plan-cell"><span class="check-dot done"><i class="fas fa-check"></i></span>
+                            </div>
                             <div class="plan-cell"><span class="dash">-</span></div>
                             <div class="plan-cell"><span class="dash">-</span></div>
                             <div class="plan-cell"><span class="dash">-</span></div>
 
                             <div class="plan-cell plan-item-name"><span>眼底检查</span></div>
-                            <div class="plan-cell"><span class="check-dot done"><i class="fas fa-check"></i></span></div>
+                            <div class="plan-cell"><span class="check-dot done"><i class="fas fa-check"></i></span>
+                            </div>
                             <div class="plan-cell"><span class="dash">-</span></div>
                             <div class="plan-cell"><span class="dash">-</span></div>
                             <div class="plan-cell"><span class="dash">-</span></div>
@@ -1758,48 +2248,18 @@
 
     </div>
 
-    <div class="modal-mask" id="complicationModal" onclick="closeComplicationModal(event)">
-        <div class="modal complication-modal">
-            <div class="modal-head">
-                <div class="modal-title">并发症详情</div>
-                <button class="modal-close" type="button" onclick="closeComplicationModal(event)"><i class="fas fa-xmark"></i></button>
-            </div>
-            <div class="complication-list">
-                <div class="system-group">
-                    <div class="system-name">心血管系统<span class="system-count">1</span></div>
-                    <div class="complication-card">
-                        <div class="complication-source">门诊</div>
-                        <div class="complication-title">冠状动脉粥样硬化性心脏病</div>
-                        <div class="complication-meta">
-                            <span class="complication-date">2026.04.12</span>
-                            <span class="complication-hospital">临海市第一人民医院</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="system-group">
-                    <div class="system-name">肾脏系统<span class="system-count">1</span></div>
-                    <div class="complication-card">
-                        <div class="complication-source">住院</div>
-                        <div class="complication-title">糖尿病肾病</div>
-                        <div class="complication-meta">
-                            <span class="complication-date">2026.05.04</span>
-                            <span class="complication-hospital">滨海社区卫生服务中心</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="modal-mask" id="appointmentModal" onclick="closeAppointmentModal(event)">
         <div class="modal" onclick="event.stopPropagation()">
             <div class="modal-head">
                 <div class="modal-title">预约就诊</div>
-                <button class="modal-close" type="button" onclick="closeAppointmentModal(event)"><i class="fas fa-xmark"></i></button>
+                <button class="modal-close" type="button" onclick="closeAppointmentModal(event)"><i
+                        class="fas fa-xmark"></i></button>
             </div>
             <div class="appointment-type-tabs">
-                <button class="appointment-type-tab active" type="button" data-appointment-type="visit" onclick="selectAppointmentType('visit')">就诊预约</button>
-                <button class="appointment-type-tab" type="button" data-appointment-type="referral" onclick="selectAppointmentType('referral')">转诊预约</button>
+                <button class="appointment-type-tab active" type="button" data-appointment-type="visit"
+                    onclick="selectAppointmentType('visit')">就诊预约</button>
+                <button class="appointment-type-tab" type="button" data-appointment-type="referral"
+                    onclick="selectAppointmentType('referral')">转诊预约</button>
             </div>
             <div class="form-group">
                 <label class="form-label" for="appointmentDatetime">预约日期 <span class="required">*</span></label>
@@ -1827,10 +2287,12 @@
                     <div class="modal-title">切换工作台</div>
                     <div class="tag-helper">请选择要演示的场景</div>
                 </div>
-                <button class="modal-close" type="button" onclick="closeWorkbenchModal(event)"><i class="fas fa-xmark"></i></button>
+                <button class="modal-close" type="button" onclick="closeWorkbenchModal(event)"><i
+                        class="fas fa-xmark"></i></button>
             </div>
             <div class="workbench-list">
-                <button class="workbench-item specialist" type="button" data-workbench-option="specialist" onclick="selectWorkbench('specialist')">
+                <button class="workbench-item specialist" type="button" data-workbench-option="specialist"
+                    onclick="selectWorkbench('specialist')">
                     <span class="workbench-icon"><i class="fas fa-stethoscope"></i></span>
                     <span class="workbench-info">
                         <span class="workbench-name">专科慢病</span>
@@ -1838,7 +2300,8 @@
                     </span>
                     <i class="fas fa-chevron-right workbench-arrow"></i>
                 </button>
-                <button class="workbench-item public-health" type="button" data-workbench-option="public-health" onclick="selectWorkbench('public-health')">
+                <button class="workbench-item public-health" type="button" data-workbench-option="public-health"
+                    onclick="selectWorkbench('public-health')">
                     <span class="workbench-icon"><i class="fas fa-hospital"></i></span>
                     <span class="workbench-info">
                         <span class="workbench-name">公卫慢病</span>
@@ -1846,7 +2309,8 @@
                     </span>
                     <i class="fas fa-chevron-right workbench-arrow"></i>
                 </button>
-                <button class="workbench-item operation" type="button" data-workbench-option="operation" onclick="selectWorkbench('operation')">
+                <button class="workbench-item operation" type="button" data-workbench-option="operation"
+                    onclick="selectWorkbench('operation')">
                     <span class="workbench-icon"><i class="fas fa-headset"></i></span>
                     <span class="workbench-info">
                         <span class="workbench-name">运营中心</span>
@@ -1859,13 +2323,18 @@
     </div>
 
     <div class="floating-actions">
-        <button class="float-action primary" type="button" onclick="openAppointmentModal()"><i class="fas fa-calendar-plus"></i><span>预约</span></button>
-        <button class="float-action" type="button" onclick="openPatientMessage()"><i class="fas fa-comment-dots"></i><span>消息</span></button>
-        <button class="float-action" type="button" onclick="startPreFollowUp()"><i class="fas fa-clipboard-check"></i><span>预随访</span></button>
+        <button class="float-action primary" type="button" onclick="openAppointmentModal()"><i
+                class="fas fa-calendar-plus"></i><span>预约</span></button>
+        <button class="float-action" type="button" onclick="openPatientMessage()"><i
+                class="fas fa-comment-dots"></i><span>消息</span></button>
+        <button class="float-action" type="button" onclick="startPreFollowUp()"><i
+                class="fas fa-clipboard-check"></i><span>预随访</span></button>
     </div>
 
     <script src="../components/shared/status-tag.js"></script>
+    <script src="../components/mobile/mobile-modal.js"></script>
     <script src="../modules/resident-tag-modal.js"></script>
+    <script src="../modules/past-medical-history-modal.js"></script>
     <script>
         const patientInfo = {
             id: new URLSearchParams(window.location.search).get('id') || '1',
@@ -1884,6 +2353,23 @@
                 { id: 'org002', name: '临海市第一人民医院', departments: ['心内科', '内分泌科', '肾内科', '神经内科'] }
             ]
         };
+        // 居民既往史疾病数据，addedAt 用于判断近3个月新增标识
+        const pastMedicalHistories = [
+            { name: '冠状动脉粥样硬化性心脏病', addedAt: '2026-04-12' },
+            { name: '糖尿病肾病', addedAt: '2026-05-04' },
+            { name: '高尿酸血症', addedAt: '2026-02-28' },
+            { name: '糖尿病周围神经病变', addedAt: '2026-05-18' },
+            { name: '颈动脉粥样硬化', addedAt: '2026-03-16' },
+            { name: '2型糖尿病', addedAt: '2021-06-18' },
+            { name: '3级高血压病', addedAt: '2020-09-12' },
+            { name: '高脂血症', addedAt: '2023-11-03' },
+            { name: '慢性胃炎', addedAt: '2019-04-15' },
+            { name: '胆囊结石', addedAt: '2022-02-09' },
+            { name: '脑梗死后遗症', addedAt: '2024-01-22' },
+            { name: '慢性支气管炎', addedAt: '2023-12-06' },
+            { name: '骨质疏松症', addedAt: '2025-09-18' },
+            { name: '非酒精性脂肪性肝病', addedAt: '2022-08-21' }
+        ];
         let currentAppointmentType = 'visit';
         const servicePackageCheckinTasks = [
             {
@@ -2177,20 +2663,20 @@
         }
 
         function openComplicationModal() {
-            document.getElementById('complicationModal').classList.add('show');
+            PastMedicalHistoryModal.init({
+                histories: pastMedicalHistories
+            });
+            PastMedicalHistoryModal.open();
         }
 
         function closeComplicationModal(event) {
-            const clickedMask = event.target.id === 'complicationModal';
-            const clickedClose = event.currentTarget.classList && event.currentTarget.classList.contains('modal-close');
-            if (clickedMask || clickedClose) {
-                document.getElementById('complicationModal').classList.remove('show');
-            }
+            PastMedicalHistoryModal.close();
         }
 
         function applyWorkspaceMode(type = getInitialWorkbench()) {
             const isOperation = type === 'operation';
-            document.getElementById('currentWorkbench').textContent = workbenchNames[type];
+            const currentWorkbench = document.getElementById('currentWorkbench');
+            if (currentWorkbench) currentWorkbench.textContent = workbenchNames[type];
             document.querySelectorAll('[data-workspace="operation"]').forEach(item => {
                 item.hidden = !isOperation;
             });
@@ -2220,12 +2706,18 @@
             });
         });
 
-        applyWorkspaceMode();
-        ResidentTagModal.init({
-            getCurrentTags: getCurrentTagNames,
-            onAddTag: addResidentTag
+        document.addEventListener('DOMContentLoaded', () => {
+            ResidentTagModal.init({
+                getCurrentTags: getCurrentTagNames,
+                onAddTag: addResidentTag
+            });
+            PastMedicalHistoryModal.init({
+                histories: pastMedicalHistories
+            });
+            applyWorkspaceMode();
+            renderTodoSection();
         });
-        renderTodoSection();
     </script>
 </body>
+
 </html>
