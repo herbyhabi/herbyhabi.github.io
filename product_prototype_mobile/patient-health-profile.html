@@ -372,6 +372,19 @@
             margin-bottom: 5px;
         }
 
+        /* 疾病用药就诊日期行 */
+        .medication-visit-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .medication-visit-date {
+            flex: 0 0 auto;
+            text-align: right;
+        }
+
         .value {
             color: var(--text-1);
             font-size: 14px;
@@ -461,7 +474,6 @@
             margin-left: 8px;
             color: var(--text-3);
             font-size: 11px;
-            font-weight: 600;
         }
 
         .section-action {
@@ -697,11 +709,28 @@
         }
 
         .list-row .name {
+            display: flex;
+            align-items: center;
+            gap: 6px;
             flex: 1;
             min-width: 0;
             color: var(--text-1);
             font-weight: 700;
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* 疾病用药药名标识 */
+        .list-row .medicine-icon {
+            flex: 0 0 auto;
+            width: 14px;
+            height: 14px;
+            object-fit: contain;
+        }
+
+        .list-row .medicine-name {
+            min-width: 0;
             overflow: hidden;
             text-overflow: ellipsis;
         }
@@ -734,6 +763,17 @@
                 linear-gradient(135deg, rgba(229, 246, 255, 0.98), rgba(238, 234, 255, 0.96)),
                 repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.36) 0 1px, transparent 1px 56px);
             box-shadow: 0 10px 26px rgba(89, 126, 190, 0.16);
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .timeline-dynamic:active {
+            transform: scale(0.99);
+        }
+
+        .timeline-dynamic:focus-visible {
+            outline: 2px solid rgba(47, 122, 246, 0.42);
+            outline-offset: 2px;
         }
 
         .dynamic-icon {
@@ -2005,20 +2045,30 @@
             <div class="section-card">
                 <div class="section-head">
                     <div class="section-title">疾病用药</div>
-                    <button class="section-action" type="button" onclick="showToast('查看全部用药记录')">查看全部 <i
+                    <button class="section-action" type="button" onclick="openMedicationRecords()">查看更多 <i
                             class="fas fa-chevron-right"></i></button>
                 </div>
-                <div class="label">最近用药：2026-01-13</div>
+                <div class="label medication-visit-row">
+                    <span>最新就诊用药</span>
+                    <span class="medication-visit-date">2026-01-13</span>
+                </div>
                 <div class="list">
-                    <div class="list-row"><span class="name">二甲双胍缓释片</span><span class="dose">0.5g</span><span
+                    <div class="list-row"><span class="name"><img class="medicine-icon" src="assets/icons/pill.svg"
+                                alt="" aria-hidden="true"><span
+                                class="medicine-name">二甲双胍缓释片</span></span><span class="dose">0.5g</span><span
                             class="freq">2次/日</span></div>
-                    <div class="list-row"><span class="name">阿卡波糖片</span><span class="dose">50mg</span><span
+                    <div class="list-row"><span class="name"><img class="medicine-icon" src="assets/icons/pill.svg"
+                                alt="" aria-hidden="true"><span
+                                class="medicine-name">阿卡波糖片</span></span><span class="dose">50mg</span><span
                             class="freq">3次/日</span></div>
-                    <div class="list-row"><span class="name">氨氯地平片</span><span class="dose">5mg</span><span
+                    <div class="list-row"><span class="name"><img class="medicine-icon" src="assets/icons/pill.svg"
+                                alt="" aria-hidden="true"><span
+                                class="medicine-name">氨氯地平片</span></span><span class="dose">5mg</span><span
                             class="freq">1次/日</span></div>
                 </div>
                 <div style="height:12px"></div>
-                <div class="timeline-dynamic">
+                <div class="timeline-dynamic" role="button" tabindex="0" onclick="openMedicationDynamicModal()"
+                    onkeydown="handleMedicationDynamicKeydown(event)">
                     <!-- <div class="dynamic-icon"><i class="fas fa-bell"></i></div> -->
                     <div class="dynamic-content"><span class="dynamic-type">09-19 续方：</span>「苯磺酸氨氯地平」，维持原用药方案</div>
                     <!-- <button class="dynamic-action" type="button" onclick="showToast('查看用药动态详情')">查看</button> -->
@@ -2335,6 +2385,7 @@
     <script src="../components/mobile/mobile-modal.js"></script>
     <script src="../modules/resident-tag-modal.js"></script>
     <script src="../modules/past-medical-history-modal.js"></script>
+    <script src="../modules/medication-dynamic-modal.js"></script>
     <script>
         const patientInfo = {
             id: new URLSearchParams(window.location.search).get('id') || '1',
@@ -2353,6 +2404,13 @@
                 { id: 'org002', name: '临海市第一人民医院', departments: ['心内科', '内分泌科', '肾内科', '神经内科'] }
             ]
         };
+        // 居民用药动态数据，用于疾病用药模块的弹窗展示
+        const medicationDynamics = [
+            { date: '09-19', type: '续方', content: '「苯磺酸氨氯地平」，维持原用药方案' },
+            { date: '08-28', type: '调整', content: '「二甲双胍缓释片」，剂量1.0g->1.5g 频次每日三次->每日1次' },
+            { date: '07-16', type: '新增', content: '「阿卡波糖片」' },
+            { date: '06-02', type: '新增', content: '「格列美脲片」' }
+        ];
         // 居民既往史疾病数据，addedAt 用于判断近3个月新增标识
         const pastMedicalHistories = [
             { name: '冠状动脉粥样硬化性心脏病', addedAt: '2026-04-12' },
@@ -2414,6 +2472,10 @@
 
         function editInfo() {
             window.location.href = `customer-info-edit.html?id=${patientInfo.id}`;
+        }
+
+        function openMedicationRecords() {
+            window.location.href = `patient-medication-records.html?id=${patientInfo.id}`;
         }
 
         function callPatient(phone, name) {
@@ -2673,6 +2735,19 @@
             PastMedicalHistoryModal.close();
         }
 
+        function openMedicationDynamicModal() {
+            MedicationDynamicModal.init({
+                dynamics: medicationDynamics
+            });
+            MedicationDynamicModal.open();
+        }
+
+        function handleMedicationDynamicKeydown(event) {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+            event.preventDefault();
+            openMedicationDynamicModal();
+        }
+
         function applyWorkspaceMode(type = getInitialWorkbench()) {
             const isOperation = type === 'operation';
             const currentWorkbench = document.getElementById('currentWorkbench');
@@ -2713,6 +2788,9 @@
             });
             PastMedicalHistoryModal.init({
                 histories: pastMedicalHistories
+            });
+            MedicationDynamicModal.init({
+                dynamics: medicationDynamics
             });
             applyWorkspaceMode();
             renderTodoSection();

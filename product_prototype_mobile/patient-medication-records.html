@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>用药记录</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="../components/mobile/mobile-title-bar.js" defer></script>
+    <script src="../components/mobile/mobile-search.js"></script>
+    <script src="../components/shared/status-tag.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+        }
+
+        .medicine-icon {
+            width: 14px;
+            height: 14px;
+            object-fit: contain;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-slate-50 text-[#333333] antialiased">
+    <mobile-title-bar title="用药记录" back-action="goBack()"></mobile-title-bar>
+
+    <main class="space-y-3 p-3 pb-24">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="搜索诊断名称或药品名称" oninput="handleSearch()">
+        </div>
+        <div class="space-y-3" id="recordList"></div>
+    </main>
+
+    <template id="recordGroupTemplate">
+        <section class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div class="mb-3 flex min-w-0 items-center gap-2">
+                <h4 class="visit-date min-w-0 truncate text-base font-bold text-[#333333]"></h4>
+                <status-tag class="visit-type shrink-0" size="middle"></status-tag>
+            </div>
+            <div class="diagnosis-row mb-3 flex items-start gap-2 rounded-xl bg-blue-50 px-3 py-2">
+                <span class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white text-xs text-blue-600">
+                    <i class="fas fa-notes-medical"></i>
+                </span>
+                <p class="diagnosis-text min-w-0 flex-1 text-sm leading-5 text-[#666666]"></p>
+            </div>
+            <div class="medicine-list divide-y divide-slate-100 border-t border-slate-100"></div>
+        </section>
+    </template>
+
+    <template id="medicineRowTemplate">
+        <div class="flex min-h-[42px] items-center gap-2 py-2 text-sm text-[#666666]">
+            <div class="flex min-w-0 flex-1 items-center gap-1.5 font-bold text-[#333333]">
+                <img class="medicine-icon shrink-0" src="assets/icons/pill.svg" alt="" aria-hidden="true">
+                <span class="medicine-name min-w-0 truncate"></span>
+            </div>
+            <span class="medicine-dose min-w-[58px] shrink-0 text-right"></span>
+            <span class="medicine-frequency min-w-[58px] shrink-0 text-right"></span>
+        </div>
+    </template>
+
+    <script>
+        // 近一年用药记录示例数据，按就诊记录聚合展示
+        const medicationRecords = [
+            {
+                visitDate: '2026-01-13',
+                visitType: '门诊',
+                diagnoses: ['2型糖尿病', '高血压','慢性阻塞性肺疾病伴急性加重','骨质疏松','胃食管反流病'],
+                medicines: [
+                    { name: '二甲双胍缓释片', dose: '0.5g', frequency: '2次/日' },
+                    { name: '阿卡波糖片', dose: '50mg', frequency: '3次/日' },
+                    { name: '氨氯地平片', dose: '5mg', frequency: '1次/日' }
+                ]
+            },
+            {
+                visitDate: '2025-09-19',
+                visitType: '门诊',
+                diagnoses: ['高血压', '血脂异常'],
+                medicines: [
+                    { name: '苯磺酸氨氯地平片', dose: '5mg', frequency: '1次/日' },
+                    { name: '阿托伐他汀钙片', dose: '20mg', frequency: '1次/晚' }
+                ]
+            },
+            {
+                visitDate: '2025-06-08',
+                visitType: '住院',
+                diagnoses: ['2型糖尿病', '糖尿病周围神经病变'],
+                medicines: [
+                    { name: '盐酸二甲双胍片', dose: '0.5g', frequency: '2次/日' },
+                    { name: '甲钴胺片', dose: '0.5mg', frequency: '3次/日' }
+                ]
+            }
+        ];
+
+        let searchKeyword = '';
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function handleSearch() {
+            searchKeyword = document.getElementById('searchInput').value.trim().toLowerCase();
+            renderMedicationRecords(getFilteredMedicationRecords());
+        }
+
+        // 根据诊断名称或药品名称过滤用药记录，保留命中的就诊分组
+        function getFilteredMedicationRecords() {
+            if (!searchKeyword) return medicationRecords;
+
+            return medicationRecords
+                .map((record) => {
+                    const matchDiagnosis = record.diagnoses.some((diagnosis) =>
+                        diagnosis.toLowerCase().includes(searchKeyword)
+                    );
+                    const matchedMedicines = record.medicines.filter((medicine) =>
+                        medicine.name.toLowerCase().includes(searchKeyword)
+                    );
+
+                    return {
+                        ...record,
+                        medicines: matchDiagnosis ? record.medicines : matchedMedicines
+                    };
+                })
+                .filter((record) => record.medicines.length);
+        }
+
+        // 渲染近一年用药记录；无数据时展示缺省文案
+        function renderMedicationRecords(records) {
+            const container = document.getElementById('recordList');
+            const groupTemplate = document.getElementById('recordGroupTemplate');
+            const medicineTemplate = document.getElementById('medicineRowTemplate');
+
+            container.innerHTML = '';
+
+            if (!records.length) {
+                const emptyText = searchKeyword ? '未搜索到相关用药记录' : '近一年无用药记录';
+                container.innerHTML = `
+                    <section class="flex min-h-[180px] items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-white p-6 text-sm font-medium text-[#999999]">
+                        ${emptyText}
+                    </section>
+                `;
+                return;
+            }
+
+            records.forEach((record) => {
+                const group = groupTemplate.content.cloneNode(true);
+                const visitTypeTag = group.querySelector('.visit-type');
+                group.querySelector('.visit-date').textContent = record.visitDate;
+                visitTypeTag.textContent = record.visitType;
+                visitTypeTag.setAttribute('color', record.visitType === '住院' ? 'orange' : 'blue');
+                group.querySelector('.diagnosis-text').textContent = record.diagnoses.join(',');
+
+                const medicineList = group.querySelector('.medicine-list');
+                record.medicines.forEach((medicine) => {
+                    const row = medicineTemplate.content.cloneNode(true);
+                    row.querySelector('.medicine-name').textContent = medicine.name;
+                    row.querySelector('.medicine-dose').textContent = medicine.dose;
+                    row.querySelector('.medicine-frequency').textContent = medicine.frequency;
+                    medicineList.appendChild(row);
+                });
+
+                container.appendChild(group);
+            });
+        }
+
+        renderMedicationRecords(medicationRecords);
+    </script>
+</body>
+
+</html>
