@@ -180,11 +180,18 @@
             align-items: flex-start;
         }
 
+        .avatar-wrap {
+            flex: 0 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
         .avatar {
             width: 44px;
             height: 44px;
             border-radius: 50%;
-            flex: 0 0 auto;
             overflow: hidden;
             background: linear-gradient(145deg, #d8ecff, #ffffff);
             border: 2px solid rgba(255, 255, 255, 0.88);
@@ -194,6 +201,21 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+
+        .profile-edit-btn {
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            border: 0;
+            border-radius: 50%;
+            background: var(--blue-soft);
+            color: var(--blue);
+            font-size: 13px;
+            cursor: pointer;
         }
 
         .patient-main {
@@ -1894,31 +1916,33 @@
     <div class="page">
         <div class="profile-hero">
             <div class="patient-top">
-                <div class="avatar">
-                    <img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&amp;fit=crop&amp;w=160&amp;q=80"
-                        alt="居民头像">
+                <div class="avatar-wrap">
+                    <div class="avatar">
+                        <img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&amp;fit=crop&amp;w=160&amp;q=80"
+                            alt="居民头像">
+                    </div>
+                    <button class="profile-edit-btn" type="button" data-workspace="operation" onclick="editInfo()"
+                        aria-label="编辑信息" title="编辑信息" hidden><i class="fas fa-pen"></i></button>
                 </div>
                 <div class="patient-main">
                     <div class="name-row">
-                        <span class="patient-name">张建国</span>
+                        <span class="patient-name" id="patientNameText">张建国</span>
                         <span class="meta">男</span>
                         <span class="meta">67岁</span>
                         <span class="customer-card-tag" data-workspace="operation" hidden>@微信</span>
                         <button class="profile-call-btn" type="button"
-                            onclick="callPatient('13811115678', patientInfo.name)">
+                            onclick="callPatient(patientInfo.phones[0] || '', patientInfo.name)">
                             <i class="fas fa-phone"></i>
                             <span>呼叫</span>
                         </button>
-                        <button class="section-action" type="button" data-workspace="operation" onclick="editInfo()"
-                            hidden>编辑信息 &gt;</button>
                     </div>
 
                     <div class="info-grid">
-                        <div class="info-item">联系号码：13811115678</div>
+                        <div class="info-item" id="patientPhoneText">联系号码：13811115678</div>
                         <div class="info-item" data-workspace="clinical">归属网格：滨海网格</div>
                         <div class="info-item" data-workspace="clinical">基层在管：高,糖,肺</div>
                         <div class="info-item" data-workspace="clinical">医院在管：高,糖</div>
-                        <div class="info-item full">居住地址：浙江省杭州市余杭区闲林街道海滨南路88号</div>
+                        <div class="info-item full" id="patientAddressText">居住地址：浙江省杭州市余杭区闲林街道海滨南路88号</div>
                     </div>
                 </div>
             </div>
@@ -2469,11 +2493,26 @@
     <script src="../modules/resident-tag-modal.js"></script>
     <script src="../modules/past-medical-history-modal.js"></script>
     <script src="../modules/medication-dynamic-modal.js"></script>
+    <script src="../modules/customer-info-modal.js"></script>
     <script>
         const patientInfo = {
             id: new URLSearchParams(window.location.search).get('id') || '1',
-            name: '张建国'
+            name: '张建国',
+            remark: '稳定复购，近期重点跟进营养干预服务。',
+            phones: ['13811115678'],
+            address: '浙江省杭州市余杭区闲林街道海滨南路88号',
+            idCard: '330110195901011234',
+            responsibleStaff: [
+                { id: 'dietitian-001', name: '李娜', title: '主管营养师' }
+            ]
         };
+        const nutritionists = [
+            { id: 'dietitian-001', name: '李娜', title: '主管营养师' },
+            { id: 'dietitian-002', name: '王敏', title: '营养师' },
+            { id: 'dietitian-003', name: '陈晨', title: '高级营养顾问' },
+            { id: 'dietitian-004', name: '赵雅', title: '慢病营养师' },
+            { id: 'dietitian-005', name: '周可', title: '糖尿病营养师' }
+        ];
         const workbenchNames = {
             'specialist': '专科慢病',
             'public-health': '公卫慢病',
@@ -2552,9 +2591,31 @@
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 1500);
         }
+        window.showToast = showToast;
 
         function editInfo() {
-            window.location.href = `customer-info-edit.html?id=${patientInfo.id}`;
+            CustomerInfoModal.open();
+        }
+
+        // 将弹窗保存后的客户资料同步回健康画像页头部展示
+        function saveCustomerInfo(payload) {
+            Object.assign(patientInfo, payload);
+            renderPatientHeader();
+            showToast('客户信息已保存');
+        }
+
+        function getCustomerInfo() {
+            return {
+                ...patientInfo,
+                phones: [...patientInfo.phones],
+                responsibleStaff: patientInfo.responsibleStaff.map(staff => ({ ...staff }))
+            };
+        }
+
+        function renderPatientHeader() {
+            document.getElementById('patientNameText').textContent = patientInfo.name;
+            document.getElementById('patientPhoneText').textContent = `联系号码：${patientInfo.phones.join('、') || '未填写'}`;
+            document.getElementById('patientAddressText').textContent = `居住地址：${patientInfo.address || '未填写'}`;
         }
 
         function openMedicationRecords() {
@@ -2883,7 +2944,13 @@
             MedicationDynamicModal.init({
                 dynamics: medicationDynamics
             });
+            CustomerInfoModal.init({
+                getCustomerInfo,
+                nutritionists,
+                onSave: saveCustomerInfo
+            });
             applyWorkspaceMode();
+            renderPatientHeader();
             renderTodoSection();
         });
     </script>
