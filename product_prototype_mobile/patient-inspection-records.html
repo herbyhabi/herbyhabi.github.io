@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>检验检查记录</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="../components/mobile/mobile-title-bar.js" defer></script>
+    <script src="../components/mobile/mobile-search.js"></script>
+    <script src="../components/shared/status-tag.js"></script>
+    <script src="../components/mobile/grouped-info-card.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+        }
+
+        .tab-btn {
+            color: #666666;
+        }
+
+        .tab-btn.active {
+            color: #2f7af6;
+            background: #ffffff;
+            box-shadow: 0 6px 16px rgba(47, 122, 246, 0.14);
+        }
+
+        .detail-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.75fr) minmax(0, 0.9fr);
+            gap: 8px;
+            align-items: center;
+            padding: 10px 0;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .detail-row:first-child {
+            border-top: 0;
+        }
+
+        .detail-head {
+            min-height: 20px;
+            padding: 4px 0;
+            align-items: center;
+            color: #999999;
+            font-size: 12px;
+            font-weight: 500;
+            line-height: 12px;
+        }
+
+        .detail-head > div {
+            min-height: 12px;
+            display: flex;
+            text-align: center;
+        }
+
+        .detail-cell {
+            min-width: 0;
+            color: #333333;
+            font-size: 13px;
+            line-height: 18px;
+            overflow-wrap: anywhere;
+        }
+
+        .detail-cell.muted {
+            color: #666666;
+            font-size: 12px;
+        }
+
+        .result-value.is-abnormal {
+            color: #d92d20;
+            font-weight: 700;
+        }
+
+        .result-arrow {
+            margin-left: 3px;
+            color: #d92d20;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .highlight {
+            color: #fa8c16;
+            background: #fff7e8;
+            border-radius: 4px;
+            font-weight: 800;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-slate-50 text-[#333333] antialiased">
+    <mobile-title-bar title="检验检查记录" back-action="goBack()"></mobile-title-bar>
+
+    <main class="space-y-3 p-3 pb-24">
+        <div class="grid grid-cols-2 gap-2 rounded-full bg-slate-100 p-1">
+            <button class="tab-btn active h-9 rounded-full text-[14px] font-semibold" type="button" data-tab="lab"
+                onclick="switchTab('lab')">检验记录<span id="labTabCount"></span></button>
+            <button class="tab-btn h-9 rounded-full text-[14px] font-semibold" type="button" data-tab="exam"
+                onclick="switchTab('exam')">检查记录<span id="examTabCount"></span></button>
+        </div>
+
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="搜索项目名称或指标名称" oninput="handleSearch()">
+        </div>
+
+        <div class="space-y-3" id="recordList"></div>
+    </main>
+
+    <script>
+        // 近一年 HIS 检验记录示例数据；任一子项目异常时，该检验项目计为异常记录
+        const labRecords = [
+            {
+                name: '糖化血红蛋白测定',
+                date: '2026-05-08',
+                items: [
+                    { name: '糖化血红蛋白', result: '8.2%', range: '4.0-6.0%', status: '偏高' }
+                ]
+            },
+            {
+                name: '血脂四项',
+                date: '2026-04-25',
+                items: [
+                    { name: '总胆固醇', result: '5.9 mmol/L', range: '<5.2 mmol/L', status: '偏高' },
+                    { name: '甘油三酯', result: '2.1 mmol/L', range: '<1.7 mmol/L', status: '偏高' },
+                    { name: '低密度脂蛋白胆固醇低密度脂蛋白胆固醇', result: '3.6 mmol/L', range: '<2.6 mmol/L', status: '偏高' },
+                    { name: '高密度脂蛋白胆固醇', result: '1.1 mmol/L', range: '>1.0 mmol/L', status: '正常' }
+                ]
+            },
+            {
+                name: '肝肾功能',
+                date: '2026-03-12',
+                items: [
+                    { name: '丙氨酸氨基转移酶', result: '32 U/L', range: '7-40 U/L', status: '正常' },
+                    { name: '血肌酐', result: '78 umol/L', range: '57-97 umol/L', status: '正常' },
+                    { name: '尿酸', result: '468 umol/L', range: '208-420 umol/L', status: '偏高' }
+                ]
+            },
+            {
+                name: '尿常规',
+                date: '2026-01-18',
+                items: [
+                    { name: '尿蛋白', result: '+', range: '阴性', status: '异常' },
+                    { name: '尿糖', result: '++', range: '阴性', status: '异常' },
+                    { name: '尿酮体', result: '阴性', range: '阴性', status: '正常' }
+                ]
+            },
+            {
+                name: '空腹血糖',
+                date: '2025-11-06',
+                items: [
+                    { name: '葡萄糖', result: '6.4 mmol/L', range: '3.9-6.1 mmol/L', status: '偏高' }
+                ]
+            },
+            {
+                name: '血常规',
+                date: '2025-08-17',
+                items: [
+                    { name: '白细胞计数', result: '6.2 x10^9/L', range: '3.5-9.5 x10^9/L', status: '正常' },
+                    { name: '血红蛋白', result: '138 g/L', range: '130-175 g/L', status: '正常' },
+                    { name: '血小板计数', result: '214 x10^9/L', range: '125-350 x10^9/L', status: '正常' }
+                ]
+            }
+        ];
+
+        // 近一年 HIS 检查记录示例数据，详情展示检查所见与诊断结论
+        const examRecords = [
+            {
+                name: '颈动脉彩超',
+                date: '2026-04-10',
+                isAbnormal: true,
+                finding: '双侧颈动脉内中膜增厚，左侧颈动脉可见斑块形成，管腔未见明显狭窄。',
+                conclusion: '颈动脉粥样硬化伴斑块形成'
+            },
+            {
+                name: '胸部 CT 平扫',
+                date: '2026-02-26',
+                isAbnormal: true,
+                finding: '两肺纹理增多，右肺下叶少许纤维灶，未见明确活动性渗出影。',
+                conclusion: '慢性支气管炎改变，建议结合临床随访'
+            },
+            {
+                name: '腹部超声',
+                date: '2025-09-15',
+                isAbnormal: true,
+                finding: '肝脏回声细密增强，胆囊内见强回声团伴声影，胰脾肾未见明显异常。',
+                conclusion: '脂肪肝；胆囊结石'
+            }
+        ];
+
+        let currentTab = new URLSearchParams(window.location.search).get('tab') === 'exam' ? 'exam' : 'lab';
+        let searchKeyword = '';
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function hasAbnormalItem(record) {
+            return record.items.some((item) => item.status !== '正常');
+        }
+
+        function hasAbnormalExam(record) {
+            return record.isAbnormal === true;
+        }
+
+        function sortByDateDesc(records) {
+            return [...records].sort((a, b) => new Date(b.date) - new Date(a.date));
+        }
+
+        function highlightText(text) {
+            const value = String(text);
+            if (!searchKeyword) return value;
+            const escaped = searchKeyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            return value.replace(new RegExp(escaped, 'gi'), (match) => `<span class="highlight">${match}</span>`);
+        }
+
+        function getResultArrow(status) {
+            if (status === '偏高') return '↑';
+            if (status === '偏低') return '↓';
+            return '';
+        }
+
+        // 结果值只保留数值，单位保留在参考范围中展示
+        function formatResultValue(result) {
+            return result
+                .replace(/\s*(mmol\/L|umol\/L|x10\^9\/L|g\/L|U\/L|%)/g, '')
+                .trim();
+        }
+
+        function handleSearch() {
+            searchKeyword = document.getElementById('searchInput').value.trim().toLowerCase();
+            renderRecords();
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            searchKeyword = '';
+            document.getElementById('searchInput').value = '';
+            document.getElementById('searchInput').placeholder = tab === 'lab' ? '搜索项目名称或指标名称' : '搜索检查项目名称';
+            document.querySelectorAll('.tab-btn').forEach((button) => {
+                button.classList.toggle('active', button.dataset.tab === tab);
+            });
+            renderRecords();
+        }
+
+        function getFilteredLabs() {
+            const sorted = sortByDateDesc(labRecords);
+            if (!searchKeyword) return sorted;
+
+            return sorted.filter((record) => {
+                const matchName = record.name.toLowerCase().includes(searchKeyword);
+                const matchItem = record.items.some((item) => item.name.toLowerCase().includes(searchKeyword));
+                return matchName || matchItem;
+            });
+        }
+
+        function getFilteredExams() {
+            const sorted = sortByDateDesc(examRecords);
+            if (!searchKeyword) return sorted;
+
+            return sorted.filter((record) => record.name.toLowerCase().includes(searchKeyword));
+        }
+
+        function renderLabRecords(records) {
+            const container = document.getElementById('recordList');
+
+            records.forEach((record) => {
+                const rows = record.items.map((item) => {
+                    const isAbnormal = item.status !== '正常';
+                    const arrow = getResultArrow(item.status);
+
+                    return `
+                        <div class="detail-row">
+                            <div class="detail-cell ">${highlightText(item.name)}</div>
+                            <div class="detail-cell">
+                                <span class="result-value ${isAbnormal ? 'is-abnormal' : ''}">${formatResultValue(item.result)}</span>
+                                ${arrow ? `<span class="result-arrow" aria-label="${item.status}">${arrow}</span>` : ''}
+                            </div>
+                            <div class="detail-cell muted">${item.range}</div>
+                        </div>
+                    `;
+                }).join('');
+
+                const card = GroupedInfoCard.render(container, {
+                    title: record.name,
+                    subtitle: record.date,
+                    keyword: searchKeyword,
+                    highlightFields: ['title'],
+                    showDivider: true,
+                    emptyText: '近一年无检验检查记录'
+                });
+
+                const content = document.createElement('div');
+                content.className = 'px-4 pb-4 pt-3';
+                content.innerHTML = `
+                    <div class="detail-row detail-head">
+                        <div>实验指标</div>
+                        <div>结果</div>
+                        <div>参考范围</div>
+                    </div>
+                    ${rows}
+                `;
+                card.appendChild(content);
+            });
+        }
+
+        function renderExamRecords(records) {
+            const container = document.getElementById('recordList');
+
+            records.forEach((record) => {
+                const card = GroupedInfoCard.render(container, {
+                    title: record.name,
+                    subtitle: record.date,
+                    keyword: searchKeyword,
+                    highlightFields: ['title'],
+                    showDivider: true,
+                    emptyText: '近一年无检验检查记录'
+                });
+
+                const content = document.createElement('div');
+                content.className = 'px-4 pb-4 pt-3';
+                content.innerHTML = `
+                    <div class="space-y-3">
+                        <div>
+                            <div class="mb-1 text-[12px] font-semibold text-[#999999]">检查所见</div>
+                            <div class="text-[14px] leading-6 text-[#333333]">${record.finding}</div>
+                        </div>
+                        <div>
+                            <div class="mb-1 text-[12px] font-semibold text-[#999999]">诊断结论</div>
+                            <div class="text-[14px] font-semibold leading-6 text-[#333333]">${record.conclusion}</div>
+                        </div>
+                    </div>
+                `;
+                card.appendChild(content);
+            });
+        }
+
+        // 根据当前页签和检索词渲染列表，无匹配时展示空状态
+        function renderRecords() {
+            const container = document.getElementById('recordList');
+            const records = currentTab === 'lab' ? getFilteredLabs() : getFilteredExams();
+            container.innerHTML = '';
+
+            if (!records.length) {
+                const emptyText = searchKeyword ? '未搜索到相关检验检查记录' : '近一年无检验检查记录';
+                container.innerHTML = `
+                    <section class="flex min-h-[180px] items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-white p-6 text-sm font-medium text-[#999999]">
+                        ${emptyText}
+                    </section>
+                `;
+                return;
+            }
+
+            if (currentTab === 'lab') {
+                renderLabRecords(records);
+            } else {
+                renderExamRecords(records);
+            }
+        }
+
+        function renderTabCounts() {
+            document.getElementById('labTabCount').textContent = `（${labRecords.length}）`;
+            document.getElementById('examTabCount').textContent = `（${examRecords.length}）`;
+        }
+
+        renderTabCounts();
+        switchTab(currentTab);
+    </script>
+</body>
+
+</html>

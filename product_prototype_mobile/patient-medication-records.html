@@ -9,16 +9,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="../components/mobile/mobile-title-bar.js" defer></script>
     <script src="../components/mobile/mobile-search.js"></script>
-    <script src="../components/shared/status-tag.js"></script>
+    <script src="../components/mobile/grouped-info-card.js"></script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
-        }
-
-        .medicine-icon {
-            width: 14px;
-            height: 14px;
-            object-fit: contain;
         }
     </style>
 </head>
@@ -33,33 +27,6 @@
         </div>
         <div class="space-y-3" id="recordList"></div>
     </main>
-
-    <template id="recordGroupTemplate">
-        <section class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-            <div class="mb-3 flex min-w-0 items-center gap-2">
-                <h4 class="visit-date min-w-0 truncate text-base font-bold text-[#333333]"></h4>
-                <status-tag class="visit-type shrink-0" size="middle"></status-tag>
-            </div>
-            <div class="diagnosis-row mb-3 flex items-start gap-2 rounded-xl bg-blue-50 px-3 py-2">
-                <span class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white text-xs text-blue-600">
-                    <i class="fas fa-notes-medical"></i>
-                </span>
-                <p class="diagnosis-text min-w-0 flex-1 text-sm leading-5 text-[#666666]"></p>
-            </div>
-            <div class="medicine-list divide-y divide-slate-100 border-t border-slate-100"></div>
-        </section>
-    </template>
-
-    <template id="medicineRowTemplate">
-        <div class="flex min-h-[42px] items-center gap-2 py-2 text-sm text-[#666666]">
-            <div class="flex min-w-0 flex-1 items-center gap-1.5 font-bold text-[#333333]">
-                <img class="medicine-icon shrink-0" src="assets/icons/pill.svg" alt="" aria-hidden="true">
-                <span class="medicine-name min-w-0 truncate"></span>
-            </div>
-            <span class="medicine-dose min-w-[58px] shrink-0 text-right"></span>
-            <span class="medicine-frequency min-w-[58px] shrink-0 text-right"></span>
-        </div>
-    </template>
 
     <script>
         // 近一年用药记录示例数据，按就诊记录聚合展示
@@ -89,6 +56,7 @@
                 diagnoses: ['2型糖尿病', '糖尿病周围神经病变'],
                 medicines: [
                     { name: '盐酸二甲双胍片', dose: '0.5g', frequency: '2次/日' },
+                    { name: '苯磺酸氨氯地平片', dose: '5mg', frequency: '1次/日' },
                     { name: '甲钴胺片', dose: '0.5mg', frequency: '3次/日' }
                 ]
             }
@@ -105,32 +73,103 @@
             renderMedicationRecords(getFilteredMedicationRecords());
         }
 
-        // 根据诊断名称或药品名称过滤用药记录，保留命中的就诊分组
+        // 根据诊断名称或药品名称过滤用药记录，命中后展示该就诊分组全部用药
         function getFilteredMedicationRecords() {
             if (!searchKeyword) return medicationRecords;
 
-            return medicationRecords
-                .map((record) => {
-                    const matchDiagnosis = record.diagnoses.some((diagnosis) =>
-                        diagnosis.toLowerCase().includes(searchKeyword)
-                    );
-                    const matchedMedicines = record.medicines.filter((medicine) =>
-                        medicine.name.toLowerCase().includes(searchKeyword)
-                    );
+            return medicationRecords.filter((record) => {
+                const matchDiagnosis = record.diagnoses.some((diagnosis) =>
+                    diagnosis.toLowerCase().includes(searchKeyword)
+                );
+                const matchMedicine = record.medicines.some((medicine) =>
+                    medicine.name.toLowerCase().includes(searchKeyword)
+                );
 
-                    return {
-                        ...record,
-                        medicines: matchDiagnosis ? record.medicines : matchedMedicines
-                    };
-                })
-                .filter((record) => record.medicines.length);
+                return matchDiagnosis || matchMedicine;
+            });
+        }
+
+        function createMedicineExtra(medicine) {
+            const extra = document.createElement('div');
+            extra.className = 'flex items-center gap-2 text-sm text-[#666666]';
+
+            const dose = document.createElement('span');
+            dose.className = 'min-w-[58px] text-right';
+            dose.textContent = medicine.dose;
+
+            const frequency = document.createElement('span');
+            frequency.className = 'min-w-[58px] text-right';
+            frequency.textContent = medicine.frequency;
+
+            extra.append(dose, frequency);
+            return extra;
+        }
+
+        function appendHighlightedText(target, text) {
+            const value = String(text || '');
+            const keyword = searchKeyword.toLowerCase();
+            target.innerHTML = '';
+
+            if (!keyword) {
+                target.textContent = value;
+                return;
+            }
+
+            const lowerValue = value.toLowerCase();
+            let startIndex = 0;
+            let matchIndex = lowerValue.indexOf(keyword, startIndex);
+
+            while (matchIndex !== -1) {
+                if (matchIndex > startIndex) {
+                    target.appendChild(document.createTextNode(value.slice(startIndex, matchIndex)));
+                }
+
+                const highlight = document.createElement('span');
+                highlight.className = 'rounded bg-[#FFE7BA] px-0.5 font-extrabold text-[#FA8C16]';
+                highlight.textContent = value.slice(matchIndex, matchIndex + keyword.length);
+                target.appendChild(highlight);
+
+                startIndex = matchIndex + keyword.length;
+                matchIndex = lowerValue.indexOf(keyword, startIndex);
+            }
+
+            if (startIndex < value.length) {
+                target.appendChild(document.createTextNode(value.slice(startIndex)));
+            }
+        }
+
+        function createMedicineRow(medicine) {
+            const row = document.createElement('div');
+            row.className = 'flex min-h-[42px] items-center gap-2 border-t border-slate-100 py-2';
+
+            const icon = document.createElement('img');
+            icon.className = 'h-3.5 w-3.5 shrink-0 object-contain';
+            icon.src = 'assets/icons/pill.svg';
+            icon.alt = '';
+            icon.setAttribute('aria-hidden', 'true');
+
+            const name = document.createElement('div');
+            name.className = 'min-w-0 flex-1 text-[14px] font-bold leading-5 text-[#333333]';
+            appendHighlightedText(name, medicine.name);
+
+            row.append(icon, name, createMedicineExtra(medicine));
+            return row;
+        }
+
+        function createMedicationCardContent(record) {
+            const content = document.createElement('div');
+            content.className = 'px-4 pb-4';
+
+            record.medicines.forEach((medicine) => {
+                content.appendChild(createMedicineRow(medicine));
+            });
+
+            return content;
         }
 
         // 渲染近一年用药记录；无数据时展示缺省文案
         function renderMedicationRecords(records) {
             const container = document.getElementById('recordList');
-            const groupTemplate = document.getElementById('recordGroupTemplate');
-            const medicineTemplate = document.getElementById('medicineRowTemplate');
 
             container.innerHTML = '';
 
@@ -145,23 +184,15 @@
             }
 
             records.forEach((record) => {
-                const group = groupTemplate.content.cloneNode(true);
-                const visitTypeTag = group.querySelector('.visit-type');
-                group.querySelector('.visit-date').textContent = record.visitDate;
-                visitTypeTag.textContent = record.visitType;
-                visitTypeTag.setAttribute('color', record.visitType === '住院' ? 'orange' : 'blue');
-                group.querySelector('.diagnosis-text').textContent = record.diagnoses.join(',');
-
-                const medicineList = group.querySelector('.medicine-list');
-                record.medicines.forEach((medicine) => {
-                    const row = medicineTemplate.content.cloneNode(true);
-                    row.querySelector('.medicine-name').textContent = medicine.name;
-                    row.querySelector('.medicine-dose').textContent = medicine.dose;
-                    row.querySelector('.medicine-frequency').textContent = medicine.frequency;
-                    medicineList.appendChild(row);
+                const card = GroupedInfoCard.render(container, {
+                    title: record.visitDate,
+                    subtitle: record.visitType,
+                    description: record.diagnoses.join(','),
+                    keyword: searchKeyword,
+                    highlightFields: ['title', 'description'],
+                    emptyText: '近一年无用药记录'
                 });
-
-                container.appendChild(group);
+                card.appendChild(createMedicationCardContent(record));
             });
         }
 

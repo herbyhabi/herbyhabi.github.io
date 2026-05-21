@@ -42,6 +42,10 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        body.workspace-operation {
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
         .navbar {
             position: sticky;
             top: 0;
@@ -466,14 +470,23 @@
         }
 
         .section-title {
+            min-width: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             font-size: 15px;
             font-weight: 900;
+            line-height: 20px;
         }
 
         .section-title .hint {
-            margin-left: 8px;
+            flex: 0 1 auto;
+            min-width: 0;
+            margin-left: 0;
             color: var(--text-3);
             font-size: 11px;
+            font-weight: 500;
+            line-height: 16px;
         }
 
         .section-action {
@@ -623,6 +636,66 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+        }
+
+        .inspection-list .mini-card {
+            padding: 12px;
+        }
+
+        .inspection-counts {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 4px 0;
+        }
+
+        .inspection-count-total {
+            color: var(--blue);
+        }
+
+        .inspection-count-divider {
+            display: inline-block;
+            width: 1px;
+            height: 12px;
+            margin: 0 8px;
+            background: rgba(79, 96, 116, 0.58);
+        }
+
+        .inspection-count-abnormal {
+            color: var(--orange);
+        }
+
+        .inspection-stats {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+            padding-left: 36px;
+        }
+
+        .inspection-stat {
+            min-width: 0;
+            padding: 7px 8px;
+            border-radius: 10px;
+            background: rgba(247, 250, 255, 0.86);
+        }
+
+        .inspection-stat strong {
+            display: block;
+            color: var(--text-1);
+            font-size: 15px;
+            font-weight: 900;
+            line-height: 1.1;
+        }
+
+        .inspection-stat span {
+            display: block;
+            margin-top: 3px;
+            color: var(--text-3);
+            font-size: 10px;
+            line-height: 1.2;
+            white-space: nowrap;
         }
 
         .mini-card {
@@ -1569,6 +1642,10 @@
             backdrop-filter: blur(14px);
         }
 
+        .floating-actions[hidden] {
+            display: none;
+        }
+
         .float-action {
             min-width: 0;
             height: 46px;
@@ -1763,6 +1840,10 @@
             .risk-list,
             .risk-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .inspection-stats {
+                padding-left: 0;
             }
 
             .indicator-scroll {
@@ -2077,32 +2158,34 @@
 
             <div class="section-card">
                 <div class="section-head">
-                    <div class="section-title">近期医疗记录</div>
+                    <div class="section-title">检验检查<span class="hint">（近一年内记录）</span></div>
                 </div>
-                <div class="record-grid-3col">
-                    <div class="record-item">
-                        <div class="record-main">
-                            <div class="record-icon"><i class="fas fa-clipboard-list"></i></div>
-                            <div class="record-title">门诊记录</div>
+                <div class="risk-list inspection-list">
+                    <div class="mini-card" onclick="openInspectionRecords('lab')">
+                        <div class="mini-row">
+                            <span class="mini-icon blue"><i class="fas fa-vial"></i></span>
+                            <div class="mini-content">
+                                <span class="mini-title">检验记录</span>
+                                <span class="mini-value inspection-counts">
+                                    <span class="inspection-count-total">6项</span>
+                                    <span class="inspection-count-divider" aria-hidden="true"></span>
+                                    <span class="inspection-count-abnormal">5项异常</span>
+                                </span>
+                            </div>
+                            <i class="fas fa-chevron-right date"></i>
                         </div>
-                        <div class="record-date">2026-04-28</div>
-                        <div class="record-desc">内分泌科</div>
                     </div>
-                    <div class="record-item">
-                        <div class="record-main">
-                            <div class="record-icon"><i class="fas fa-file-medical"></i></div>
-                            <div class="record-title">检验检查</div>
+                    <div class="mini-card" onclick="openInspectionRecords('exam')">
+                        <div class="mini-row">
+                            <span class="mini-icon blue"><i class="fas fa-file-waveform"></i></span>
+                            <div class="mini-content">
+                                <span class="mini-title">检查记录</span>
+                                <span class="mini-value inspection-counts">
+                                    <span class="inspection-count-total">3项</span>
+                                </span>
+                            </div>
+                            <i class="fas fa-chevron-right date"></i>
                         </div>
-                        <div class="record-date">2026-04-25</div>
-                        <div class="record-desc">共3项异常</div>
-                    </div>
-                    <div class="record-item">
-                        <div class="record-main">
-                            <div class="record-icon"><i class="fas fa-hospital"></i></div>
-                            <div class="record-title">住院记录</div>
-                        </div>
-                        <div class="record-date">2026-11-18</div>
-                        <div class="record-desc">共4天</div>
                     </div>
                 </div>
             </div>
@@ -2478,6 +2561,10 @@
             window.location.href = `patient-medication-records.html?id=${patientInfo.id}`;
         }
 
+        function openInspectionRecords(tab = 'lab') {
+            window.location.href = `patient-inspection-records.html?id=${patientInfo.id}&tab=${tab}`;
+        }
+
         function callPatient(phone, name) {
             showToast(`正在呼叫 ${name}: ${phone}`);
         }
@@ -2752,6 +2839,10 @@
             const isOperation = type === 'operation';
             const currentWorkbench = document.getElementById('currentWorkbench');
             if (currentWorkbench) currentWorkbench.textContent = workbenchNames[type];
+            // 根据当前工作台同步页面底部操作区展示状态
+            document.body.classList.toggle('workspace-operation', isOperation);
+            const floatingActions = document.querySelector('.floating-actions');
+            if (floatingActions) floatingActions.hidden = isOperation;
             document.querySelectorAll('[data-workspace="operation"]').forEach(item => {
                 item.hidden = !isOperation;
             });
