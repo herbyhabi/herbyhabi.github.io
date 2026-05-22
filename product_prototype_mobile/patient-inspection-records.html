@@ -8,22 +8,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="../components/mobile/mobile-title-bar.js" defer></script>
+    <script src="../components/mobile/mobile-tabs.js"></script>
     <script src="../components/mobile/mobile-search.js"></script>
     <script src="../components/shared/status-tag.js"></script>
     <script src="../components/mobile/grouped-info-card.js"></script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
-        }
-
-        .tab-btn {
-            color: #666666;
-        }
-
-        .tab-btn.active {
-            color: #2f7af6;
-            background: #ffffff;
-            box-shadow: 0 6px 16px rgba(47, 122, 246, 0.14);
         }
 
         .detail-row {
@@ -93,12 +84,7 @@
     <mobile-title-bar title="检验检查记录" back-action="goBack()"></mobile-title-bar>
 
     <main class="space-y-3 p-3 pb-24">
-        <div class="grid grid-cols-2 gap-2 rounded-full bg-slate-100 p-1">
-            <button class="tab-btn active h-9 rounded-full text-[14px] font-semibold" type="button" data-tab="lab"
-                onclick="switchTab('lab')">检验记录<span id="labTabCount"></span></button>
-            <button class="tab-btn h-9 rounded-full text-[14px] font-semibold" type="button" data-tab="exam"
-                onclick="switchTab('exam')">检查记录<span id="examTabCount"></span></button>
-        </div>
+        <mobile-tabs id="inspectionTabs"></mobile-tabs>
 
         <div class="search-box">
             <i class="fas fa-search"></i>
@@ -238,9 +224,7 @@
             searchKeyword = '';
             document.getElementById('searchInput').value = '';
             document.getElementById('searchInput').placeholder = tab === 'lab' ? '搜索项目名称或指标名称' : '搜索检查项目名称';
-            document.querySelectorAll('.tab-btn').forEach((button) => {
-                button.classList.toggle('active', button.dataset.tab === tab);
-            });
+            document.getElementById('inspectionTabs').value = tab;
             renderRecords();
         }
 
@@ -360,10 +344,15 @@
         }
 
         function renderTabCounts() {
-            document.getElementById('labTabCount').textContent = `（${labRecords.length}）`;
-            document.getElementById('examTabCount').textContent = `（${examRecords.length}）`;
+            document.getElementById('inspectionTabs').tabs = [
+                { label: '检验记录', value: 'lab', count: labRecords.length },
+                { label: '检查记录', value: 'exam', count: examRecords.length }
+            ];
         }
 
+        document.getElementById('inspectionTabs').addEventListener('change', (event) => {
+            switchTab(event.detail.value);
+        });
         renderTabCounts();
         switchTab(currentTab);
     </script>

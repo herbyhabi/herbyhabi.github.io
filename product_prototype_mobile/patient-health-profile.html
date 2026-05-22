@@ -329,6 +329,17 @@
             overflow: hidden;
         }
 
+        .manage-strip .status-item[role="button"] {
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .manage-strip .status-item[role="button"]:focus-visible {
+            outline: 2px solid rgba(47, 122, 246, 0.36);
+            outline-offset: 3px;
+            border-radius: 8px;
+        }
+
         .manage-strip strong {
             min-width: 0;
             overflow: hidden;
@@ -1968,7 +1979,8 @@
             </div>
             <div class="manage-strip" data-workspace="operation" hidden>
                 <div class="status-item">客户阶段 <strong class="green">成交客户</strong></div>
-                <div class="status-item">好友关系 <strong class="orange">1好友 | 4群聊</strong><i
+                <div class="status-item" role="button" tabindex="0" onclick="openFriendRelationModal()"
+                    onkeydown="handleFriendRelationKeydown(event)">好友关系 <strong class="orange">4好友 | 4群聊</strong><i
                         class="fas fa-chevron-right date"></i></div>
 
             </div>
@@ -2490,10 +2502,12 @@
 
     <script src="../components/shared/status-tag.js"></script>
     <script src="../components/mobile/mobile-modal.js"></script>
+    <script src="../components/mobile/mobile-tabs.js"></script>
     <script src="../modules/resident-tag-modal.js"></script>
     <script src="../modules/past-medical-history-modal.js"></script>
     <script src="../modules/medication-dynamic-modal.js"></script>
     <script src="../modules/customer-info-modal.js"></script>
+    <script src="../modules/friend-relation-modal.js"></script>
     <script>
         const patientInfo = {
             id: new URLSearchParams(window.location.search).get('id') || '1',
@@ -2550,6 +2564,21 @@
             { name: '骨质疏松症', addedAt: '2025-09-18' },
             { name: '非酒精性脂肪性肝病', addedAt: '2022-08-21' }
         ];
+        // 好友关系数据，用于运营工作台中的好友关系弹窗展示
+        const friendRelationData = {
+            employees: [
+                { name: '李娜', addedAt: '2026-05-12 09:18', ownerTag: '负责人' },
+                { name: '王敏', addedAt: '2026-05-12 10:36'  },
+                { name: '陈晨', addedAt: '2026-05-13 15:22' ,ownerTag: '负责人' },
+                { name: '赵雅', addedAt: '2026-05-15 11:08' }
+            ],
+            groups: [
+                { name: '张建国营养干预服务群', memberCount: 8, joinedAt: '2026-05-12 09:24' },
+                { name: '糖尿病饮食打卡群', memberCount: 156, joinedAt: '2026-05-13 18:42' },
+                { name: '高血压随访提醒群', memberCount: 86, joinedAt: '2026-05-15 08:31' },
+                { name: '慢病复诊预约群', memberCount: 42, joinedAt: '2026-05-18 14:06' }
+            ]
+        };
         let currentAppointmentType = 'visit';
         const servicePackageCheckinTasks = [
             {
@@ -2896,6 +2925,17 @@
             openMedicationDynamicModal();
         }
 
+        function openFriendRelationModal() {
+            FriendRelationModal.init(friendRelationData);
+            FriendRelationModal.open();
+        }
+
+        function handleFriendRelationKeydown(event) {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+            event.preventDefault();
+            openFriendRelationModal();
+        }
+
         function applyWorkspaceMode(type = getInitialWorkbench()) {
             const isOperation = type === 'operation';
             const currentWorkbench = document.getElementById('currentWorkbench');
@@ -2944,6 +2984,7 @@
             MedicationDynamicModal.init({
                 dynamics: medicationDynamics
             });
+            FriendRelationModal.init(friendRelationData);
             CustomerInfoModal.init({
                 getCustomerInfo,
                 nutritionists,

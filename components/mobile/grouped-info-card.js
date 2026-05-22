@@ -11,6 +11,8 @@
         style.textContent = `
             .grouped-info-card {
                 width: 100%;
+                display: flex;
+                flex-direction: column;
                 box-sizing: border-box;
                 border: 1px solid #f1f5f9;
                 border-radius: 12px;
@@ -42,7 +44,7 @@
             }
 
             .grouped-info-card__header.has-divider {
-                padding-bottom: 0;
+                border-bottom: 1px dashed #e2e8f0;
             }
 
             .grouped-info-card__heading {
@@ -89,10 +91,66 @@
                 word-break: break-word;
             }
 
-            .grouped-info-card__divider {
-                width: 100%;
-                height: 0;
+            .grouped-info-card__actions {
+                order: 100;
+                min-height: 52px;
+                display: grid;
+                grid-template-columns: repeat(var(--grouped-info-card-action-count, 1), minmax(0, 1fr));
+                align-items: center;
+                gap: 0;
                 border-top: 1px dashed #e2e8f0;
+                padding: 8px 16px;
+                box-sizing: border-box;
+            }
+
+            .grouped-info-card__action {
+                min-width: 0;
+                min-height: 36px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 6px;
+                padding: 0 10px;
+                border: 0;
+                border-radius: 0;
+                background: transparent;
+                color: #333333;
+                font: inherit;
+                font-size: 13px;
+                font-weight: 700;
+                line-height: 18px;
+                cursor: pointer;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .grouped-info-card__action.is-primary {
+                color: #2f7af6;
+            }
+
+            .grouped-info-card__action + .grouped-info-card__action {
+                border-left: 1px solid #e2e8f0;
+            }
+
+            .grouped-info-card__action:disabled {
+                opacity: 0.52;
+                cursor: not-allowed;
+            }
+
+            .grouped-info-card__action:not(:disabled):active {
+                transform: scale(0.98);
+            }
+
+            .grouped-info-card__action-icon {
+                flex: 0 0 auto;
+                font-size: 14px;
+                line-height: 1;
+            }
+
+            .grouped-info-card__action-label {
+                min-width: 0;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
 
             .grouped-info-card__empty {
@@ -161,10 +219,26 @@
                 : ['title', 'subtitle', 'description'],
             emptyText: options.emptyText || '暂无内容',
             showDivider: Boolean(options.showDivider),
+            actions: normalizeActions(options.actions),
             loading: Boolean(options.loading),
             disabled: Boolean(options.disabled),
             onClick: typeof options.onClick === 'function' ? options.onClick : null
         };
+    }
+
+    function normalizeActions(actions = []) {
+        if (!Array.isArray(actions)) return [];
+
+        // 操作栏最多展示 3 个按钮，避免移动端底部操作区拥挤
+        return actions.slice(0, 3)
+            .filter((action) => action && action.label)
+            .map((action) => ({
+                label: String(action.label),
+                icon: String(action.icon || ''),
+                disabled: Boolean(action.disabled),
+                primary: Boolean(action.primary),
+                onClick: typeof action.onClick === 'function' ? action.onClick : null
+            }));
     }
 
     function appendHighlightedText(target, text, keyword, shouldHighlight) {
@@ -283,14 +357,49 @@
             header.appendChild(description);
         }
 
-        if (config.showDivider) {
-            const divider = document.createElement('div');
-            divider.className = 'grouped-info-card__divider';
-            header.appendChild(divider);
-        }
-
         card.appendChild(header);
+        appendActions(card, config.actions, config);
         return card;
+    }
+
+    function appendActions(card, actions, config) {
+        if (!actions.length) return;
+
+        // 卡片操作栏固定渲染在底部，与主体内容之间使用虚线分隔
+        const actionBar = document.createElement('div');
+        actionBar.className = 'grouped-info-card__actions';
+        actionBar.style.setProperty('--grouped-info-card-action-count', actions.length);
+
+        actions.forEach((action) => {
+            const button = document.createElement('button');
+            button.className = 'grouped-info-card__action';
+            if (action.primary) button.classList.add('is-primary');
+            button.type = 'button';
+            button.disabled = action.disabled || config.disabled;
+
+            if (action.icon) {
+                const icon = document.createElement('i');
+                icon.className = `grouped-info-card__action-icon ${action.icon}`;
+                icon.setAttribute('aria-hidden', 'true');
+                button.appendChild(icon);
+            }
+
+            const label = document.createElement('span');
+            label.className = 'grouped-info-card__action-label';
+            label.textContent = action.label;
+            button.appendChild(label);
+
+            if (action.onClick) {
+                button.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    action.onClick(event, config, action);
+                });
+            }
+
+            actionBar.appendChild(button);
+        });
+
+        card.appendChild(actionBar);
     }
 
     function render(container, options) {
