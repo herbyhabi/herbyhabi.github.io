@@ -79,10 +79,6 @@
             border-color: #edf1f5;
             border-radius: 12px;
         }
-        .customer-info-form .grouped-info-card__header {
-            padding: 14px 16px 0;
-            gap: 10px;
-        }
         .customer-info-form .grouped-info-card__title {
             font-size: 16px;
             font-weight: 700;
