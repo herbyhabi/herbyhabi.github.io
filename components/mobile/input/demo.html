@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>移动端输入组件预览</title>
+    <script src="https://cdn.tailwindcss.com" defer></script>
+</head>
+<body class="min-h-screen bg-slate-50 font-sans text-[#333333] antialiased">
+    <main class="mx-auto min-h-screen max-w-md px-3 py-4 pb-10">
+        <header class="mb-4">
+            <h1 class="text-xl font-bold text-[#333333]">输入组件预览</h1>
+            <p class="mt-1 text-sm leading-5 text-[#666666]">用于查看移动端表单组件的默认态、禁用态、错误态和选择交互。</p>
+        </header>
+
+        <div id="demoForm" class="space-y-4">
+            <section class="overflow-hidden rounded-2xl border border-slate-100 bg-white">
+                <div class="border-b border-slate-100 px-4 py-3">
+                    <div class="text-base font-medium text-[#333333]">静态预览</div>
+                    <div class="mt-1 text-xs leading-5 text-[#999999]">如果组件脚本未执行，会先显示这组兜底样式。</div>
+                </div>
+                <div class="flex items-start justify-between gap-3 border-b border-slate-100 bg-white px-4 py-3">
+                    <div class="w-24 shrink-0 pt-0.5 text-sm font-medium text-[#333333]">姓名<span class="ml-0.5 text-[#f53f3f]">*</span></div>
+                    <div class="min-w-0 flex-1 text-right">
+                        <input class="w-full bg-transparent text-right text-sm text-[#333333] placeholder:text-[#999999] outline-none" value="张建国">
+                    </div>
+                </div>
+                <div class="flex items-start justify-between gap-3 border-b border-slate-100 bg-white px-4 py-3">
+                    <div class="w-24 shrink-0 pt-0.5 text-sm font-medium text-[#333333]">客户类型</div>
+                    <div class="min-w-0 flex-1 truncate text-right text-sm text-[#333333]">慢病管理 <span class="text-[#999999]">›</span></div>
+                </div>
+                <div class="flex items-start justify-between gap-3 border-b border-slate-100 bg-white px-4 py-3">
+                    <div class="w-24 shrink-0 pt-0.5 text-sm font-medium text-[#333333]">风险因素</div>
+                    <div class="flex min-w-0 flex-1 flex-wrap justify-end gap-2">
+                        <span class="min-h-8 rounded-full border border-[#2f7af6] bg-blue-50 px-3 py-1 text-sm text-[#2f7af6]">高血压</span>
+                        <span class="min-h-8 rounded-full border border-slate-200 bg-white px-3 py-1 text-sm text-[#666666]">糖尿病</span>
+                    </div>
+                </div>
+                <div class="flex items-start justify-between gap-3 bg-white px-4 py-3">
+                    <div class="w-24 shrink-0 pt-0.5 text-sm font-medium text-[#333333]">错误提示<span class="ml-0.5 text-[#f53f3f]">*</span></div>
+                    <div class="min-w-0 flex-1 text-right">
+                        <input class="w-full bg-transparent text-right text-sm text-[#333333] placeholder:text-[#999999] outline-none" placeholder="请输入联系人">
+                        <div class="mt-1 text-xs leading-4 text-[#f53f3f]">联系人不能为空</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div id="demoError" class="mt-4 hidden rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm leading-6 text-[#f53f3f]"></div>
+    </main>
+
+    <script src="./base-field.js"></script>
+    <script src="./text-input.js"></script>
+    <script src="./number-input.js"></script>
+    <script src="./textarea.js"></script>
+    <script src="./picker-select.js"></script>
+    <script src="./radio-group.js"></script>
+    <script src="./checkbox-group.js"></script>
+    <script src="./switch-field.js"></script>
+    <script src="./date-picker.js"></script>
+    <script src="./date-range-picker.js"></script>
+    <script src="./location-input.js"></script>
+    <script src="./phone-input.js"></script>
+    <script src="./form-section.js"></script>
+    <script>
+        // 独立预览页：集中渲染所有移动端输入组件，方便直接打开 HTML 查看样式。
+        const demoRoot = document.getElementById('demoForm');
+        const demoError = document.getElementById('demoError');
+
+        function showDemoError(error) {
+            demoError.classList.remove('hidden');
+            demoError.textContent = `组件预览加载失败：${error && error.message ? error.message : error}`;
+        }
+
+        window.addEventListener('error', (event) => {
+            showDemoError(event.error || event.message);
+        });
+
+        function appendSection(title, description) {
+            const section = FormSection.create({
+                title,
+                description,
+                content: document.createElement('div')
+            });
+            demoRoot.appendChild(section);
+            return section.body;
+        }
+
+        try {
+            demoRoot.innerHTML = '';
+            const basicSection = appendSection('基础输入', '文本、数字、手机号、地址等常用录入场景');
+            TextInput.render(basicSection, {
+                label: '姓名',
+                placeholder: '请输入姓名',
+                value: '张建国',
+                required: true,
+                clearable: true
+            });
+            TextInput.render(basicSection, {
+                label: '单位名称',
+                placeholder: '请输入单位名称',
+                clearable: true
+            });
+            NumberInput.render(basicSection, {
+                label: '年龄',
+                placeholder: '请输入年龄',
+                value: 67,
+                min: 0,
+                max: 120,
+                unit: '岁',
+                required: true
+            });
+            PhoneInput.render(basicSection, {
+                label: '手机号',
+                placeholder: '请输入手机号',
+                value: '13811115678',
+                required: true
+            });
+            PhoneInput.render(basicSection, {
+                label: '联系电话',
+                placeholder: '请输入手机号',
+                value: ['13811115678', '13922223333'],
+                multiple: true,
+                max: 3,
+                addText: '添加联系电话'
+            });
+            LocationInput.render(basicSection, {
+                label: '居住地址',
+                placeholder: '请输入居住地址',
+                value: '浙江省杭州市余杭区',
+                enableLocation: true
+            });
+
+            const textSection = appendSection('多行内容', '备注、描述、建议等长文本内容');
+            Textarea.render(textSection, {
+                label: '医生建议',
+                placeholder: '请输入医生建议',
+                value: '规律服药，控制盐分摄入，保持每周复测血压。',
+                rows: 3,
+                maxLength: 80,
+                showCount: true
+            });
+            Textarea.render(textSection, {
+                label: '施工说明',
+                placeholder: '请输入施工说明',
+                rows: 4,
+                maxLength: 120,
+                showCount: true
+            });
+
+            const choiceSection = appendSection('选择组件', '固定选项、单选、多选和开关状态');
+            PickerSelect.render(choiceSection, {
+                label: '客户类型',
+                placeholder: '请选择客户类型',
+                value: '慢病管理',
+                options: ['初次建档', '慢病管理', '复购培育'],
+                required: true
+            });
+            PickerSelect.render(choiceSection, {
+                label: '服务项目',
+                placeholder: '请选择服务项目',
+                value: ['血压管理', '营养干预'],
+                multiple: true,
+                options: ['血压管理', '血糖管理', '营养干预', '运动指导']
+            });
+            RadioGroup.render(choiceSection, {
+                label: '性别',
+                value: '男',
+                options: ['男', '女'],
+                direction: 'horizontal'
+            });
+            CheckboxGroup.render(choiceSection, {
+                label: '风险因素',
+                value: ['高血压', '吸烟'],
+                options: ['高血压', '糖尿病', '吸烟', '肥胖'],
+                max: 3
+            });
+            SwitchField.render(choiceSection, {
+                label: '是否通知',
+                value: true,
+                activeText: '已开启',
+                inactiveText: '已关闭'
+            });
+
+            const dateSection = appendSection('日期时间', '单日期与日期范围录入');
+            DatePicker.render(dateSection, {
+                label: '随访日期',
+                value: '2026-05-22',
+                type: 'date',
+                required: true
+            });
+            DatePicker.render(dateSection, {
+                label: '提醒时间',
+                value: '09:30',
+                type: 'time'
+            });
+            DateRangePicker.render(dateSection, {
+                label: '服务周期',
+                startValue: '2026-05-01',
+                endValue: '2026-05-31'
+            });
+
+            const stateSection = appendSection('状态展示', '错误、禁用、只读等基础状态');
+            TextInput.render(stateSection, {
+                label: '必填错误',
+                placeholder: '请输入联系人',
+                required: true,
+                error: '联系人不能为空'
+            });
+            TextInput.render(stateSection, {
+                label: '只读字段',
+                value: '系统生成编号 A-20260522',
+                readonly: true
+            });
+            NumberInput.render(stateSection, {
+                label: '禁用金额',
+                value: 1280,
+                unit: '元',
+                disabled: true
+            });
+            SwitchField.render(stateSection, {
+                label: '禁用开关',
+                value: false,
+                disabled: true
+            });
+        } catch (error) {
+            showDemoError(error);
+        }
+    </script>
+</body>
+</html>

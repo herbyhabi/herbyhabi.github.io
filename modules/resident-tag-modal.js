@@ -10,12 +10,15 @@
             <input id="residentTagSearchInput" type="search" placeholder="输入关键词后回车查询" autocomplete="off">
         </div>
         <div class="resident-tag-results" id="residentTagResults"></div>
-        <div class="resident-tag-actions">
-            <button class="resident-tag-confirm" type="button" id="residentTagConfirm">确认</button>
-        </div>
     `;
 
     const styleText = `
+        .resident-tag-modal-mask {
+            --mobile-modal-primary: #2f7af6;
+        }
+        .resident-tag-modal-mask .mobile-modal-action {
+            font-size: 14px;
+        }
         .resident-tag-search { margin: 2px 0 12px; }
         .resident-tag-helper {
             color: var(--text-3);
@@ -69,25 +72,6 @@
             padding: 12px;
             border-radius: 12px;
             background: #f8fbff;
-        }
-        .resident-tag-actions {
-            position: sticky;
-            bottom: -16px;
-            margin: 16px -16px -16px;
-            padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
-            background: rgba(255, 255, 255, 0.96);
-            border-top: 1px solid var(--line);
-        }
-        .resident-tag-confirm {
-            width: 100%;
-            height: 44px;
-            border: 0;
-            border-radius: 12px;
-            background: var(--blue);
-            color: #fff;
-            font-size: 15px;
-            font-weight: 900;
-            cursor: pointer;
         }
     `;
 
@@ -147,10 +131,14 @@
             title: '设置标签',
             className: 'resident-tag-modal-mask',
             content: modalContentHTML,
+            leftAction: {
+                text: '取消',
+                close: true
+            },
             rightAction: {
-                icon: 'fas fa-xmark',
-                close: true,
-                ariaLabel: '关闭'
+                text: '保存',
+                primary: true,
+                onClick: confirm
             }
         });
     }
@@ -164,7 +152,6 @@
             event.preventDefault();
             search();
         });
-        document.getElementById('residentTagConfirm').addEventListener('click', confirm);
     }
 
     function search() {

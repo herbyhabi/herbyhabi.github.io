@@ -1967,19 +1967,19 @@
                 <div class="status-item">当前状态 <strong class="green">在管</strong></div>
             </div>
             <div class="manage-strip" data-workspace="operation" hidden>
-                <div class="status-item">当前阶段 <strong class="green">成交客户</strong></div>
+                <div class="status-item">客户阶段 <strong class="green">成交客户</strong></div>
                 <div class="status-item">好友关系 <strong class="orange">1好友 | 4群聊</strong><i
                         class="fas fa-chevron-right date"></i></div>
 
             </div>
         </div>
 
-        <div class="section-card" id="todoSection" style="margin-top:10px" hidden>
+        <!-- <div class="section-card" id="todoSection" style="margin-top:10px" hidden>
             <div class="section-head">
                 <div class="section-title">待办事项<span class="badge-count" id="todoCount">0</span></div>
             </div>
             <div class="todo-list" id="todoList"></div>
-        </div>
+        </div> -->
 
         <!-- <div class="section-card" style="margin-top:10px">
             <div class="section-head">
@@ -2498,8 +2498,8 @@
         const patientInfo = {
             id: new URLSearchParams(window.location.search).get('id') || '1',
             name: '张建国',
-            remark: '稳定复购，近期重点跟进营养干预服务。',
-            phones: ['13811115678'],
+            remark: '张大爷',
+            phones: ['13811115678', '0571-12345678'],
             address: '浙江省杭州市余杭区闲林街道海滨南路88号',
             idCard: '330110195901011234',
             responsibleStaff: [
@@ -2507,11 +2507,11 @@
             ]
         };
         const nutritionists = [
-            { id: 'dietitian-001', name: '李娜', title: '主管营养师' },
-            { id: 'dietitian-002', name: '王敏', title: '营养师' },
-            { id: 'dietitian-003', name: '陈晨', title: '高级营养顾问' },
-            { id: 'dietitian-004', name: '赵雅', title: '慢病营养师' },
-            { id: 'dietitian-005', name: '周可', title: '糖尿病营养师' }
+            { id: 'dietitian-001', name: '李娜' },
+            { id: 'dietitian-002', name: '王敏' },
+            { id: 'dietitian-003', name: '陈晨' },
+            { id: 'dietitian-004', name: '赵雅' },
+            { id: 'dietitian-005', name: '周可' }
         ];
         const workbenchNames = {
             'specialist': '专科慢病',
