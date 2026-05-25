@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>随访记录</title>
+    <script src="../assets/vendor/tailwind-browser@4.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/@arco-design/mobile-react/dist/arco.css">
     <style>
@@ -85,15 +86,6 @@
         /* 记录列表 */
         .record-list {
             padding: 0 16px;
-        }
-
-        .section-title {
-            font-size: var(--font-size-body-1);
-            font-weight: 600;
-            color: var(--text-2);
-            margin: 16px 0 12px;
-            padding-left: 12px;
-            border-left: 3px solid var(--arcoblue-6);
         }
 
         .year-group {
@@ -233,10 +225,8 @@
         }
 /* 首页风格统一覆盖 */
 body {
-    color: #0f1f33;
-    background:
-        radial-gradient(circle at 82% 2%, rgba(181, 213, 255, 0.8) 0 110px, transparent 220px),
-        linear-gradient(180deg, #d9ebff 0%, #f4faff 28%, #f7fbff 68%, #ffffff 100%) !important;
+    color: #333333;
+    background: #f8fafc !important;
     -webkit-font-smoothing: antialiased;
 }
 
@@ -282,6 +272,88 @@ body {
 .navbar-title {
     font-weight: 800 !important;
 }
+
+        /* 随访记录卡片：复用通用分组组件承载标题、副标题和明细信息 */
+        .record-list .grouped-info-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.92) !important;
+            border: 1px solid rgba(123, 147, 176, 0.14) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12) !important;
+            backdrop-filter: blur(12px);
+        }
+
+        .record-list .grouped-info-card__header {
+            min-height: 52px;
+        }
+
+        .record-list .grouped-info-card__heading {
+            gap: 16px;
+        }
+
+        .record-list .grouped-info-card__title {
+            padding-left: 18px;
+        }
+
+        .record-list .grouped-info-card__subtitle {
+            padding-right: 18px;
+        }
+
+        .record-card-body {
+            padding: 0 16px 14px;
+        }
+
+        .record-card-items {
+            display: grid;
+            gap: 4px;
+        }
+
+        .record-card-items .record-item {
+            border: 0 !important;
+        }
+
+        /* 随访病种标签：与“随访任务”页面保持一致 */
+        .follow-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+            padding-top: 2px;
+        }
+
+        .follow-tag {
+            display: inline-flex;
+            align-items: center;
+            min-height: 20px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: #f3f6ff;
+            color: #5a78d8;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: 0;
+        }
+
+        .follow-tag.disease-hypertension {
+            background: #ffe7ec;
+            color: #ff6f82;
+        }
+
+        .follow-tag.disease-diabetes {
+            background: #ede8ff;
+            color: #9b85df;
+        }
+
+        .follow-tag.disease-heart {
+            background: #e9f1ff;
+            color: #5a84ff;
+        }
+
+        .follow-tag.disease-risk {
+            background: #fff2e8;
+            color: #d25f00;
+        }
 
         .navbar-title .title-meta {
             margin-left: 6px;
@@ -523,6 +595,7 @@ textarea {
     </style>
     <script src="../components/mobile/mobile-title-bar.js" defer></script>
     <script src="../components/mobile/mobile-search.js"></script>
+    <script src="../components/mobile/grouped-info-card.js"></script>
 </head>
 <body>
     <!-- 导航栏 -->
@@ -530,7 +603,6 @@ textarea {
 
     <!-- 记录列表 -->
     <div class="record-list">
-        <div class="section-title">随访记录</div>
         <div id="recordList">
             <!-- 动态生成 -->
         </div>
@@ -577,70 +649,70 @@ textarea {
         // 模拟随访记录数据（使用动态日期）
         const followUpRecords = {
             1: [
-                { date: getPastDateStr(5), type: '常规随访', disease: '高血压', doctor: '张医生' },
-                { date: getPastDateStr(35), type: '常规随访', disease: '高血压', doctor: '张医生' },
-                { date: getPastDateStr(65), type: '控制不满意随访', disease: '高血压', doctor: '李医生' },
-                { date: getPastDateStr(95), type: '常规随访', disease: '高血压', doctor: '张医生' },
-                { date: getYearDateStr(2025, 11, 18), type: '常规随访', disease: '高血压', doctor: '张医生' },
-                { date: getYearDateStr(2025, 8, 20), type: '控制不满意随访', disease: '高血压', doctor: '李医生' },
-                { date: getYearDateStr(2025, 4, 12), type: '常规随访', disease: '高血压', doctor: '张医生' },
-                { date: getYearDateStr(2024, 12, 9), type: '常规随访', disease: '高血压', doctor: '张医生' },
-                { date: getYearDateStr(2024, 7, 15), type: '常规随访', disease: '高血压', doctor: '李医生' }
+                { date: getPastDateStr(5), type: '常规随访', disease: '高', doctor: '张大伟' },
+                { date: getPastDateStr(35), type: '常规随访', disease: '高', doctor: '张大伟' },
+                { date: getPastDateStr(65), type: '控制不满意随访', disease: '高', doctor: '李医生' },
+                { date: getPastDateStr(95), type: '常规随访', disease: '高', doctor: '张大伟' },
+                { date: getYearDateStr(2025, 11, 18), type: '常规随访', disease: '高', doctor: '张大伟' },
+                { date: getYearDateStr(2025, 8, 20), type: '控制不满意随访', disease: '高', doctor: '李医生' },
+                { date: getYearDateStr(2025, 4, 12), type: '常规随访', disease: '高', doctor: '张大伟' },
+                { date: getYearDateStr(2024, 12, 9), type: '常规随访', disease: '高', doctor: '张大伟' },
+                { date: getYearDateStr(2024, 7, 15), type: '常规随访', disease: '高', doctor: '李医生' }
             ],
             2: [
-                { date: getPastDateStr(10), type: '常规随访', disease: '糖尿病', doctor: '王医生' },
-                { date: getPastDateStr(40), type: '常规随访', disease: '糖尿病', doctor: '王医生' },
-                { date: getPastDateStr(70), type: '常规随访', disease: '糖尿病', doctor: '王医生' },
-                { date: getYearDateStr(2025, 10, 22), type: '常规随访', disease: '糖尿病', doctor: '王医生' },
-                { date: getYearDateStr(2025, 6, 18), type: '常规随访', disease: '糖尿病', doctor: '王医生' },
-                { date: getYearDateStr(2024, 11, 6), type: '常规随访', disease: '糖尿病', doctor: '王医生' }
+                { date: getPastDateStr(10), type: '常规随访', disease: '糖', doctor: '王海燕' },
+                { date: getPastDateStr(40), type: '常规随访', disease: '糖', doctor: '王海燕' },
+                { date: getPastDateStr(70), type: '常规随访', disease: '糖', doctor: '王海燕' },
+                { date: getYearDateStr(2025, 10, 22), type: '常规随访', disease: '糖', doctor: '王海燕' },
+                { date: getYearDateStr(2025, 6, 18), type: '常规随访', disease: '糖', doctor: '王海燕' },
+                { date: getYearDateStr(2024, 11, 6), type: '常规随访', disease: '糖', doctor: '王海燕' }
             ],
             3: [
-                { date: getPastDateStr(12), type: '常规随访', disease: '冠心病', doctor: '刘医生' },
-                { date: getPastDateStr(42), type: '常规随访', disease: '冠心病', doctor: '刘医生' },
-                { date: getYearDateStr(2025, 9, 8), type: '常规随访', disease: '冠心病', doctor: '刘医生' },
-                { date: getYearDateStr(2024, 10, 16), type: '常规随访', disease: '冠心病', doctor: '刘医生' }
+                { date: getPastDateStr(12), type: '常规随访', disease: '冠', doctor: '刘医生' },
+                { date: getPastDateStr(42), type: '常规随访', disease: '冠', doctor: '刘医生' },
+                { date: getYearDateStr(2025, 9, 8), type: '常规随访', disease: '冠', doctor: '刘医生' },
+                { date: getYearDateStr(2024, 10, 16), type: '常规随访', disease: '冠', doctor: '刘医生' }
             ],
             4: [
-                { date: getPastDateStr(8), type: '常规随访', disease: '高血压', doctor: '张医生' },
-                { date: getPastDateStr(38), type: '常规随访', disease: '高血压', doctor: '张医生' }
+                { date: getPastDateStr(8), type: '常规随访', disease: '高', doctor: '张大伟' },
+                { date: getPastDateStr(38), type: '常规随访', disease: '高', doctor: '张大伟' }
             ],
             5: [
-                { date: getPastDateStr(15), type: '常规随访', disease: '糖尿病', doctor: '王医生' },
-                { date: getPastDateStr(45), type: '常规随访', disease: '糖尿病', doctor: '王医生' }
+                { date: getPastDateStr(15), type: '常规随访', disease: '糖', doctor: '王海燕' },
+                { date: getPastDateStr(45), type: '常规随访', disease: '糖', doctor: '王海燕' }
             ],
             6: [
                 { date: getPastDateStr(20), type: '常规随访', disease: '高血脂', doctor: '李医生' },
                 { date: getPastDateStr(50), type: '常规随访', disease: '高血脂', doctor: '李医生' }
             ],
             7: [
-                { date: getPastDateStr(25), type: '常规随访', disease: '高血压', doctor: '张医生' },
-                { date: getPastDateStr(55), type: '常规随访', disease: '高血压', doctor: '张医生' }
+                { date: getPastDateStr(25), type: '常规随访', disease: '高', doctor: '张大伟' },
+                { date: getPastDateStr(55), type: '常规随访', disease: '高', doctor: '张大伟' }
             ],
             8: [
-                { date: getPastDateStr(30), type: '常规随访', disease: '糖尿病', doctor: '王医生' },
-                { date: getPastDateStr(60), type: '常规随访', disease: '糖尿病', doctor: '王医生' }
+                { date: getPastDateStr(30), type: '常规随访', disease: '糖', doctor: '王海燕' },
+                { date: getPastDateStr(60), type: '常规随访', disease: '糖', doctor: '王海燕' }
             ],
             101: [
-                { date: getPastDateStr(3), type: '高危随访', disease: '高血压3级', doctor: '张医生' },
-                { date: getPastDateStr(17), type: '高危随访', disease: '高血压3级', doctor: '张医生' },
-                { date: getPastDateStr(31), type: '高危随访', disease: '高血压3级', doctor: '张医生' }
+                { date: getPastDateStr(3), type: '高危随访', disease: '高', doctor: '张大伟' },
+                { date: getPastDateStr(17), type: '高危随访', disease: '高', doctor: '张大伟' },
+                { date: getPastDateStr(31), type: '高危随访', disease: '高', doctor: '张大伟' }
             ],
             102: [
-                { date: getPastDateStr(7), type: '高危随访', disease: '糖尿病并发症', doctor: '王医生' },
-                { date: getPastDateStr(21), type: '高危随访', disease: '糖尿病并发症', doctor: '王医生' }
+                { date: getPastDateStr(7), type: '高危随访', disease: '糖', doctor: '王海燕' },
+                { date: getPastDateStr(21), type: '高危随访', disease: '糖', doctor: '王海燕' }
             ],
             103: [
-                { date: getPastDateStr(4), type: '高危随访', disease: '脑卒中后遗症', doctor: '刘医生' },
-                { date: getPastDateStr(18), type: '高危随访', disease: '脑卒中后遗症', doctor: '刘医生' }
+                { date: getPastDateStr(4), type: '高危随访', disease: '脑', doctor: '刘医生' },
+                { date: getPastDateStr(18), type: '高危随访', disease: '脑', doctor: '刘医生' }
             ],
             104: [
-                { date: getPastDateStr(6), type: '高危随访', disease: '冠心病', doctor: '张医生' },
-                { date: getPastDateStr(20), type: '高危随访', disease: '冠心病', doctor: '张医生' }
+                { date: getPastDateStr(6), type: '高危随访', disease: '冠', doctor: '张大伟' },
+                { date: getPastDateStr(20), type: '高危随访', disease: '冠', doctor: '张大伟' }
             ],
             105: [
-                { date: getPastDateStr(2), type: '高危随访', disease: '心力衰竭', doctor: '王医生' },
-                { date: getPastDateStr(16), type: '高危随访', disease: '心力衰竭', doctor: '王医生' }
+                { date: getPastDateStr(2), type: '高危随访', disease: '高血压', doctor: '王海燕' },
+                { date: getPastDateStr(16), type: '高危随访', disease: '高血压', doctor: '王海燕' }
             ]
         };
 
@@ -698,32 +770,11 @@ textarea {
                     html += `
                         <div class="year-group">
                             <div class="year-header">
-                                <div class="year-title">${year}<span>年</span></div>
+                                <div class="year-title">${year}</div>
                                 <div class="year-count">${typeCountText}</div>
                             </div>
-                            <div class="year-records">
+                            <div class="year-records" data-record-year="${year}">
                     `;
-
-                    yearRecords.forEach(record => {
-                        html += `
-                            <div class="record-card">
-                                <div class="record-header">
-                                    <span class="record-date">${record.date}</span>
-                                    <span class="record-type">${record.type}</span>
-                                </div>
-                                <div class="record-body">
-                                    <div class="record-item">
-                                        <span class="record-label">随访病种</span>
-                                        <span class="tag-disease">${record.disease}</span>
-                                    </div>
-                                    <div class="record-item">
-                                        <span class="record-label">随访医生</span>
-                                        <span class="record-value">${record.doctor}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    });
 
                     html += `
                             </div>
@@ -732,6 +783,61 @@ textarea {
                 });
             
             container.innerHTML = html;
+
+            Object.keys(groupedRecords)
+                .sort((a, b) => Number(b) - Number(a))
+                .forEach(year => {
+                    const yearRecordsContainer = container.querySelector(`[data-record-year="${year}"]`);
+                    if (!yearRecordsContainer) return;
+                    groupedRecords[year].forEach(record => renderRecordCard(yearRecordsContainer, record));
+                });
+        }
+
+        // 渲染单条随访记录，卡片头部复用通用分组组件
+        function renderRecordCard(container, record) {
+            const card = GroupedInfoCard.render(container, {
+                title: record.date,
+                subtitle: record.type,
+                showDivider: true
+            });
+
+            const content = document.createElement('div');
+            content.className = 'record-card-body';
+            content.innerHTML = `
+                <div class="record-card-items">
+                    <div class="record-item">
+                        <span class="record-label">随访病种</span>
+                        <span class="record-value">
+                            <span class="follow-tags">${renderDiseaseTags([record.disease])}</span>
+                        </span>
+                    </div>
+                    <div class="record-item">
+                        <span class="record-label">随访项目</span>
+                        <span class="record-value">${followUpType}</span>
+                    </div>
+                    <div class="record-item">
+                        <span class="record-label">随访医生</span>
+                        <span class="record-value">${record.doctor}</span>
+                    </div>
+                </div>
+            `;
+
+            card.appendChild(content);
+        }
+
+        // 生成随访病种标签，样式与“随访任务”页面保持一致
+        function renderDiseaseTags(diseases) {
+            return diseases.map(disease => (
+                `<span class="follow-tag ${getDiseaseTagClass(disease)}">${disease}</span>`
+            )).join('');
+        }
+
+        // 根据病种生成标签色
+        function getDiseaseTagClass(disease) {
+            if (disease.includes('高')) return 'disease-hypertension';
+            if (disease.includes('糖')) return 'disease-diabetes';
+            if (disease.includes('冠') || disease.includes('心')) return 'disease-heart';
+            return disease.includes('高危') || disease.includes('并发') || disease.includes('后遗') ? 'disease-risk' : '';
         }
 
         // 返回
