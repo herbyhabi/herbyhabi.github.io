@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>我的患者</title>
+    <script src="../assets/vendor/tailwind-browser@4.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -141,6 +142,10 @@
 
         .patient-list .grouped-info-card {
             position: relative;
+        }
+
+        .patient-list .grouped-info-card__title {
+            padding-left: 18px;
         }
 
         .patient-card-items {
@@ -687,6 +692,11 @@
 
             const card = GroupedInfoCard.render(container, {
                 title: patient.name,
+                status:{
+                    label:'男·70岁',
+                    size:'small',
+                    color:'default'
+                },
                 keyword: searchKeyword,
                 highlightFields: ['title'],
                 showDivider: true,
@@ -717,10 +727,6 @@
             content.innerHTML = `
                 <div class="patient-card-items">
                     <div class="detail-item">
-                        <span class="detail-label">性别年龄</span>
-                        <span class="detail-value">${patient.gender} · ${patient.age}岁</span>
-                    </div>
-                    <div class="detail-item">
                         <span class="detail-label">证件号码</span>
                         <span class="detail-value">${patient.idCard}</span>
                     </div>
@@ -736,7 +742,8 @@
                     </div>
                 </div>
             `;
-            card.appendChild(content);
+            const actions = card.querySelector('.grouped-info-card__actions');
+            card.insertBefore(content, actions);
         }
 
         // 根据病种生成圆形短标文字

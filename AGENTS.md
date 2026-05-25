@@ -1,6 +1,6 @@
 ## 核心技术栈
 *   **Frontend:** HTML5
-*   **Styling:** Tailwind CSS (优先使用 Play CDN)
+*   **Styling:** Tailwind CSS
 *   **Environment:** Static HTML / Browser-based
 
 ---
@@ -16,9 +16,9 @@
 *   **触发条件**：只有当涉及到必须依赖 Node.js 的逻辑调整（如：安装新的 NPM 包、修改 `tailwind.config.js` 配置文件、或编写复杂的后端 JavaScript 逻辑）时，方可调用或建议启动 Node.js。
 
 ### 3. 代码实现规范
-*   **轻量化引入**：默认通过以下方式引入 Tailwind，避免复杂的构建流程：
+*   **轻量化引入**：默认通过项目内本地包引入 Tailwind，避免复杂的构建流程：
     ```html
-    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <script src="../assets/vendor/tailwind-browser@4.js"></script>
 *  **添加代码注释**：对完整的代码模块需添加适当的中文代码注释
 
 ### 4. 代码编辑约束

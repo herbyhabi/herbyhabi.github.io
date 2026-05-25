@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>健康画像</title>
+    <script src="../assets/vendor/tailwind-browser@4.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1978,7 +1979,7 @@
                 <div class="status-item">当前状态 <strong class="green">在管</strong></div>
             </div>
             <div class="manage-strip" data-workspace="operation" hidden>
-                <div class="status-item">客户阶段 <strong class="green">成交客户</strong></div>
+                <div class="status-item">客户阶段 <strong class="green" id="patientStageText">成交客户</strong></div>
                 <div class="status-item" role="button" tabindex="0" onclick="openFriendRelationModal()"
                     onkeydown="handleFriendRelationKeydown(event)">好友关系 <strong class="orange">4好友 | 4群聊</strong><i
                         class="fas fa-chevron-right date"></i></div>
@@ -2506,13 +2507,13 @@
     <script src="../modules/resident-tag-modal.js"></script>
     <script src="../modules/past-medical-history-modal.js"></script>
     <script src="../modules/medication-dynamic-modal.js"></script>
-    <script src="../modules/customer-info-modal.js"></script>
     <script src="../modules/friend-relation-modal.js"></script>
     <script>
         const patientInfo = {
             id: new URLSearchParams(window.location.search).get('id') || '1',
             name: '张建国',
             remark: '张大爷',
+            stage: '成交客户',
             phones: ['13811115678', '0571-12345678'],
             address: '浙江省杭州市余杭区闲林街道海滨南路88号',
             idCard: '330110195901011234',
@@ -2520,13 +2521,6 @@
                 { id: 'dietitian-001', name: '李娜', title: '主管营养师' }
             ]
         };
-        const nutritionists = [
-            { id: 'dietitian-001', name: '李娜' },
-            { id: 'dietitian-002', name: '王敏' },
-            { id: 'dietitian-003', name: '陈晨' },
-            { id: 'dietitian-004', name: '赵雅' },
-            { id: 'dietitian-005', name: '周可' }
-        ];
         const workbenchNames = {
             'specialist': '专科慢病',
             'public-health': '公卫慢病',
@@ -2623,28 +2617,30 @@
         window.showToast = showToast;
 
         function editInfo() {
-            CustomerInfoModal.open();
+            window.location.href = `customer-info-edit.html?id=${patientInfo.id}`;
         }
 
-        // 将弹窗保存后的客户资料同步回健康画像页头部展示
-        function saveCustomerInfo(payload) {
-            Object.assign(patientInfo, payload);
-            renderPatientHeader();
-            showToast('客户信息已保存');
-        }
-
-        function getCustomerInfo() {
-            return {
-                ...patientInfo,
-                phones: [...patientInfo.phones],
-                responsibleStaff: patientInfo.responsibleStaff.map(staff => ({ ...staff }))
-            };
+        // 从客户信息编辑页读取本次会话保存的数据，并同步到健康画像头部展示。
+        function syncCustomerInfoFromStorage() {
+            try {
+                const saved = JSON.parse(sessionStorage.getItem(`customer-info:${patientInfo.id}`));
+                if (!saved) return;
+                Object.assign(patientInfo, {
+                    ...saved,
+                    phones: Array.isArray(saved.phones) ? saved.phones : patientInfo.phones,
+                    responsibleStaff: Array.isArray(saved.responsibleStaff) ? saved.responsibleStaff : patientInfo.responsibleStaff
+                });
+            } catch (error) {
+                return;
+            }
         }
 
         function renderPatientHeader() {
             document.getElementById('patientNameText').textContent = patientInfo.name;
             document.getElementById('patientPhoneText').textContent = `联系号码：${patientInfo.phones.join('、') || '未填写'}`;
             document.getElementById('patientAddressText').textContent = `居住地址：${patientInfo.address || '未填写'}`;
+            const stageText = document.getElementById('patientStageText');
+            if (stageText) stageText.textContent = patientInfo.stage || '未填写';
         }
 
         function openMedicationRecords() {
@@ -2985,12 +2981,8 @@
                 dynamics: medicationDynamics
             });
             FriendRelationModal.init(friendRelationData);
-            CustomerInfoModal.init({
-                getCustomerInfo,
-                nutritionists,
-                onSave: saveCustomerInfo
-            });
             applyWorkspaceMode();
+            syncCustomerInfoFromStorage();
             renderPatientHeader();
             renderTodoSection();
         });

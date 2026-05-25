@@ -5,204 +5,104 @@
     function ensureStyles() {
         if (document.getElementById(styleId)) return;
 
-        // 分组信息卡片基础样式，仅保留卡片外壳和标题信息展示
+        // 分组信息卡片基础样式，使用本地 Tailwind 运行时编译。
         const style = document.createElement('style');
         style.id = styleId;
+        style.type = 'text/tailwindcss';
         style.textContent = `
-            .grouped-info-card {
-                width: 100%;
-                display: flex;
-                flex-direction: column;
-                box-sizing: border-box;
-                border: 1px solid #f1f5f9;
-                border-radius: 12px;
-                background: #ffffff;
-                color: #333333;
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
-            }
-
-            .grouped-info-card.is-clickable {
-                cursor: pointer;
-                -webkit-tap-highlight-color: transparent;
-            }
-
-            .grouped-info-card.is-clickable:active {
-                transform: scale(0.99);
-            }
-
-            .grouped-info-card.is-disabled {
-                opacity: 0.56;
-                pointer-events: none;
-            }
-
-            .grouped-info-card__header {
-                min-width: 0;
-                display: grid;
-                gap: 12px;
-                padding: 16px;
-                box-sizing: border-box;
-            }
-
-            .grouped-info-card__header.has-divider {
-                border-bottom: 1px dashed #e2e8f0;
-            }
-
-            .grouped-info-card__heading {
-                min-width: 0;
-                display: flex;
-                align-items: flex-start;
-                justify-content: space-between;
-                gap: 12px;
-            }
-
-            .grouped-info-card__title {
-                flex: 1 1 auto;
-                min-width: 0;
-                color: #333333;
-                font-size: 15px;
-                font-weight: 700;
-                line-height: 20px;
-                white-space: normal;
-                overflow-wrap: anywhere;
-                word-break: break-word;
-            }
-
-            .grouped-info-card__subtitle {
-                flex: 0 0 auto;
-                min-width: 0;
-                color: #999999;
-                font-size: 12px;
-                font-weight: 400;
-                line-height: 18px;
-                text-align: right;
-                white-space: normal;
-                overflow-wrap: anywhere;
-                word-break: break-word;
-            }
-
-            .grouped-info-card__description {
-                min-width: 0;
-                color: #666666;
-                font-size: 14px;
-                font-weight: 400;
-                line-height: 22px;
-                white-space: normal;
-                overflow-wrap: anywhere;
-                word-break: break-word;
-            }
-
-            .grouped-info-card__actions {
-                order: 100;
-                min-height: 52px;
-                display: grid;
-                grid-template-columns: repeat(var(--grouped-info-card-action-count, 1), minmax(0, 1fr));
-                align-items: center;
-                gap: 0;
-                border-top: 1px dashed #e2e8f0;
-                padding: 8px 16px;
-                box-sizing: border-box;
-            }
-
-            .grouped-info-card__action {
-                min-width: 0;
-                min-height: 36px;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                gap: 6px;
-                padding: 0 10px;
-                border: 0;
-                border-radius: 0;
-                background: transparent;
-                color: #333333;
-                font: inherit;
-                font-size: 13px;
-                font-weight: 700;
-                line-height: 18px;
-                cursor: pointer;
-                -webkit-tap-highlight-color: transparent;
-            }
-
-            .grouped-info-card__action.is-primary {
-                color: #2f7af6;
-            }
-
-            .grouped-info-card__action + .grouped-info-card__action {
-                border-left: 1px solid #e2e8f0;
-            }
-
-            .grouped-info-card__action:disabled {
-                opacity: 0.52;
-                cursor: not-allowed;
-            }
-
-            .grouped-info-card__action:not(:disabled):active {
-                transform: scale(0.98);
-            }
-
-            .grouped-info-card__action-icon {
-                flex: 0 0 auto;
-                font-size: 14px;
-                line-height: 1;
-            }
-
-            .grouped-info-card__action-label {
-                min-width: 0;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-            }
-
-            .grouped-info-card__empty {
-                min-height: 120px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 24px 16px;
-                box-sizing: border-box;
-                color: #999999;
-                font-size: 14px;
-                font-weight: 500;
-                text-align: center;
-            }
-
-            .grouped-info-card__highlight {
-                color: #FA8C16;
-                font-weight: 800;
-                background: #FFE7BA;
-                border-radius: 4px;
-                padding: 0 2px;
-            }
-
-            .grouped-info-card__skeleton {
-                display: grid;
-                gap: 10px;
-                padding: 16px;
-            }
-
-            .grouped-info-card__skeleton-line {
-                height: 14px;
-                border-radius: 999px;
-                background: linear-gradient(90deg, #f1f5f9 0%, #e8eef6 50%, #f1f5f9 100%);
-                background-size: 200% 100%;
-                animation: groupedInfoCardLoading 1.2s ease-in-out infinite;
-            }
-
-            .grouped-info-card__skeleton-line:nth-child(1) {
-                width: 42%;
-            }
-
-            .grouped-info-card__skeleton-line:nth-child(2) {
-                width: 78%;
-            }
-
-            .grouped-info-card__skeleton-line:nth-child(3) {
-                width: 64%;
-            }
-
-            @keyframes groupedInfoCardLoading {
-                0% { background-position: 100% 0; }
-                100% { background-position: -100% 0; }
+            @layer components {
+                .grouped-info-card {
+                    @apply box-border flex w-full flex-col rounded-xl border border-slate-100 bg-white font-sans text-[#333333];
+                }
+                .grouped-info-card.is-clickable {
+                    @apply cursor-pointer active:scale-[0.99];
+                    -webkit-tap-highlight-color: transparent;
+                }
+                .grouped-info-card.is-disabled {
+                    @apply pointer-events-none opacity-55;
+                }
+                .grouped-info-card__header {
+                    @apply box-border grid min-h-[52px] min-w-0 items-center gap-3 px-4 py-2;
+                }
+                .grouped-info-card__header.has-divider {
+                    @apply border-b border-dashed border-slate-200;
+                }
+                .grouped-info-card__heading {
+                    @apply flex min-w-0 items-start justify-between gap-3;
+                }
+                .grouped-info-card__title-wrap {
+                    @apply flex min-w-0 flex-1 flex-wrap items-center gap-1.5;
+                }
+                .grouped-info-card__title {
+                    @apply min-w-0 whitespace-normal text-base font-bold leading-5 text-[#333333];
+                    overflow-wrap: anywhere;
+                    word-break: break-word;
+                }
+                .grouped-info-card__status {
+                    @apply max-w-full shrink-0;
+                }
+                status-tag.grouped-info-card__status {
+                    @apply inline-flex h-5 max-w-full items-center rounded-full bg-[#f5f5f5] px-1.5 text-[11px] font-bold leading-5 text-[#666666];
+                }
+                .grouped-info-card__subtitle {
+                    @apply min-w-0 shrink-0 whitespace-normal text-right text-xs font-normal leading-[18px] text-[#999999];
+                    overflow-wrap: anywhere;
+                    word-break: break-word;
+                }
+                .grouped-info-card__description {
+                    @apply min-w-0 whitespace-normal text-sm font-normal leading-[22px] text-[#666666];
+                    overflow-wrap: anywhere;
+                    word-break: break-word;
+                }
+                .grouped-info-card__actions {
+                    @apply order-[100] grid min-h-[52px] items-center gap-0 border-t border-dashed border-slate-200 px-4 py-2;
+                    grid-template-columns: repeat(var(--grouped-info-card-action-count, 1), minmax(0, 1fr));
+                }
+                .grouped-info-card__action {
+                    @apply inline-flex min-h-9 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-none border-0 bg-transparent px-2.5 text-sm font-medium leading-4 text-[#333333] disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.98];
+                    font-family: inherit;
+                    -webkit-tap-highlight-color: transparent;
+                }
+                .grouped-info-card__action.is-primary {
+                    @apply text-[#2f7af6];
+                }
+                .grouped-info-card__action + .grouped-info-card__action {
+                    @apply border-l border-slate-200;
+                }
+                .grouped-info-card__action-icon {
+                    @apply shrink-0 text-sm leading-none;
+                }
+                .grouped-info-card__action-label {
+                    @apply min-w-0 truncate;
+                }
+                .grouped-info-card__empty {
+                    @apply box-border flex min-h-[120px] items-center justify-center px-4 py-6 text-center text-sm font-medium text-[#999999];
+                }
+                .grouped-info-card__highlight {
+                    @apply rounded bg-[#FFE7BA] px-0.5 font-extrabold text-[#FA8C16];
+                }
+                .grouped-info-card__skeleton {
+                    @apply grid gap-2.5 p-4;
+                }
+                .grouped-info-card__skeleton-line {
+                    @apply h-3.5 rounded-full;
+                    background: linear-gradient(90deg, #f1f5f9 0%, #e8eef6 50%, #f1f5f9 100%);
+                    background-size: 200% 100%;
+                    animation: groupedInfoCardLoading 1.2s ease-in-out infinite;
+                }
+                .grouped-info-card__skeleton-line:nth-child(1) {
+                    @apply w-[42%];
+                }
+                .grouped-info-card__skeleton-line:nth-child(2) {
+                    @apply w-[78%];
+                }
+                .grouped-info-card__skeleton-line:nth-child(3) {
+                    @apply w-[64%];
+                }
+                @keyframes groupedInfoCardLoading {
+                    0% { background-position: 100% 0; }
+                    100% { background-position: -100% 0; }
+                }
             }
         `;
         document.head.appendChild(style);
@@ -211,6 +111,7 @@
     function normalizeOptions(options = {}) {
         return {
             title: options.title || '',
+            status: normalizeStatus(options.status),
             subtitle: options.subtitle || '',
             description: options.description || '',
             keyword: String(options.keyword || '').trim(),
@@ -239,6 +140,26 @@
                 primary: Boolean(action.primary),
                 onClick: typeof action.onClick === 'function' ? action.onClick : null
             }));
+    }
+
+    function normalizeStatus(status) {
+        if (!status) return null;
+
+        if (typeof status === 'string') {
+            const label = status.trim();
+            return label ? { label, color: 'gray', size: 'small' } : null;
+        }
+
+        if (typeof status !== 'object') return null;
+
+        const label = String(status.label || status.text || status.value || '').trim();
+        if (!label) return null;
+
+        return {
+            label,
+            color: String(status.color || 'gray'),
+            size: String(status.size || 'small')
+        };
     }
 
     function appendHighlightedText(target, text, keyword, shouldHighlight) {
@@ -276,6 +197,17 @@
 
     function fieldCanHighlight(options, field) {
         return options.highlightFields.includes(field);
+    }
+
+    function createStatusTag(status) {
+        // 标题状态复用通用状态标签组件，保持列表卡片内的状态表达一致。
+        const tag = document.createElement('status-tag');
+        tag.className = 'grouped-info-card__status';
+        tag.setAttribute('label', status.label);
+        tag.setAttribute('color', status.color);
+        tag.setAttribute('size', status.size);
+        tag.textContent = status.label;
+        return tag;
     }
 
     function createSkeleton() {
@@ -317,7 +249,7 @@
             });
         }
 
-        if (!config.title && !config.subtitle && !config.description) {
+        if (!config.title && !config.status && !config.subtitle && !config.description) {
             const empty = document.createElement('div');
             empty.className = 'grouped-info-card__empty';
             empty.textContent = config.emptyText;
@@ -329,15 +261,26 @@
         header.className = 'grouped-info-card__header';
         if (config.showDivider) header.classList.add('has-divider');
 
-        if (config.title || config.subtitle) {
+        if (config.title || config.status || config.subtitle) {
             const heading = document.createElement('div');
             heading.className = 'grouped-info-card__heading';
 
-            if (config.title) {
-                const title = document.createElement('div');
-                title.className = 'grouped-info-card__title';
-                appendHighlightedText(title, config.title, config.keyword, fieldCanHighlight(config, 'title'));
-                heading.appendChild(title);
+            if (config.title || config.status) {
+                const titleWrap = document.createElement('div');
+                titleWrap.className = 'grouped-info-card__title-wrap';
+
+                if (config.title) {
+                    const title = document.createElement('div');
+                    title.className = 'grouped-info-card__title';
+                    appendHighlightedText(title, config.title, config.keyword, fieldCanHighlight(config, 'title'));
+                    titleWrap.appendChild(title);
+                }
+
+                if (config.status) {
+                    titleWrap.appendChild(createStatusTag(config.status));
+                }
+
+                heading.appendChild(titleWrap);
             }
 
             if (config.subtitle) {

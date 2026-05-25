@@ -1,84 +1,220 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>客户信息编辑</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>客户信息</title>
+    <script src="../assets/vendor/tailwind-browser@4.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="../components/mobile/mobile-title-bar.js" defer></script>
-    <script src="../components/mobile/mobile-search.js"></script>
 </head>
-<body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
-    <mobile-title-bar title="客户信息编辑" right-text="保存" right-action="saveCustomerInfo()"></mobile-title-bar>
 
-    <main class="space-y-3 p-3 pb-24">
-        <section class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-            <div class="mb-4 flex items-center gap-3">
-                <img class="h-14 w-14 rounded-full object-cover ring-2 ring-blue-50" src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&amp;fit=crop&amp;w=160&amp;q=80" alt="居民头像">
-                <div>
-                    <div class="text-lg font-black">张建国</div>
-                    <div class="mt-1 text-xs font-semibold text-slate-500">运营中心客户档案</div>
-                </div>
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-                <label class="block">
-                    <span class="text-xs font-bold text-slate-500">姓名</span>
-                    <input class="mt-1 h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-semibold outline-none focus:border-blue-400" value="张建国">
-                </label>
-                <label class="block">
-                    <span class="text-xs font-bold text-slate-500">性别</span>
-                    <select class="mt-1 h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-semibold outline-none focus:border-blue-400">
-                        <option>男</option>
-                        <option>女</option>
-                    </select>
-                </label>
-                <label class="block">
-                    <span class="text-xs font-bold text-slate-500">年龄</span>
-                    <input class="mt-1 h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-semibold outline-none focus:border-blue-400" value="67岁">
-                </label>
-                <label class="block">
-                    <span class="text-xs font-bold text-slate-500">联系号码</span>
-                    <input class="mt-1 h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-semibold outline-none focus:border-blue-400" value="13811115678">
-                </label>
-                <label class="col-span-2 block">
-                    <span class="text-xs font-bold text-slate-500">居住地址</span>
-                    <textarea class="mt-1 min-h-20 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold leading-6 outline-none focus:border-blue-400">浙江省杭州市余杭区闲林街道海滨南路88号</textarea>
-                </label>
-            </div>
-        </section>
+<body class="min-h-screen bg-[#f4f4f8] text-[#333333] antialiased [font-family:-apple-system,BlinkMacSystemFont,'Segoe_UI','PingFang_SC','Hiragino_Sans_GB','Microsoft_YaHei',Arial,sans-serif]">
+    <mobile-title-bar title="客户信息" back-action="goBack()" right-text="保存" right-action="saveCustomerInfo()"
+        style="--mobile-title-bar-bg: rgba(244, 244, 248, 0.88); --mobile-title-bar-color: #111111; --mobile-title-bar-shadow: none; --mobile-title-bar-title-size: 18px;"></mobile-title-bar>
 
-        <section class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-            <h2 class="mb-3 text-sm font-black">客户名片</h2>
-            <div class="grid grid-cols-2 gap-3">
-                <label class="block">
-                    <span class="text-xs font-bold text-slate-500">客户阶段</span>
-                    <select class="mt-1 h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-semibold outline-none focus:border-blue-400">
-                        <option>慢病管理服务期</option>
-                        <option>初次建档</option>
+    <main class="px-3.5 pb-[calc(32px+env(safe-area-inset-bottom,0px))] pt-[18px] max-[360px]:px-2.5">
+        <!-- 基础资料卡片：承载姓名、备注、阶段和负责人员等核心客户信息。 -->
+        <section class="mb-[18px] overflow-hidden rounded-3xl bg-white" aria-label="基本信息">
+            <label class="ml-4 grid min-h-16 grid-cols-[104px_minmax(0,1fr)] items-center gap-3 border-b border-black/10 py-2.5 pr-4 max-[360px]:ml-3.5 max-[360px]:grid-cols-[92px_minmax(0,1fr)] max-[360px]:pr-3.5">
+                <span class="min-w-0 text-base font-normal leading-5 text-[#6E6E73] max-[360px]:text-[15px]">客户姓名<span class="ml-0.5 text-sm text-[#f53f3f]">*</span></span>
+                <input id="customerName" class="w-full min-w-0 appearance-none border-0 bg-transparent text-right text-[15px] leading-6 text-[#111111] outline-none placeholder:text-[#999999]" type="text" value="张建国" placeholder="请输入">
+            </label>
+            <label class="ml-4 grid min-h-16 grid-cols-[104px_minmax(0,1fr)] items-center gap-3 border-b border-black/10 py-2.5 pr-4 max-[360px]:ml-3.5 max-[360px]:grid-cols-[92px_minmax(0,1fr)] max-[360px]:pr-3.5">
+                <span class="min-w-0 text-base font-normal leading-5 text-[#6E6E73] max-[360px]:text-[15px]">客户备注</span>
+                <input id="customerRemark" class="w-full min-w-0 appearance-none border-0 bg-transparent text-right text-[15px] leading-6 text-[#111111] outline-none placeholder:text-[#999999]" type="text" value="张大爷" placeholder="请输入">
+            </label>
+            <label class="ml-4 grid min-h-16 grid-cols-[104px_minmax(0,1fr)] items-center gap-3 border-b border-black/10 py-2.5 pr-4 max-[360px]:ml-3.5 max-[360px]:grid-cols-[92px_minmax(0,1fr)] max-[360px]:pr-3.5">
+                <span class="min-w-0 text-base font-normal leading-5 text-[#6E6E73] max-[360px]:text-[15px]">客户阶段<span class="ml-0.5 text-sm text-[#f53f3f]">*</span></span>
+                <span class="flex min-w-0 items-center gap-2">
+                    <select id="customerStage" class="w-full min-w-0 appearance-none border-0 bg-transparent text-right text-[15px] leading-6 text-[#111111] outline-none">
+                        <option>成交客户</option>
+                        <option>意向客户</option>
+                        <option>服务期客户</option>
                         <option>复购培育</option>
                     </select>
-                </label>
-                <label class="block">
-                    <span class="text-xs font-bold text-slate-500">客户来源</span>
-                    <input class="mt-1 h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-semibold outline-none focus:border-blue-400" value="有赞助手">
-                </label>
-                <label class="col-span-2 block">
-                    <span class="text-xs font-bold text-slate-500">运营备注</span>
-                    <textarea class="mt-1 min-h-24 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold leading-6 outline-none focus:border-blue-400">稳定复购，近期重点跟进营养干预服务。</textarea>
-                </label>
+                    <i class="fas fa-chevron-right shrink-0 text-[13px] text-[#c7c7cc]"></i>
+                </span>
+            </label>
+            <label class="ml-4 grid min-h-16 grid-cols-[104px_minmax(0,1fr)] items-center gap-3 py-2.5 pr-4 max-[360px]:ml-3.5 max-[360px]:grid-cols-[92px_minmax(0,1fr)] max-[360px]:pr-3.5">
+                <span class="min-w-0 text-base font-normal leading-5 text-[#6E6E73] max-[360px]:text-[15px]">负责人员<span class="ml-0.5 text-sm text-[#f53f3f]">*</span></span>
+                <span class="flex min-w-0 items-center gap-2">
+                    <select id="responsibleStaff" class="w-full min-w-0 appearance-none border-0 bg-transparent text-right text-[15px] leading-6 text-[#111111] outline-none">
+                        <option>李娜</option>
+                        <option>王敏</option>
+                        <option>陈晨</option>
+                        <option>赵雅</option>
+                    </select>
+                    <i class="fas fa-chevron-right shrink-0 text-[13px] text-[#c7c7cc]"></i>
+                </span>
+            </label>
+        </section>
+
+        <!-- 联系资料卡片：电话号码支持多条维护，地址使用多行输入便于录入完整信息。 -->
+        <section class="mb-[18px] overflow-hidden rounded-3xl bg-white" aria-label="联系信息">
+            <div class="ml-4 grid min-h-16 grid-cols-[104px_minmax(0,1fr)] items-center gap-3 border-b border-black/10 py-2.5 pr-4 max-[360px]:ml-3.5 max-[360px]:grid-cols-[92px_minmax(0,1fr)] max-[360px]:pr-3.5">
+                <span class="min-w-0 text-base font-normal leading-5 text-[#6E6E73] max-[360px]:text-[15px]">联系号码</span>
+                <div class="min-w-0 py-2" id="phoneList"></div>
             </div>
+            <label class="ml-4 grid min-h-16 grid-cols-[104px_minmax(0,1fr)] items-center gap-3 py-2.5 pr-4 max-[360px]:ml-3.5 max-[360px]:grid-cols-[92px_minmax(0,1fr)] max-[360px]:pr-3.5">
+                <span class="min-w-0 text-base font-normal leading-5 text-[#6E6E73] max-[360px]:text-[15px]">居住地址</span>
+                <textarea id="customerAddress" class="min-h-12 w-full min-w-0 resize-none appearance-none border-0 bg-transparent text-right text-[15px] leading-6 text-[#111111] outline-none placeholder:text-[#999999]" placeholder="请输入">浙江省杭州市余杭区闲林街道海滨南路88号</textarea>
+            </label>
+        </section>
+
+        <!-- 身份资料卡片：用于维护非必填的证件号码。 -->
+        <section class="mb-[18px] overflow-hidden rounded-3xl bg-white" aria-label="身份信息">
+            <label class="ml-4 grid min-h-16 grid-cols-[104px_minmax(0,1fr)] items-center gap-3 py-2.5 pr-4 max-[360px]:ml-3.5 max-[360px]:grid-cols-[92px_minmax(0,1fr)] max-[360px]:pr-3.5">
+                <span class="min-w-0 text-base font-normal leading-5 text-[#6E6E73] max-[360px]:text-[15px]">身份证号</span>
+                <input id="customerIdCard" class="w-full min-w-0 appearance-none border-0 bg-transparent text-right text-[15px] leading-6 text-[#111111] outline-none placeholder:text-[#999999]" type="text" value="330110195901011234" placeholder="请输入">
+            </label>
         </section>
     </main>
 
-    <div id="toast" class="pointer-events-none fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-slate-900/85 px-5 py-3 text-sm font-bold text-white opacity-0 transition-opacity">已保存</div>
+    <div id="toast" class="pointer-events-none fixed left-1/2 top-1/2 z-50 max-w-[78vw] -translate-x-1/2 -translate-y-1/2 rounded-xl bg-[#111111]/85 px-4 py-2.5 text-sm font-medium text-white opacity-0 transition-opacity"></div>
 
     <script>
-        function saveCustomerInfo() {
-            const toast = document.getElementById('toast');
-            toast.classList.remove('opacity-0');
-            setTimeout(() => toast.classList.add('opacity-0'), 1500);
+        const params = new URLSearchParams(window.location.search);
+        const customerId = params.get('id') || '1';
+        const storageKey = `customer-info:${customerId}`;
+        const defaultCustomerInfo = {
+            id: customerId,
+            name: '张建国',
+            remark: '张大爷',
+            stage: '成交客户',
+            responsibleStaff: [{ id: 'dietitian-001', name: '李娜', title: '主管营养师' }],
+            phones: ['13811115678', '0571-12345678'],
+            address: '浙江省杭州市余杭区闲林街道海滨南路88号',
+            idCard: '330110195901011234'
+        };
+        let phoneValues = [];
+
+        // 读取本地临时保存的数据，保持静态原型在页面跳转后仍能展示编辑结果。
+        function getStoredCustomerInfo() {
+            try {
+                return JSON.parse(sessionStorage.getItem(storageKey)) || {};
+            } catch (error) {
+                return {};
+            }
         }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.remove('opacity-0');
+            toast.classList.add('opacity-100');
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                toast.classList.remove('opacity-100');
+            }, 1400);
+        }
+
+        function renderPhones() {
+            const phoneList = document.getElementById('phoneList');
+            phoneList.innerHTML = '';
+            const values = phoneValues.length ? phoneValues : [''];
+
+            values.forEach((phone, index) => {
+                const item = document.createElement('div');
+                item.className = 'flex min-h-10 items-center gap-2 border-t border-black/[0.06] first:border-t-0';
+                item.innerHTML = `
+                    <input class="phone-input min-w-0 flex-1 appearance-none border-0 bg-transparent text-right text-[15px] leading-[22px] text-[#333333] outline-none placeholder:text-[#999999]" type="tel" value="${escapeAttribute(phone)}" placeholder="请输入">
+                    <button class="flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-full border-0 bg-transparent text-[15px] text-[#999999]" type="button" aria-label="删除号码"><i class="fas fa-minus-circle"></i></button>
+                `;
+                const input = item.querySelector('input');
+                input.addEventListener('input', () => {
+                    phoneValues[index] = input.value.trim();
+                });
+                item.querySelector('button').addEventListener('click', () => removePhone(index));
+                phoneList.appendChild(item);
+            });
+
+            const addButton = document.createElement('button');
+            addButton.className = 'flex min-h-[42px] w-full items-center justify-end gap-1.5 border-0 bg-transparent text-sm font-medium text-[#2f7af6]';
+            addButton.type = 'button';
+            addButton.innerHTML = '<i class="fas fa-plus-circle"></i><span>添加号码</span>';
+            addButton.addEventListener('click', addPhone);
+            phoneList.appendChild(addButton);
+        }
+
+        function addPhone() {
+            collectPhones();
+            phoneValues.push('');
+            renderPhones();
+        }
+
+        function removePhone(index) {
+            collectPhones();
+            phoneValues.splice(index, 1);
+            renderPhones();
+        }
+
+        function collectPhones() {
+            phoneValues = Array.from(document.querySelectorAll('.phone-input')).map(input => input.value.trim());
+        }
+
+        function validateRequired(value, message) {
+            if (String(value || '').trim()) return true;
+            showToast(message);
+            return false;
+        }
+
+        function saveCustomerInfo() {
+            collectPhones();
+            const name = document.getElementById('customerName').value.trim();
+            const stage = document.getElementById('customerStage').value;
+            const staffName = document.getElementById('responsibleStaff').value;
+
+            if (!validateRequired(name, '请填写客户姓名')) return;
+            if (!validateRequired(stage, '请选择客户阶段')) return;
+            if (!validateRequired(staffName, '请选择负责人员')) return;
+
+            const payload = {
+                id: customerId,
+                name,
+                remark: document.getElementById('customerRemark').value.trim(),
+                stage,
+                responsibleStaff: [{ name: staffName }],
+                phones: phoneValues.filter(Boolean),
+                address: document.getElementById('customerAddress').value.trim(),
+                idCard: document.getElementById('customerIdCard').value.trim()
+            };
+
+            sessionStorage.setItem(storageKey, JSON.stringify(payload));
+            showToast('客户信息已保存');
+            setTimeout(() => {
+                if (document.referrer) {
+                    window.history.back();
+                }
+            }, 520);
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function escapeAttribute(value) {
+            return String(value || '')
+                .replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        // 页面初始化：合并默认演示数据与本次会话保存的数据。
+        document.addEventListener('DOMContentLoaded', () => {
+            const data = { ...defaultCustomerInfo, ...getStoredCustomerInfo() };
+            document.getElementById('customerName').value = data.name || '';
+            document.getElementById('customerRemark').value = data.remark || '';
+            document.getElementById('customerStage').value = data.stage || '成交客户';
+            document.getElementById('responsibleStaff').value = (data.responsibleStaff && data.responsibleStaff[0] && data.responsibleStaff[0].name) || '李娜';
+            document.getElementById('customerAddress').value = data.address || '';
+            document.getElementById('customerIdCard').value = data.idCard || '';
+            phoneValues = Array.isArray(data.phones) ? [...data.phones] : [''];
+            renderPhones();
+        });
     </script>
 </body>
+
 </html>
