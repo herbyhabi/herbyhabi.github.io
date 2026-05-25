@@ -1333,6 +1333,7 @@
             border: 1px solid var(--line);
             border-radius: 12px;
             background: linear-gradient(180deg, #ffffff, #f8fbff);
+            overflow: visible;
         }
 
         .service-project-head {
@@ -1344,14 +1345,192 @@
         }
 
         .service-project-title {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
             color: var(--text-1);
             font-size: 14px;
             font-weight: 900;
         }
 
+        .service-project-icon {
+            width: 26px;
+            height: 26px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+            border-radius: 9px;
+            background: var(--blue-soft);
+            color: var(--blue);
+            font-size: 12px;
+        }
+
+        .service-project-icon.green {
+            background: var(--green-soft);
+            color: var(--green);
+        }
+
         .service-project-body {
             display: grid;
             gap: 8px;
+            overflow: visible;
+        }
+
+        /* 服务管理：随访卡片信息块，避免内容压缩后出现卡片内部滚动 */
+        .followup-summary {
+            display: grid;
+            gap: 10px;
+        }
+
+        .followup-block {
+            padding: 10px;
+            border: 1px solid rgba(116, 137, 164, 0.12);
+            border-radius: 10px;
+            background: rgba(244, 248, 253, 0.82);
+        }
+
+        .followup-block-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .followup-block-title {
+            color: var(--text-1);
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        .followup-source-tag {
+            display: inline-flex;
+            align-items: center;
+            min-height: 20px;
+            padding: 2px 7px;
+            border-radius: 999px;
+            background: var(--green-soft);
+            color: var(--green);
+            font-size: 11px;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .followup-info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .followup-info-item {
+            min-width: 0;
+        }
+
+        .followup-info-item.full {
+            grid-column: 1 / -1;
+        }
+
+        .followup-label {
+            margin-bottom: 4px;
+            color: var(--text-3);
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .followup-value {
+            color: var(--text-1);
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        .followup-date-value {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .followup-value.muted {
+            color: var(--text-2);
+            font-weight: 500;
+        }
+
+        /* 随访病种标签：与“随访任务”页面保持一致 */
+        .follow-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .follow-tag {
+            display: inline-flex;
+            align-items: center;
+            min-height: 20px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: #f3f6ff;
+            color: #5a78d8;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: 0;
+        }
+
+        .follow-tag.disease-hypertension {
+            background: #ffe7ec;
+            color: #ff6f82;
+        }
+
+        .follow-tag.disease-diabetes {
+            background: #ede8ff;
+            color: #9b85df;
+        }
+
+        .follow-tag.disease-heart {
+            background: #e9f1ff;
+            color: #5a84ff;
+        }
+
+        .follow-tag.disease-risk {
+            background: #fff2e8;
+            color: #d25f00;
+        }
+
+        .followup-status-tag {
+            display: inline-flex;
+            align-items: center;
+            min-height: 22px;
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: var(--orange-soft);
+            color: var(--orange);
+            font-size: 11px;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .followup-summary-text {
+            color: var(--text-2);
+            font-size: 12px;
+            font-weight: 500;
+            line-height: 1.4;
+            word-break: break-word;
+            font-style: italic;
+        }
+
+        .followup-plan-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .followup-plan-main {
+            min-width: 0;
         }
 
         .service-metric-grid {
@@ -1369,14 +1548,14 @@
         .service-metric-label {
             color: var(--text-3);
             font-size: 11px;
-            font-weight: 700;
+            font-weight: 500;
             margin-bottom: 5px;
         }
 
         .service-metric-value {
             color: var(--text-1);
             font-size: 14px;
-            font-weight: 900;
+            font-weight: 500;
         }
 
         .service-metric-value-row {
@@ -1398,7 +1577,7 @@
 
         .service-date {
             color: var(--text-1);
-            font-weight: 900;
+            font-weight: 500;
         }
 
         .overdue-tag {
@@ -1411,7 +1590,7 @@
             background: var(--red-soft);
             color: var(--red);
             font-size: 11px;
-            font-weight: 900;
+            font-weight: 500;
         }
 
         .text-action {
@@ -1419,7 +1598,7 @@
             background: transparent;
             color: var(--blue);
             font-size: 10px;
-            font-weight: 900;
+            font-weight: 500;
             white-space: nowrap;
             cursor: pointer;
         }
@@ -1912,6 +2091,14 @@
             .service-metric-grid {
                 grid-template-columns: 1fr;
             }
+
+            .followup-info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .followup-plan-row {
+                align-items: flex-start;
+            }
         }
     </style>
     <script src="../components/mobile/mobile-title-bar.js" defer></script>
@@ -2249,33 +2436,54 @@
                     <div class="service-project-list">
                         <div class="service-project-card">
                             <div class="service-project-head">
-                                <div class="service-project-title">定期健康随访</div>
-                                <span class="freq-tag">按需服务</span>
+                                <div class="service-project-title"><span class="service-project-icon"><i
+                                            class="fas fa-calendar-check"></i></span>定期健康随访</div>
+                                <!-- <span class="freq-tag">按需服务</span> -->
                             </div>
                             <div class="service-project-body">
-                                <div class="service-metric-grid">
-                                    <div class="service-metric">
-                                        <div class="service-metric-label">高危随访</div>
-                                        <div class="service-metric-value">2次</div>
+                                <!-- 定期健康随访：按随访来源展示最近一次记录和下次计划 -->
+                                <div class="followup-summary">
+                                    <div class="followup-block">
+                                        <div class="followup-block-head">
+                                            <div class="followup-label">上次随访情况</div>
+                                            <span class="followup-status-tag">控制不满意</span>
+                                        </div>
+                                        <div class="followup-info-grid">
+                                            <div class="followup-info-item full">
+                                                <div class="followup-value followup-date-value">
+                                                    <span>2026-04-18</span>
+                                                    <span class="follow-tags">
+                                                        <span class="follow-tag disease-hypertension">高</span>
+                                                        <span class="follow-tag disease-diabetes">糖</span>
+                                                        <span class="follow-tag">肺</span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="followup-info-item full">
+                                                <div class="followup-summary-text">"近期空腹血糖仍有波动，建议继续监测血糖并加强饮食、运动干预。"</div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="service-metric">
-                                        <div class="service-metric-label">患者随访</div>
-                                        <div class="service-metric-value">4次</div>
+                                    <div class="followup-block">
+                                        <div class="followup-plan-row">
+                                            <div class="followup-plan-main">
+                                                <div class="followup-label">下次随访计划</div>
+                                                <div class="followup-value"><span class="service-date">2026-05-10</span><span
+                                                        class="overdue-tag">已逾期</span></div>
+                                            </div>
+                                            <button class="text-action" type="button" onclick="startPreFollowUp()">预随访 <i
+                                                    class="fas fa-chevron-right"></i></button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="service-detail-row">
-                                    <span>下次随访：<span class="service-date">2026-05-10</span><span
-                                            class="overdue-tag">已逾期</span></span>
-                                    <button class="text-action" type="button" onclick="startPreFollowUp()">预随访 <i
-                                            class="fas fa-chevron-right"></i></button>
                                 </div>
                             </div>
                         </div>
 
                         <div class="service-project-card">
                             <div class="service-project-head">
-                                <div class="service-project-title">个性化健康指导</div>
-                                <span class="freq-tag">按需服务</span>
+                                <div class="service-project-title"><span class="service-project-icon green"><i
+                                            class="fas fa-notes-medical"></i></span>个性化健康指导</div>
+                                <!-- <span class="freq-tag">按需服务</span> -->
                             </div>
                             <div class="service-project-body">
                                 <div class="service-metric-grid">
