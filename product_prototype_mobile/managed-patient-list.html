@@ -199,54 +199,98 @@
             word-break: break-all;
         }
 
+        /* 在管病种标签：左侧病种圆标 + 右侧状态胶囊 */
         .manage-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 6px;
+            align-items: center;
+            padding-top: 1px;
         }
 
         .manage-tag {
-            width: 24px;
-            height: 24px;
+            display: inline-flex;
+            align-items: center;
+            min-width: 42px;
+            height: 20px;
+            border-radius: 999px;
+            background: #f3f6ff;
+            color: #5a78d8;
+            font-size: 13px;
+            font-weight: 800;
+            line-height: 1;
+            overflow: hidden;
+            letter-spacing: 0;
+        }
+
+        .manage-tag__icon {
+            width: 20px;
+            height: 20px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             padding: 0;
-            background: #FFF3E8;
-            color: #FF7D00;
-            font-size: 13px;
-            font-weight: 700;
+            flex: 0 0 auto;
             border-radius: 50%;
+            background: #5a84ff;
+            color: #ffffff;
+        }
+
+        .manage-tag__level {
+            min-width: 18px;
+            padding: 0 6px 0 4px;
+            color: currentColor;
+            text-align: center;
         }
 
         .manage-tag.high-risk {
-            background: #FFF3E8;
-            color: #FF7D00;
+            background: #ffeef0;
+            color: #ff6b7c;
         }
 
         .manage-tag.disease-hypertension {
-            background: #eef5ff;
-            color: #2f7af6;
+            background: #ffe7ec;
+            color: #ff6f82;
+        }
+
+        .manage-tag.disease-hypertension .manage-tag__icon {
+            background: #ff6578;
         }
 
         .manage-tag.disease-diabetes {
-            background: #fff7e8;
-            color: #fa8c16;
+            background: #ede8ff;
+            color: #9b85df;
+        }
+
+        .manage-tag.disease-diabetes .manage-tag__icon {
+            background: #8a6be8;
         }
 
         .manage-tag.disease-heart {
-            background: #fff1f1;
-            color: #d92d20;
+            background: #e9f1ff;
+            color: #5a84ff;
+        }
+
+        .manage-tag.disease-heart .manage-tag__icon {
+            background: #4f7dff;
         }
 
         .manage-tag.disease-stroke {
-            background: #f4f0ff;
-            color: #7c3aed;
+            background: #edf6ff;
+            color: #5f89db;
+        }
+
+        .manage-tag.disease-stroke .manage-tag__icon {
+            background: #5f8cff;
         }
 
         .manage-tag.disease-kidney {
-            background: #ecfeff;
-            color: #0e7490;
+            background: #eef8fb;
+            color: #42a5b9;
+        }
+
+        .manage-tag.disease-kidney .manage-tag__icon {
+            background: #38a8bd;
         }
 
         /* 空状态 */
@@ -592,10 +636,10 @@
 
         // 在管患者数据
         const managedPatients = [
-            { id: 1, name: '王建国', gender: '男', age: 68, phone: '13812341234', idCard: '330326195601011234', diseases: [{ name: '高血压', level: '一级' }, { name: '糖尿病', level: '二级' }] },
+            { id: 1, name: '王建国', gender: '男', age: 68, phone: '13812341234', idCard: '330326195601011234', diseases: [{ name: '高血压', level: '一级' }, { name: '糖尿病', level: '强化' }] },
             { id: 2, name: '李秀英', gender: '女', age: 72, phone: '13912345678', idCard: '330326195201025678', diseases: [{ name: '高血压', level: '二级' }] },
-            { id: 3, name: '张大山', gender: '男', age: 65, phone: '13712349012', idCard: '330326195801019012', diseases: [{ name: '糖尿病', level: '一级' }] },
-            { id: 4, name: '陈美丽', gender: '女', age: 58, phone: '13612343456', idCard: '330326196601023456', diseases: [{ name: '高血压', level: '一级' }, { name: '冠心病', level: '二级' }] }
+            { id: 3, name: '张大山', gender: '男', age: 65, phone: '13712349012', idCard: '330326195801019012', diseases: [{ name: '糖尿病', level: '常规' }] },
+            { id: 4, name: '陈美丽', gender: '女', age: 58, phone: '13612343456', idCard: '330326196601023456', diseases: [{ name: '高血压', level: '一级' }, { name: '冠心病', level: '常规' }] }
         ];
 
         // 在管高危数据
@@ -687,7 +731,12 @@
         function renderPatientCard(container, patient, isHighRisk) {
             const diseaseTags = patient.diseases.map(d => {
                 const tagClass = `manage-tag ${getDiseaseBadgeClass(d.name)} ${isHighRisk ? 'high-risk' : ''}`.trim();
-                return `<span class="${tagClass}" title="${d.name} · ${d.level}">${getDiseaseBadgeText(d.name)}</span>`;
+                return `
+                    <span class="${tagClass}" title="${d.name} · ${d.level}">
+                        <span class="manage-tag__icon">${getDiseaseBadgeText(d.name)}</span>
+                        <span class="manage-tag__level">${getDiseaseLevelText(d.level)}</span>
+                    </span>
+                `;
             }).join('');
 
             const card = GroupedInfoCard.render(container, {
@@ -756,6 +805,19 @@
                 '肾病': '肾'
             };
             return badgeTextMap[diseaseName] || diseaseName.slice(0, 1);
+        }
+
+        // 根据病种分级生成胶囊右侧短标
+        function getDiseaseLevelText(level) {
+            const levelTextMap = {
+                '一级': '1',
+                '二级': '2',
+                '三级': '3',
+                '高危': '危',
+                '常规': '常',
+                '强化': '强'
+            };
+            return levelTextMap[level] || level;
         }
 
         // 根据病种生成不同颜色的圆形标识
