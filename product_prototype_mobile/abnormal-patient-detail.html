@@ -532,9 +532,6 @@
                 id: 3, name: '张大山', gender: 'male', age: 65, phone: '13711119012',
                 idCard: '310111111111119012', grid: '第一网格', address: '大洋街道1001',
                 anomalies: [
-                    // 越级就诊 - 2条
-                    { type: 'skipVisit', category: '越级就诊', date: '2024-01-14', institution: '市第一人民医院', referral: false },
-                    { type: 'skipVisit', category: '越级就诊', date: '2024-01-08', institution: '省人民医院', referral: false },
                     // 体征异常 - 1条
                     { type: 'vital', category: '血脂异常', indicator: '总胆固醇', value: '6.8mmol/L', date: '2024-01-12', referral: false },
                     // 危险因素异常 - 1条
@@ -551,7 +548,6 @@
             'risk': { name: '危险因素异常' },
             'complication': { name: '合/并发症异常' },
             'visit': { name: '未及时复诊' },
-            'skipVisit': { name: '越级就诊' },
             'other': { name: '其他异常' }
         };
 
@@ -588,6 +584,7 @@
                 // 异常类型分组复用通用分组信息卡片，标题、数量和展开状态由组件统一承载。
                 const groupCard = GroupedInfoCard.render(groupEl, {
                     title: config.name,
+                    titleIcon: 'assets/icons/exclamation-circle.svg',
                     showDivider: true,
                     subtitle: anomalies.length + '条',
                     collapsible: true,
@@ -621,9 +618,6 @@
                     break;
                 case 'visit':
                     infoRows = '<div class="info-row"><span class="info-label">应复诊日期</span><span class="info-value">' + anomaly.expectedDate + '</span></div><div class="info-row"><span class="info-label">上次就诊</span><span class="info-value">' + anomaly.lastDate + '</span></div>';
-                    break;
-                case 'skipVisit':
-                    infoRows = '<div class="info-row"><span class="info-label">就诊机构</span><span class="info-value">' + anomaly.institution + '</span></div><div class="info-row"><span class="info-label">就诊日期</span><span class="info-value">' + anomaly.date + '</span></div>';
                     break;
                 case 'other':
                     infoRows = '<div class="info-row"><span class="info-label">异常结果</span><span class="info-value">' + anomaly.result + '</span></div><div class="info-row"><span class="info-label">发生日期</span><span class="info-value">' + anomaly.occurDate + '</span></div>';

@@ -727,7 +727,6 @@ textarea {
             risk: '危险因素异常',
             complication: '合/并发症异常',
             visit: '未及时复诊',
-            skipVisit: '越级就诊',
             other: '其他异常'
         };
 
@@ -822,8 +821,7 @@ textarea {
                     { name: '高血压', level: '高危' }
                 ],
                 anomalies: [
-                    { type: 'complication', label: '合/并发症异常' },
-                    { type: 'skipVisit', label: '越级就诊' }
+                    { type: 'complication', label: '合/并发症异常' }
                 ]
             }
         ];
@@ -834,7 +832,6 @@ textarea {
             { type: 'risk', label: '危险因素异常' },
             { type: 'complication', label: '合/并发症异常' },
             { type: 'visit', label: '未及时复诊' },
-            { type: 'skipVisit', label: '越级就诊' },
             { type: 'other', label: '其他异常' }
         ];
 
@@ -1038,7 +1035,6 @@ textarea {
                 risk: 'red',
                 complication: 'red',
                 visit: 'cyan',
-                skipVisit: 'orange',
                 other: 'gray'
             };
             return colorMap[type] || 'gray';

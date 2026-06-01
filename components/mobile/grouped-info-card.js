@@ -73,7 +73,7 @@
                     @apply flex min-w-0 flex-1 flex-wrap items-center gap-1.5;
                 }
                 .grouped-info-card__title-icon {
-                    @apply h-4 w-4 shrink-0 object-contain;
+                    @apply h-5 w-5 shrink-0 object-contain;
                 }
                 .grouped-info-card__title {
                     @apply min-w-0 whitespace-normal text-base font-bold leading-5 text-[#333333];
@@ -102,7 +102,13 @@
                     -webkit-tap-highlight-color: transparent;
                 }
                 .grouped-info-card__collapse-icon {
-                    @apply h-4 w-4 object-contain transition-transform;
+                    @apply h-3.5 w-3.5 bg-[#4E5969] transition-transform;
+                    mask-position: center;
+                    mask-repeat: no-repeat;
+                    mask-size: contain;
+                    -webkit-mask-position: center;
+                    -webkit-mask-repeat: no-repeat;
+                    -webkit-mask-size: contain;
                     transform: rotate(90deg);
                 }
                 .grouped-info-card.is-collapsed .grouped-info-card__collapse-icon {
@@ -314,12 +320,13 @@
     }
 
     function createCollapseIcon() {
-        const image = document.createElement('img');
-        image.className = 'grouped-info-card__collapse-icon';
-        image.src = resolveCollapseIconSrc();
-        image.alt = '';
-        image.setAttribute('aria-hidden', 'true');
-        return image;
+        const icon = document.createElement('span');
+        const src = `url("${resolveCollapseIconSrc()}")`;
+        icon.className = 'grouped-info-card__collapse-icon';
+        icon.style.maskImage = src;
+        icon.style.webkitMaskImage = src;
+        icon.setAttribute('aria-hidden', 'true');
+        return icon;
     }
 
     function createSkeleton() {
