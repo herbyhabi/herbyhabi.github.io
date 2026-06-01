@@ -136,14 +136,6 @@
             gap: 12px;
         }
 
-        .task-card {
-            background: var(--bg-2);
-            border-radius: var(--radius-large);
-            padding: 16px;
-            margin-bottom: 0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-        }
-
         .task-list .grouped-info-card {
             position: relative;
         }
@@ -159,62 +151,6 @@
         .task-card-items {
             display: grid;
             gap: 2px;
-        }
-
-        .task-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 12px;
-        }
-
-        .patient-info {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .patient-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            flex-shrink: 0;
-            background: var(--arcoblue-1);
-            color: var(--arcoblue-6);
-        }
-
-        .patient-avatar.female {
-            background: var(--pink-1);
-            color: var(--pink-6);
-        }
-
-        .patient-name {
-            font-size: var(--font-size-title-1);
-            font-weight: 600;
-        }
-
-        .patient-name.male {
-            color: var(--arcoblue-6);
-        }
-
-        .patient-name.female {
-            color: var(--pink-6);
-        }
-
-        .patient-name.other {
-            color: var(--arcoblue-6);
-        }
-
-        .patient-age {
-            font-size: var(--font-size-caption);
-            color: var(--text-3);
-            background: var(--bg-1);
-            padding: 2px 8px;
-            border-radius: var(--radius-small);
         }
 
         .phone-btn {
@@ -247,15 +183,6 @@
             color: white;
         }
 
-        .task-details {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 12px;
-            padding-bottom: 12px;
-            border-bottom: 1px dashed var(--border);
-        }
-
         .detail-item {
             display: flex;
             align-items: flex-start;
@@ -276,93 +203,6 @@
             color: var(--text-2);
             line-height: 26px;
             word-break: break-all;
-        }
-
-        .tag-group {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 0;
-        }
-
-        .tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            min-height: 26px;
-            padding: 4px 9px;
-            font-size: var(--font-size-caption);
-            line-height: 1.2;
-            border-radius: 999px;
-            white-space: nowrap;
-        }
-
-        .tag.disease {
-            min-height: auto;
-            padding: 4px 10px;
-            background: var(--orange-1);
-            color: var(--orange-6);
-            border: 0;
-            border-radius: var(--radius-small);
-            font-weight: 400;
-        }
-
-        .tag.type {
-            min-height: 28px;
-            padding: 5px 11px;
-            background: #e8f3ff;
-            color: #165dff;
-            border: 1px solid rgba(22, 93, 255, 0.2);
-            font-weight: 700;
-            margin-left: auto;
-        }
-
-        .tag.type::before {
-            padding: 2px 5px;
-            border-radius: 999px;
-            background: rgba(22, 93, 255, 0.1);
-            font-size: 10px;
-            line-height: 1;
-            font-weight: 700;
-        }
-
-        .tag.type.warning {
-            background: #fff7e8;
-            color: #d25f00;
-            border-color: rgba(255, 125, 0, 0.24);
-        }
-
-        .tag.type.warning::before {
-            background: rgba(255, 125, 0, 0.12);
-        }
-
-        .tag.type.danger {
-            background: #ffece8;
-            color: #c9352b;
-            border-color: rgba(245, 63, 63, 0.22);
-        }
-
-        .tag.type.danger::before {
-            background: rgba(245, 63, 63, 0.12);
-        }
-
-        .next-date {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: var(--font-size-caption);
-            color: var(--text-3);
-            margin-bottom: 12px;
-        }
-
-        .next-date i {
-            color: var(--arcoblue-6);
-        }
-
-        .next-date span {
-            color: var(--arcoblue-6);
-            font-weight: 500;
         }
 
         /* 随访任务标签：左侧类型标签 + 右侧业务状态 */
@@ -429,37 +269,6 @@
         .follow-type.danger {
             background: #ffece8;
             color: #c9352b;
-        }
-
-        .card-actions {
-            display: flex;
-            gap: 12px;
-        }
-
-        .action-btn {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            padding: 10px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-medium);
-            background: var(--bg-2);
-            font-size: var(--font-size-body-1);
-            color: var(--text-2);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .action-btn.primary {
-            background: var(--arcoblue-6);
-            border-color: var(--arcoblue-6);
-            color: white;
-        }
-
-        .action-btn:active {
-            opacity: 0.8;
         }
 
         /* Toast */
@@ -571,14 +380,12 @@ body {
     background: transparent !important;
 }
 
-.patient-card,
 .user-card,
 .org-card,
 .menu-list,
 .info-card,
 .detail-card,
 .record-card,
-.task-card,
 .anomaly-card,
 .form-card,
 .card,
@@ -596,14 +403,6 @@ body {
     backdrop-filter: blur(12px);
 }
 
-.session-item,
-.system-item,
-.menu-item,
-.list-item,
-.record-item,
-.info-row {
-    border-color: rgba(119, 140, 166, 0.18) !important;
-}
 input,
 select,
 textarea {
@@ -611,63 +410,21 @@ textarea {
     box-shadow: inset 0 0 0 1px rgba(122, 150, 184, 0.08);
 }
 
-.action-btn.primary,
-.submit-btn,
-.filter-btn.confirm,
-.modal-btn.confirm,
-.login-btn,
-.code-btn:not(:disabled) {
-    background: linear-gradient(145deg, #4b9bff, #2f7af6) !important;
-    color: #fff !important;
-    border: 0 !important;
-    box-shadow: 0 8px 16px rgba(45, 101, 170, 0.13);
-}
-
-.action-btn,
-.filter-btn.reset,
-.modal-btn.cancel,
-.popup-option,
-.phone-btn,
-.call-btn {
+.phone-btn {
     border-color: rgba(123, 147, 176, 0.14) !important;
 }
 
-.toast,
-.arco-toast {
+.toast {
     background: rgba(12, 20, 34, 0.82) !important;
     border-radius: 8px !important;
 }
-/* 首页风格补充覆盖 */
-.info-section,
-.info-list,
-.app-section,
-.form-section,
-.form-item,
-.disease-card,
-.indicator-item,
-.quick-action-item {
-    background: rgba(255, 255, 255, 0.92) !important;
-    border: 1px solid rgba(123, 147, 176, 0.14) !important;
-    border-radius: 16px !important;
-    box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12) !important;
-    backdrop-filter: blur(12px);
-}
 
-.patient-list,
-.task-list,
-.record-list,
-.search-results {
+.task-list {
     position: relative;
     z-index: 1;
 }
 
-.action-btn,
-.submit-btn,
-.code-btn,
-.filter-btn,
-.modal-btn,
-.phone-btn,
-.call-btn {
+.phone-btn {
     border-radius: 10px !important;
     font-weight: 700;
 }
@@ -820,7 +577,7 @@ textarea {
                 name: '王建国',
                 gender: 'male',
                 age: 68,
-                phone: '138****1234',
+                phone: '13811111234',
                 idCard: '310111111111111234',
                 diseases: ['高' , '糖'],
                 followUpType: '常规随访',
@@ -831,7 +588,7 @@ textarea {
                 name: '李秀英',
                 gender: 'female',
                 age: 72,
-                phone: '139****5678',
+                phone: '13911115678',
                 idCard: '310111111111115678',
                 diseases: ['糖'],
                 followUpType: '控制不满意随访',
@@ -842,7 +599,7 @@ textarea {
                 name: '张大山',
                 gender: 'male',
                 age: 65,
-                phone: '137****9012',
+                phone: '13711119012',
                 idCard: '310111111111119012',
                 diseases: ['冠', '高'],
                 followUpType: '常规随访',
@@ -853,7 +610,7 @@ textarea {
                 name: '陈美丽',
                 gender: 'female',
                 age: 58,
-                phone: '136****3456',
+                phone: '13611113456',
                 idCard: '310111111111113456',
                 diseases: ['高'],
                 followUpType: '常规随访',
@@ -864,7 +621,7 @@ textarea {
                 name: '刘志强',
                 gender: 'male',
                 age: 70,
-                phone: '135****7890',
+                phone: '13511117890',
                 idCard: '310111111111117890',
                 diseases: ['糖', '高血脂'],
                 followUpType: '控制不满意随访',
@@ -875,7 +632,7 @@ textarea {
                 name: '周明华',
                 gender: 'male',
                 age: 62,
-                phone: '134****5555',
+                phone: '13411115555',
                 idCard: '310111111111115555',
                 diseases: ['高血脂'],
                 followUpType: '常规随访',
@@ -886,7 +643,7 @@ textarea {
                 name: '吴秀兰',
                 gender: 'female',
                 age: 66,
-                phone: '133****6666',
+                phone: '13311116666',
                 idCard: '310111111111116666',
                 diseases: ['高', '糖', '冠'],
                 followUpType: '常规随访',
@@ -897,7 +654,7 @@ textarea {
                 name: '郑国强',
                 gender: 'male',
                 age: 73,
-                phone: '132****7777',
+                phone: '13211117777',
                 idCard: '310111111111117777',
                 diseases: ['糖'],
                 followUpType: '控制不满意随访',
@@ -912,7 +669,7 @@ textarea {
                 name: '赵明华',
                 gender: 'male',
                 age: 75,
-                phone: '133****1111',
+                phone: '13311111111',
                 idCard: '310111111111111111',
                 diseases: ['高', '冠'],
                 followUpType: '高危随访',
@@ -923,7 +680,7 @@ textarea {
                 name: '孙丽娟',
                 gender: 'female',
                 age: 68,
-                phone: '132****2222',
+                phone: '13211112222',
                 idCard: '310111111111112222',
                 diseases: ['糖', '糖'],
                 followUpType: '高危随访',
@@ -934,7 +691,7 @@ textarea {
                 name: '周国强',
                 gender: 'male',
                 age: 72,
-                phone: '131****3333',
+                phone: '13111113333',
                 idCard: '310111111111113333',
                 diseases: ['脑'],
                 followUpType: '高危随访',
@@ -945,7 +702,7 @@ textarea {
                 name: '钱秀英',
                 gender: 'female',
                 age: 70,
-                phone: '130****4444',
+                phone: '13011114444',
                 idCard: '310111111111114444',
                 diseases: ['冠', '心力衰竭'],
                 followUpType: '高危随访',
@@ -956,7 +713,7 @@ textarea {
                 name: '李国华',
                 gender: 'male',
                 age: 78,
-                phone: '129****5555',
+                phone: '12911115555',
                 idCard: '310111111111115555',
                 diseases: ['心力衰竭', '心律失常'],
                 followUpType: '高危随访',

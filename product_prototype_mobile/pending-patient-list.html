@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>待管患者</title>
+    <script src="../assets/vendor/tailwind-browser@4.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/@arco-design/mobile-react/dist/arco.css">
     <style>
@@ -28,7 +29,7 @@
             --text-2: #4E5969;
             --text-3: #86909C;
             --text-4: #C9CDD4;
-            --bg-1: #F2F3F5;
+            --bg-1: #F8FAFC;
             --bg-2: #FFFFFF;
             --border: #E5E6EB;
             --radius-small: 4px;
@@ -98,16 +99,15 @@
         }
 
         /* 搜索和筛选区域 */
-        .filter-section {
-            background: var(--bg-2);
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--border);
+        .quick-filter-section {
+            padding: 12px 16px 0;
         }
 
         .filter-tags {
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
+            margin-top: 12px;
         }
 
         .filter-tag {
@@ -150,159 +150,134 @@
             font-weight: 600;
         }
 
-        .patient-card {
-            background: var(--bg-2);
-            border-radius: var(--radius-large);
-            padding: 16px;
+        /* 待管患者卡片：复用通用分组组件承载患者基础信息和底部操作 */
+        .patient-list .grouped-info-card {
+            position: relative;
             margin-bottom: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            background: rgba(255, 255, 255, 0.92) !important;
+            border: 1px solid rgba(123, 147, 176, 0.14) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12) !important;
+            backdrop-filter: blur(12px);
         }
 
-        .patient-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 12px;
+        .patient-list .grouped-info-card__header {
+            min-height: 52px;
         }
 
-        .patient-info {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .patient-list .grouped-info-card__heading {
+            gap: 16px;
         }
 
-        .patient-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
+        .patient-list .grouped-info-card__title {
+            padding-left: 18px;
+        }
+
+        .patient-list .grouped-info-card__status {
+            margin-left: 2px;
+        }
+
+        .pending-call-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            z-index: 2;
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
-            flex-shrink: 0;
-            background: var(--arcoblue-1);
-            color: var(--arcoblue-6);
-        }
-
-        .patient-avatar.female {
-            background: var(--pink-1);
-            color: var(--pink-6);
-        }
-
-        .patient-name {
-            font-size: var(--font-size-title-1);
-            font-weight: 600;
-        }
-
-        .patient-name.male {
-            color: var(--arcoblue-6);
-        }
-
-        .patient-name.female {
-            color: var(--pink-6);
-        }
-
-        .patient-name.other {
-            color: var(--arcoblue-6);
-        }
-
-        .patient-age {
-            font-size: var(--font-size-caption);
-            color: var(--text-3);
-            background: var(--bg-1);
-            padding: 2px 8px;
-            border-radius: var(--radius-small);
-        }
-
-        .phone-btn {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            padding: 6px 12px;
+            padding: 0;
+            border: 0;
+            border-radius: 50% !important;
             background: var(--green-1);
             color: var(--green-6);
-            border: none;
-            border-radius: var(--radius-medium);
-            font-size: var(--font-size-caption);
+            font-size: 14px;
             cursor: pointer;
             transition: all 0.2s;
         }
 
-        .phone-btn:active {
+        .pending-call-btn:active {
             background: var(--green-6);
             color: white;
         }
 
-        .patient-details {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 12px;
-            padding-bottom: 12px;
-            border-bottom: 1px dashed var(--border);
+        .pending-card-body {
+            padding: 0 16px 14px;
         }
 
-        .detail-item {
+        .pending-card-items {
+            display: grid;
+            gap: 4px;
+        }
+
+        .pending-card-item {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 8px;
+            border: 0 !important;
             font-size: var(--font-size-body-1);
+            line-height: 22px;
         }
 
-        .detail-label {
+        .pending-card-label {
+            min-width: 68px;
             color: var(--text-3);
-            min-width: 60px;
+            flex-shrink: 0;
         }
 
-        .detail-value {
+        .pending-card-value {
+            min-width: 0;
             color: var(--text-2);
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        .pending-card-value.id-card {
             font-family: 'SF Mono', monospace;
         }
 
-        .disease-tags {
+        /* 待管病种标签：与“随访任务”页面保持一致 */
+        .follow-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .disease-tag {
-            padding: 4px 10px;
-            background: var(--orange-1);
-            color: var(--orange-6);
-            font-size: var(--font-size-caption);
-            border-radius: var(--radius-small);
-        }
-
-        .card-actions {
-            display: flex;
-            gap: 12px;
-        }
-
-        .action-btn {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             gap: 6px;
-            padding: 10px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-medium);
-            background: var(--bg-2);
-            font-size: var(--font-size-body-1);
-            color: var(--text-2);
-            cursor: pointer;
-            transition: all 0.2s;
+            align-items: center;
+            padding-top: 2px;
         }
 
-        .action-btn.primary {
-            background: var(--arcoblue-6);
-            border-color: var(--arcoblue-6);
-            color: white;
+        .follow-tag {
+            display: inline-flex;
+            align-items: center;
+            min-height: 20px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: #f3f6ff;
+            color: #5a78d8;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: 0;
         }
 
-        .action-btn:active {
-            opacity: 0.8;
+        .follow-tag.disease-hypertension {
+            background: #ffe7ec;
+            color: #ff6f82;
+        }
+
+        .follow-tag.disease-diabetes {
+            background: #ede8ff;
+            color: #9b85df;
+        }
+
+        .follow-tag.disease-heart {
+            background: #e9f1ff;
+            color: #5a84ff;
+        }
+
+        .follow-tag.disease-risk {
+            background: #fff2e8;
+            color: #d25f00;
         }
 
         /* 筛选弹窗 */
@@ -489,9 +464,7 @@
 /* 首页风格统一覆盖 */
 body {
     color: #0f1f33;
-    background:
-        radial-gradient(circle at 82% 2%, rgba(181, 213, 255, 0.8) 0 110px, transparent 220px),
-        linear-gradient(180deg, #d9ebff 0%, #f4faff 28%, #f7fbff 68%, #ffffff 100%) !important;
+    background: #f8fafc !important;
     -webkit-font-smoothing: antialiased;
 }
 
@@ -538,7 +511,6 @@ body {
     font-weight: 800 !important;
 }
 
-.tabs,
 .search-section,
 .stats-bar,
 .page-container,
@@ -547,22 +519,12 @@ body {
     background: transparent !important;
 }
 
-.tab-item.active {
-    color: #2f7af6 !important;
-}
-
-.tab-item.active::after {
-    background: #2f7af6 !important;
-}
-
-.patient-card,
 .user-card,
 .org-card,
 .menu-list,
 .info-card,
 .detail-card,
 .record-card,
-.task-card,
 .anomaly-card,
 .form-card,
 .card,
@@ -580,14 +542,6 @@ body {
     backdrop-filter: blur(12px);
 }
 
-.session-item,
-.system-item,
-.menu-item,
-.list-item,
-.record-item,
-.info-row {
-    border-color: rgba(119, 140, 166, 0.18) !important;
-}
 input,
 select,
 textarea {
@@ -595,74 +549,31 @@ textarea {
     box-shadow: inset 0 0 0 1px rgba(122, 150, 184, 0.08);
 }
 
-.action-btn.primary,
-.submit-btn,
-.filter-btn.confirm,
-.modal-btn.confirm,
-.login-btn,
-.code-btn:not(:disabled) {
+.filter-btn.confirm {
     background: linear-gradient(145deg, #4b9bff, #2f7af6) !important;
     color: #fff !important;
     border: 0 !important;
     box-shadow: 0 8px 16px rgba(45, 101, 170, 0.13);
 }
 
-.action-btn,
-.filter-btn.reset,
-.modal-btn.cancel,
-.popup-option,
-.phone-btn,
-.call-btn {
+.filter-btn.reset {
     border-color: rgba(123, 147, 176, 0.14) !important;
 }
 
-.toast,
-.arco-toast {
+.toast {
     background: rgba(12, 20, 34, 0.82) !important;
     border-radius: 8px !important;
 }
-/* 首页风格补充覆盖 */
-.info-section,
-.info-list,
-.app-section,
-.form-section,
-.form-item,
-.filter-section,
-.disease-card,
-.indicator-item,
-.quick-action-item {
-    background: rgba(255, 255, 255, 0.92) !important;
-    border: 1px solid rgba(123, 147, 176, 0.14) !important;
-    border-radius: 16px !important;
-    box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12) !important;
-    backdrop-filter: blur(12px);
-}
 
-.patient-list,
-.task-list,
-.record-list,
-.search-results {
+.patient-list {
     position: relative;
     z-index: 1;
 }
 
-.action-btn,
-.submit-btn,
-.code-btn,
-.filter-btn,
-.modal-btn,
-.phone-btn,
-.call-btn {
+.filter-btn {
     border-radius: 10px !important;
     font-weight: 700;
 }
-
-.navbar + .tabs,
-.tabs {
-    border-bottom-color: rgba(118, 140, 165, 0.16) !important;
-    backdrop-filter: blur(10px);
-}
-
 
 /* 全局顶部与查询框统一 */
 .navbar {
@@ -742,7 +653,7 @@ textarea {
 }
 
 .search-section,
-.filter-section,
+.quick-filter-section,
 .search-header {
     background: transparent !important;
 }
@@ -750,13 +661,15 @@ textarea {
     </style>
     <script src="../components/mobile/mobile-title-bar.js" defer></script>
     <script src="../components/mobile/mobile-search.js"></script>
+    <script src="../components/shared/status-tag.js"></script>
+    <script src="../components/mobile/grouped-info-card.js"></script>
 </head>
 <body>
     <!-- 导航栏 -->
     <mobile-title-bar title="待管患者" back-action="goBack()"></mobile-title-bar>
 
     <!-- 搜索和筛选 -->
-    <div class="filter-section">
+    <div class="quick-filter-section">
         <div class="search-box">
             <i class="fas fa-search"></i>
             <input type="text" id="searchInput" placeholder="搜索姓名、身份证、手机号" oninput="handleSearch()">
@@ -809,7 +722,7 @@ textarea {
                 phone: '138****1234',
                 idCard: '310111111111111234',
                 grid: '第一网格',
-                diseases: ['高血压', '糖尿病'],
+                diseases: ['高', '糖'],
                 address: '幸福社区1号楼201室'
             },
             {
@@ -820,7 +733,7 @@ textarea {
                 phone: '139****5678',
                 idCard: '310111111111115678',
                 grid: '第二网格',
-                diseases: ['高血压', '冠心病'],
+                diseases: ['高', '冠'],
                 address: '幸福社区2号楼305室'
             },
             {
@@ -831,7 +744,7 @@ textarea {
                 phone: '137****9012',
                 idCard: '310111111111119012',
                 grid: '第一网格',
-                diseases: ['糖尿病', '高血脂'],
+                diseases: ['糖', '脂'],
                 address: '幸福社区3号楼102室'
             },
             {
@@ -842,7 +755,7 @@ textarea {
                 phone: '136****3456',
                 idCard: '310111111111113456',
                 grid: '第三网格',
-                diseases: ['高血压'],
+                diseases: ['高'],
                 address: '幸福社区4号楼408室'
             },
             {
@@ -853,13 +766,13 @@ textarea {
                 phone: '135****7890',
                 idCard: '310111111111117890',
                 grid: '第二网格',
-                diseases: ['糖尿病', '冠心病', '高血压'],
+                diseases: ['糖', '冠', '高'],
                 address: '幸福社区5号楼506室'
             }
         ];
 
         // 病种选项
-        const diseaseOptions = ['高血压', '糖尿病', '冠心病', '高血脂', '脑卒中', '慢阻肺'];
+        const diseaseOptions = ['高', '糖', '冠', '脂', '脑卒中', '慢阻肺'];
         
         // 网格选项（根据用户角色动态调整）
         const gridOptions = ['第一网格', '第二网格', '第三网格', '第四网格'];
@@ -898,53 +811,82 @@ textarea {
                 return;
             }
 
-            let html = `<div class="patient-count">共有 <span>${patients.length}</span> 个待管患者</div>`;
-            
-            patients.forEach(patient => {
-                const genderClass = patient.gender === 'female' ? 'female' : (patient.gender === 'male' ? 'male' : 'other');
-                const avatarIcon = patient.gender === 'female' ? 'fa-female' : 'fa-male';
-                const diseaseTags = patient.diseases.map(d => `<span class="disease-tag">${d}</span>`).join('');
-                
-                html += `
-                    <div class="patient-card">
-                        <div class="patient-header">
-                            <div class="patient-info">
-                                <div class="patient-avatar ${genderClass}">
-                                    <i class="fas ${avatarIcon}"></i>
-                                </div>
-                                <span class="patient-name ${genderClass}">${patient.name}</span>
-                                <span class="patient-age">${patient.age}岁</span>
-                            </div>
-                            <button class="phone-btn" onclick="callPatient('${patient.phone}', '${patient.name}')">
-                                <i class="fas fa-phone"></i>
-                                <span>呼叫</span>
-                            </button>
-                        </div>
-                        <div class="patient-details">
-                            <div class="detail-item">
-                                <span class="detail-label">身份证</span>
-                                <span class="detail-value">${patient.idCard}</span>
-                            </div>
-                            
-                        </div>
-                        <div class="disease-tags">
-                            ${diseaseTags}
-                        </div>
-                        <div class="card-actions">
-                            <button class="action-btn" onclick="viewHealthProfile(${patient.id})">
-                                <i class="fas fa-user-circle"></i>
-                                <span>健康画像</span>
-                            </button>
-                            <button class="action-btn primary" onclick="viewPendingDetail(${patient.id})">
-                                <i class="fas fa-clipboard-list"></i>
-                                <span>待管信息</span>
-                            </button>
-                        </div>
-                    </div>
-                `;
+            listContainer.innerHTML = `<div class="patient-count">共有 <span>${patients.length}</span> 个待管患者</div>`;
+            patients.forEach(patient => renderPatientCard(listContainer, patient));
+        }
+
+        // 渲染单个待管患者卡片，卡片头部和底部操作复用通用分组组件
+        function renderPatientCard(container, patient) {
+            const genderText = patient.gender === 'female' ? '女' : '男';
+            const card = GroupedInfoCard.render(container, {
+                title: patient.name,
+                status: {
+                    label: `${genderText}·${patient.age}岁`,
+                    size: 'small',
+                    color: 'default'
+                },
+                showDivider: true,
+                actions: [
+                    {
+                        label: '健康画像',
+                        icon: 'fas fa-user-circle',
+                        onClick: () => viewHealthProfile(patient.id)
+                    },
+                    {
+                        label: '待管信息',
+                        icon: 'fas fa-clipboard-list',
+                        primary: true,
+                        onClick: () => viewPendingDetail(patient.id)
+                    }
+                ]
             });
 
-            listContainer.innerHTML = html;
+            const callButton = document.createElement('button');
+            callButton.className = 'pending-call-btn';
+            callButton.type = 'button';
+            callButton.setAttribute('aria-label', `呼叫${patient.name}`);
+            callButton.innerHTML = '<i class="fas fa-phone"></i>';
+            callButton.addEventListener('click', () => callPatient(patient.phone, patient.name));
+            card.appendChild(callButton);
+
+            const content = document.createElement('div');
+            content.className = 'pending-card-body';
+            content.innerHTML = `
+                <div class="pending-card-items">
+                    <div class="pending-card-item">
+                        <span class="pending-card-label">证件号码</span>
+                        <span class="pending-card-value id-card">${patient.idCard}</span>
+                    </div>
+                    <div class="pending-card-item">
+                        <span class="pending-card-label">归属网格</span>
+                        <span class="pending-card-value">${patient.grid}</span>
+                    </div>
+                    <div class="pending-card-item">
+                        <span class="pending-card-label">待管病种</span>
+                        <span class="pending-card-value">
+                            <span class="follow-tags">${renderDiseaseTags(patient.diseases)}</span>
+                        </span>
+                    </div>
+                </div>
+            `;
+
+            const actionBar = card.querySelector('.grouped-info-card__actions');
+            card.insertBefore(content, actionBar);
+        }
+
+        // 生成待管病种标签，样式与“随访任务”页面保持一致
+        function renderDiseaseTags(diseases) {
+            return diseases.map(disease => (
+                `<span class="follow-tag ${getDiseaseTagClass(disease)}">${disease}</span>`
+            )).join('');
+        }
+
+        // 根据病种生成标签色
+        function getDiseaseTagClass(disease) {
+            if (disease.includes('高')) return 'disease-hypertension';
+            if (disease.includes('糖')) return 'disease-diabetes';
+            if (disease.includes('冠') || disease.includes('心')) return 'disease-heart';
+            return disease.includes('高危') || disease.includes('并发') || disease.includes('后遗') ? 'disease-risk' : '';
         }
 
         // 搜索功能

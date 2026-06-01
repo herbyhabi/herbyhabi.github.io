@@ -1,9 +1,42 @@
 (function () {
+    const currentScript = document.currentScript;
     const styleId = 'grouped-info-card-styles';
     const componentName = 'grouped-info-card';
+    const tailwindFileName = 'tailwind-browser@4.js';
+    const collapseIconFileName = 'collapse-line.svg';
+
+    function resolveTailwindSrc() {
+        if (currentScript && currentScript.src) {
+            return new URL(`../../assets/vendor/${tailwindFileName}`, currentScript.src).href;
+        }
+        return '../../assets/vendor/tailwind-browser@4.js';
+    }
+
+    function resolveCollapseIconSrc() {
+        if (currentScript && currentScript.src) {
+            return new URL(`../../product_prototype_mobile/assets/icons/${collapseIconFileName}`, currentScript.src).href;
+        }
+        return 'product_prototype_mobile/assets/icons/collapse-line.svg';
+    }
+
+    function ensureTailwindRuntime() {
+        if (window.tailwind) return;
+
+        const src = resolveTailwindSrc();
+        const hasTailwindScript = Array.from(document.scripts).some((script) => {
+            return script.src === src || script.src.endsWith(`/assets/vendor/${tailwindFileName}`);
+        });
+        if (hasTailwindScript) return;
+
+        // 组件样式使用 text/tailwindcss，需要确保本地 Tailwind 浏览器运行时可用。
+        const script = document.createElement('script');
+        script.src = src;
+        document.head.appendChild(script);
+    }
 
     function ensureStyles() {
         if (document.getElementById(styleId)) return;
+        ensureTailwindRuntime();
 
         // 分组信息卡片基础样式，使用本地 Tailwind 运行时编译。
         const style = document.createElement('style');
@@ -12,7 +45,10 @@
         style.textContent = `
             @layer components {
                 .grouped-info-card {
-                    @apply box-border flex w-full flex-col rounded-xl border border-slate-100 bg-white font-sans text-[#333333];
+                    @apply box-border flex w-full flex-col rounded-xl border border-transparent bg-white font-sans text-[#333333];
+                }
+                .grouped-info-card.is-bordered {
+                    @apply border-slate-100;
                 }
                 .grouped-info-card.is-clickable {
                     @apply cursor-pointer active:scale-[0.99];
@@ -27,11 +63,17 @@
                 .grouped-info-card__header.has-divider {
                     @apply border-b border-dashed border-slate-200;
                 }
+                .grouped-info-card.is-collapsed .grouped-info-card__header.has-divider {
+                    @apply border-b-0;
+                }
                 .grouped-info-card__heading {
-                    @apply flex min-w-0 items-start justify-between gap-3;
+                    @apply flex min-w-0 items-center justify-between gap-3;
                 }
                 .grouped-info-card__title-wrap {
                     @apply flex min-w-0 flex-1 flex-wrap items-center gap-1.5;
+                }
+                .grouped-info-card__title-icon {
+                    @apply h-4 w-4 shrink-0 object-contain;
                 }
                 .grouped-info-card__title {
                     @apply min-w-0 whitespace-normal text-base font-bold leading-5 text-[#333333];
@@ -53,6 +95,24 @@
                     @apply min-w-0 whitespace-normal text-sm font-normal leading-[22px] text-[#666666];
                     overflow-wrap: anywhere;
                     word-break: break-word;
+                }
+                .grouped-info-card__collapse-toggle {
+                    @apply ml-1 inline-flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent leading-none transition-colors active:bg-slate-100;
+                    font-family: inherit;
+                    -webkit-tap-highlight-color: transparent;
+                }
+                .grouped-info-card__collapse-icon {
+                    @apply h-4 w-4 object-contain transition-transform;
+                    transform: rotate(90deg);
+                }
+                .grouped-info-card.is-collapsed .grouped-info-card__collapse-icon {
+                    transform: rotate(0deg);
+                }
+                .grouped-info-card__body {
+                    @apply contents;
+                }
+                .grouped-info-card.is-collapsed .grouped-info-card__body {
+                    @apply hidden;
                 }
                 .grouped-info-card__actions {
                     @apply order-[100] grid min-h-[52px] items-center gap-0 border-t border-dashed border-slate-200 px-4 py-2;
@@ -111,6 +171,7 @@
     function normalizeOptions(options = {}) {
         return {
             title: options.title || '',
+            titleIcon: normalizeTitleIcon(options.titleIcon || options.icon),
             status: normalizeStatus(options.status),
             subtitle: options.subtitle || '',
             description: options.description || '',
@@ -123,7 +184,35 @@
             actions: normalizeActions(options.actions),
             loading: Boolean(options.loading),
             disabled: Boolean(options.disabled),
+            bordered: Boolean(options.bordered),
+            collapsible: Boolean(options.collapsible),
+            collapsed: Boolean(options.collapsed),
+            onExpand: typeof options.onExpand === 'function' ? options.onExpand : null,
+            onCollapse: typeof options.onCollapse === 'function' ? options.onCollapse : null,
+            onToggle: typeof options.onToggle === 'function' ? options.onToggle : null,
+            onCollapsedChange: typeof options.onCollapsedChange === 'function' ? options.onCollapsedChange : null,
             onClick: typeof options.onClick === 'function' ? options.onClick : null
+        };
+    }
+
+    function normalizeTitleIcon(icon) {
+        if (!icon) return null;
+
+        if (typeof icon === 'string') {
+            const src = icon.trim();
+            return src ? { src, alt: '' } : null;
+        }
+
+        if (typeof icon !== 'object') return null;
+
+        const src = String(icon.src || icon.url || icon.path || '').trim();
+        if (!src) return null;
+
+        return {
+            src,
+            alt: String(icon.alt || ''),
+            width: Number(icon.width) || null,
+            height: Number(icon.height) || null
         };
     }
 
@@ -210,6 +299,29 @@
         return tag;
     }
 
+    function createTitleIcon(icon) {
+        if (!icon) return null;
+
+        // 标题图标仅支持本地 SVG 图片路径，由业务侧传入 assets 下的图标资源。
+        const image = document.createElement('img');
+        image.className = 'grouped-info-card__title-icon';
+        image.src = icon.src;
+        image.alt = icon.alt;
+        if (!icon.alt) image.setAttribute('aria-hidden', 'true');
+        if (icon.width) image.width = icon.width;
+        if (icon.height) image.height = icon.height;
+        return image;
+    }
+
+    function createCollapseIcon() {
+        const image = document.createElement('img');
+        image.className = 'grouped-info-card__collapse-icon';
+        image.src = resolveCollapseIconSrc();
+        image.alt = '';
+        image.setAttribute('aria-hidden', 'true');
+        return image;
+    }
+
     function createSkeleton() {
         const card = document.createElement('section');
         card.className = 'grouped-info-card';
@@ -227,6 +339,57 @@
         return card;
     }
 
+    function setCardCollapsed(card, config, collapsed, event = null) {
+        if (!config.collapsible) return;
+
+        const nextCollapsed = Boolean(collapsed);
+        const previousCollapsed = card.classList.contains('is-collapsed');
+        if (nextCollapsed === previousCollapsed) return;
+
+        card.classList.toggle('is-collapsed', nextCollapsed);
+        card.dataset.collapsed = String(nextCollapsed);
+        if (card.body) card.body.hidden = nextCollapsed;
+        if (card.collapseToggle) {
+            card.collapseToggle.setAttribute('aria-expanded', String(!nextCollapsed));
+            card.collapseToggle.setAttribute('aria-label', nextCollapsed ? '展开内容' : '收起内容');
+        }
+
+        const payload = {
+            collapsed: nextCollapsed,
+            expanded: !nextCollapsed,
+            card,
+            config,
+            event
+        };
+        if (config.onCollapsedChange) config.onCollapsedChange(payload);
+        if (config.onToggle) config.onToggle(payload);
+        if (nextCollapsed && config.onCollapse) config.onCollapse(payload);
+        if (!nextCollapsed && config.onExpand) config.onExpand(payload);
+    }
+
+    function toggleCardCollapsed(card, config, event) {
+        setCardCollapsed(card, config, !card.classList.contains('is-collapsed'), event);
+    }
+
+    function createBody(card) {
+        // 主体容器承载业务侧后续追加的内容，便于折叠能力只控制内容区显隐。
+        const body = document.createElement('div');
+        body.className = 'grouped-info-card__body';
+        card.body = body;
+        return body;
+    }
+
+    function patchBodyAppend(card, body, nativeAppendChild) {
+        // 兼容历史用法：业务侧继续 card.appendChild(content)，内容会进入主体区域。
+        card.appendBodyChild = (child) => body.appendChild(child);
+        card.appendChild = (child) => {
+            if (child === body || child.classList?.contains('grouped-info-card__header') || child.classList?.contains('grouped-info-card__actions')) {
+                return nativeAppendChild(child);
+            }
+            return body.appendChild(child);
+        };
+    }
+
     function createCard(options = {}) {
         ensureStyles();
         const config = normalizeOptions(options);
@@ -236,6 +399,7 @@
         // 基础卡片只负责通用头部信息，业务列表内容由各页面自行实现
         const card = document.createElement('section');
         card.className = 'grouped-info-card';
+        if (config.bordered) card.classList.add('is-bordered');
         if (config.disabled) card.classList.add('is-disabled');
         if (config.onClick) {
             card.classList.add('is-clickable');
@@ -249,7 +413,7 @@
             });
         }
 
-        if (!config.title && !config.status && !config.subtitle && !config.description) {
+        if (!config.title && !config.status && !config.subtitle && !config.description && !config.collapsible) {
             const empty = document.createElement('div');
             empty.className = 'grouped-info-card__empty';
             empty.textContent = config.emptyText;
@@ -257,17 +421,25 @@
             return card;
         }
 
+        const nativeAppendChild = card.appendChild.bind(card);
+        const body = createBody(card);
+        patchBodyAppend(card, body, nativeAppendChild);
+
         const header = document.createElement('div');
         header.className = 'grouped-info-card__header';
         if (config.showDivider) header.classList.add('has-divider');
 
-        if (config.title || config.status || config.subtitle) {
+        if (config.title || config.status || config.subtitle || config.collapsible) {
             const heading = document.createElement('div');
             heading.className = 'grouped-info-card__heading';
 
             if (config.title || config.status) {
                 const titleWrap = document.createElement('div');
                 titleWrap.className = 'grouped-info-card__title-wrap';
+
+                if (config.title && config.titleIcon) {
+                    titleWrap.appendChild(createTitleIcon(config.titleIcon));
+                }
 
                 if (config.title) {
                     const title = document.createElement('div');
@@ -283,11 +455,28 @@
                 heading.appendChild(titleWrap);
             }
 
-            if (config.subtitle) {
+            if (config.subtitle || config.collapsible) {
                 const subtitle = document.createElement('div');
                 subtitle.className = 'grouped-info-card__subtitle';
-                appendHighlightedText(subtitle, config.subtitle, config.keyword, fieldCanHighlight(config, 'subtitle'));
+                if (config.subtitle) {
+                    appendHighlightedText(subtitle, config.subtitle, config.keyword, fieldCanHighlight(config, 'subtitle'));
+                }
                 heading.appendChild(subtitle);
+            }
+
+            if (config.collapsible) {
+                const toggle = document.createElement('button');
+                toggle.type = 'button';
+                toggle.className = 'grouped-info-card__collapse-toggle';
+                toggle.setAttribute('aria-label', config.collapsed ? '展开内容' : '收起内容');
+                toggle.setAttribute('aria-expanded', String(!config.collapsed));
+                toggle.appendChild(createCollapseIcon());
+                toggle.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    toggleCardCollapsed(card, config, event);
+                });
+                card.collapseToggle = toggle;
+                heading.appendChild(toggle);
             }
 
             header.appendChild(heading);
@@ -300,7 +489,15 @@
             header.appendChild(description);
         }
 
-        card.appendChild(header);
+        nativeAppendChild(header);
+        nativeAppendChild(body);
+        if (config.collapsible && config.collapsed) {
+            card.classList.add('is-collapsed');
+            card.dataset.collapsed = 'true';
+            body.hidden = true;
+        }
+        card.setCollapsed = (collapsed, event = null) => setCardCollapsed(card, config, collapsed, event);
+        card.toggleCollapsed = (event = null) => toggleCardCollapsed(card, config, event);
         appendActions(card, config.actions, config);
         return card;
     }

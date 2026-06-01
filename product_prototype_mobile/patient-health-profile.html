@@ -1597,15 +1597,11 @@
             border: 0;
             background: transparent;
             color: var(--blue);
-            font-size: 10px;
+            font-size: 13px;
             font-weight: 500;
             white-space: nowrap;
             cursor: pointer;
-        }
-
-        .text-action i {
             margin-left: 3px;
-            font-size: 10px;
         }
 
         .check-plan {
@@ -1733,7 +1729,6 @@
 
         .plan-item-name span {
             display: -webkit-box;
-            /* -webkit-line-clamp: 2; */
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
@@ -2471,8 +2466,6 @@
                                                 <div class="followup-value"><span class="service-date">2026-05-10</span><span
                                                         class="overdue-tag">已逾期</span></div>
                                             </div>
-                                            <button class="text-action" type="button" onclick="startPreFollowUp()">预随访 <i
-                                                    class="fas fa-chevron-right"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -2483,23 +2476,19 @@
                             <div class="service-project-head">
                                 <div class="service-project-title"><span class="service-project-icon green"><i
                                             class="fas fa-notes-medical"></i></span>个性化健康指导</div>
+                                <button class="section-action" type="button"
+                                    onclick="showToast('查看健康处方详情（样式同居民端）')">查看详情<i
+                                        class="fas fa-chevron-right"></i></button>
                                 <!-- <span class="freq-tag">按需服务</span> -->
                             </div>
                             <div class="service-project-body">
                                 <div class="service-metric-grid">
                                     <div class="service-metric">
-                                        <div class="service-metric-label">健康指导次数</div>
+                                        <div class="service-metric-label">本年指导次数</div>
                                         <div class="service-metric-value">3次</div>
                                     </div>
                                     <div class="service-metric">
-
-
-                                        <div class="service-metric-value-row">
-                                            <div class="service-metric-label">上次开方</div>
-                                            <button class="text-action" type="button"
-                                                onclick="showToast('查看健康处方详情（样式同居民端）')">查看详情<i
-                                                    class="fas fa-chevron-right"></i></button>
-                                        </div>
+                                        <div class="service-metric-label">上次开方</div>
                                         <div class="service-metric-value">2026-04-18</div>
                                     </div>
                                 </div>
@@ -2509,7 +2498,8 @@
 
                     <div class="check-plan">
                         <div class="section-head">
-                            <div class="section-title">检查计划</div>
+                            <div class="section-title"><span class="service-project-icon"><i
+                                        class="fas fa-clipboard-list"></i></span>检查计划</div>
                         </div>
                         <div class="plan-stats">
                             <div class="plan-stat month">
