@@ -395,64 +395,6 @@
         }
 
         /* 底部导航 */
-        .tabbar {
-            position: fixed;
-            left: 50%;
-            bottom: 0;
-            transform: translateX(-50%);
-            z-index: 100;
-            width: 100%;
-            min-height: calc(72px + env(safe-area-inset-bottom, 0px));
-            padding: 8px 14px calc(8px + env(safe-area-inset-bottom, 0px));
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            background: rgba(255, 255, 255, 0.96);
-            border-top: 1px solid rgba(118, 140, 165, 0.16);
-            box-shadow: 0 -10px 28px rgba(55, 83, 116, 0.08);
-            backdrop-filter: blur(14px);
-        }
-
-        .tabbar-item {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            border: 0;
-            background: transparent;
-            color: #8c8f94;
-            font: 500 12px/1 -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif;
-            cursor: pointer;
-        }
-
-        .tabbar-item i {
-            font-size: 22px;
-        }
-
-        .tabbar-item.active {
-            color: var(--arcoblue-6);
-            font-weight: 700;
-        }
-
-        .tabbar-badge {
-            position: absolute;
-            top: 1px;
-            right: calc(50% - 26px);
-            min-width: 20px;
-            height: 20px;
-            border-radius: 999px;
-            background: #ff3749;
-            color: #fff;
-            border: 2px solid #fff;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 5px;
-            font-weight: 800;
-        }
-
         /* Toast 提示 */
         .toast {
             position: fixed;
@@ -978,6 +920,7 @@
     </style>
     <script src="../components/mobile/mobile-title-bar.js" defer></script>
     <script src="../components/mobile/mobile-search.js"></script>
+    <script src="../modules/medical-staff-tabbar.js" defer></script>
 </head>
 
 <body>
@@ -1020,22 +963,7 @@
         <div class="sys-detail-list" id="sysDetailList"></div>
     </div>
 
-    <!-- 底部导航 -->
-    <nav class="tabbar">
-        <button class="tabbar-item" type="button" onclick="goToPage('home')">
-            <i class="fas fa-house"></i>
-            <span>首页</span>
-        </button>
-        <button class="tabbar-item active" type="button" onclick="goToPage('message')">
-            <i class="fas fa-comment-dots"></i>
-            <span>消息</span>
-            <span class="tabbar-badge">12</span>
-        </button>
-        <button class="tabbar-item" type="button" onclick="goToPage('profile')">
-            <i class="fas fa-user"></i>
-            <span>我的</span>
-        </button>
-    </nav>
+    <medical-staff-tabbar active="message" message-badge="12"></medical-staff-tabbar>
 
     <script>
         // Toast 提示函数
@@ -1319,16 +1247,6 @@
             window.location.href = `patient-chat-session.html?residentId=${residentId}&name=${encodeURIComponent(name)}`;
         }
 
-        // 底部导航跳转
-        function goToPage(page) {
-            if (page === 'home') {
-                window.location.href = 'medical-staff-home.html';
-            } else if (page === 'message') {
-                // 当前页面
-            } else if (page === 'profile') {
-                window.location.href = 'medical-staff-profile.html';
-            }
-        }
     </script>
 </body>
 

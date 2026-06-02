@@ -1966,80 +1966,6 @@
             color: #fff;
         }
 
-        .workbench-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .workbench-item {
-            width: 100%;
-            min-height: 76px;
-            padding: 14px;
-            border: 1px solid var(--line);
-            border-radius: 14px;
-            background: #fff;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-align: left;
-            cursor: pointer;
-        }
-
-        .workbench-item.active {
-            border-color: rgba(47, 122, 246, 0.42);
-            background: var(--blue-soft);
-        }
-
-        .workbench-icon {
-            width: 42px;
-            height: 42px;
-            flex: 0 0 auto;
-            border-radius: 12px;
-            display: grid;
-            place-items: center;
-            font-size: 18px;
-        }
-
-        .workbench-item.specialist .workbench-icon {
-            background: #eaf3ff;
-            color: var(--blue);
-        }
-
-        .workbench-item.public-health .workbench-icon {
-            background: var(--green-soft);
-            color: var(--green);
-        }
-
-        .workbench-item.operation .workbench-icon {
-            background: #fff4e2;
-            color: var(--orange);
-        }
-
-        .workbench-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .workbench-name {
-            display: block;
-            color: var(--text-1);
-            font-size: 15px;
-            font-weight: 900;
-        }
-
-        .workbench-desc {
-            margin-top: 4px;
-            color: var(--text-3);
-            font-size: 12px;
-            line-height: 1.35;
-        }
-
-        .workbench-arrow {
-            color: var(--text-3);
-            font-size: 13px;
-        }
-
         @media (max-width: 360px) {
             .record-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2648,48 +2574,6 @@
         </div>
     </div>
 
-    <div class="modal-mask" id="workbenchModal" onclick="closeWorkbenchModal(event)">
-        <div class="modal" onclick="event.stopPropagation()">
-            <div class="modal-head">
-                <div>
-                    <div class="modal-title">切换工作台</div>
-                    <div class="tag-helper">请选择要演示的场景</div>
-                </div>
-                <button class="modal-close" type="button" onclick="closeWorkbenchModal(event)"><i
-                        class="fas fa-xmark"></i></button>
-            </div>
-            <div class="workbench-list">
-                <button class="workbench-item specialist" type="button" data-workbench-option="specialist"
-                    onclick="selectWorkbench('specialist')">
-                    <span class="workbench-icon"><i class="fas fa-stethoscope"></i></span>
-                    <span class="workbench-info">
-                        <span class="workbench-name">专科慢病</span>
-                        <span class="workbench-desc">专科医生慢病管理场景</span>
-                    </span>
-                    <i class="fas fa-chevron-right workbench-arrow"></i>
-                </button>
-                <button class="workbench-item public-health" type="button" data-workbench-option="public-health"
-                    onclick="selectWorkbench('public-health')">
-                    <span class="workbench-icon"><i class="fas fa-hospital"></i></span>
-                    <span class="workbench-info">
-                        <span class="workbench-name">公卫慢病</span>
-                        <span class="workbench-desc">基层公卫慢病管理场景</span>
-                    </span>
-                    <i class="fas fa-chevron-right workbench-arrow"></i>
-                </button>
-                <button class="workbench-item operation" type="button" data-workbench-option="operation"
-                    onclick="selectWorkbench('operation')">
-                    <span class="workbench-icon"><i class="fas fa-headset"></i></span>
-                    <span class="workbench-info">
-                        <span class="workbench-name">运营中心</span>
-                        <span class="workbench-desc">客户运营与档案跟进场景</span>
-                    </span>
-                    <i class="fas fa-chevron-right workbench-arrow"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
     <div class="floating-actions">
         <button class="float-action primary" type="button" onclick="openAppointmentModal()"><i
                 class="fas fa-calendar-plus"></i><span>预约</span></button>
@@ -2702,6 +2586,7 @@
     <script src="../components/shared/status-tag.js"></script>
     <script src="../components/mobile/mobile-modal.js"></script>
     <script src="../components/mobile/mobile-tabs.js"></script>
+    <script src="../modules/workbench-switcher-modal.js"></script>
     <script src="../modules/resident-tag-modal.js"></script>
     <script src="../modules/past-medical-history-modal.js"></script>
     <script src="../modules/medication-dynamic-modal.js"></script>
@@ -2724,6 +2609,11 @@
             'public-health': '公卫慢病',
             'operation': '运营中心'
         };
+        WorkbenchSwitcherModal.init({
+            title: '切换工作台',
+            selectedType: getInitialWorkbench(),
+            onSelect: selectWorkbench
+        });
         const appointmentOrgs = {
             visit: [
                 { id: 'org001', name: '滨海社区卫生服务中心', departments: ['全科门诊', '慢病管理科', '中医科'] }
@@ -2861,16 +2751,13 @@
         }
 
         function showWorkbenchModal() {
-            document.getElementById('workbenchModal').classList.add('show');
+            WorkbenchSwitcherModal.open({
+                selectedType: getInitialWorkbench()
+            });
         }
 
         function closeWorkbenchModal(event) {
-            const shouldClose = !event
-                || event.target.id === 'workbenchModal'
-                || (event.currentTarget && event.currentTarget.classList.contains('modal-close'));
-            if (shouldClose) {
-                document.getElementById('workbenchModal').classList.remove('show');
-            }
+            WorkbenchSwitcherModal.close();
         }
 
         function selectWorkbench(type) {
@@ -3143,9 +3030,6 @@
             });
             document.querySelectorAll('[data-workspace="clinical"]').forEach(item => {
                 item.hidden = isOperation;
-            });
-            document.querySelectorAll('[data-workbench-option]').forEach(item => {
-                item.classList.toggle('active', item.dataset.workbenchOption === type);
             });
         }
 

@@ -370,164 +370,6 @@
             z-index: 1;
         }
 
-        /* ===== Arco Design 风格底部弹出弹窗 (Popup) ===== */
-        .popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.45);
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.25s ease, visibility 0.25s ease;
-        }
-
-        .popup-overlay.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .popup-content {
-            position: fixed;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: #fff;
-            border-radius: var(--border-radius-xlarge) var(--border-radius-xlarge) 0 0;
-            padding: var(--spacing-6) var(--spacing-6);
-            z-index: 1001;
-            transform: translateY(100%);
-            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-            max-height: 70vh;
-            overflow-y: auto;
-        }
-
-        .popup-overlay.show .popup-content {
-            transform: translateY(0);
-        }
-
-        /* 弹窗顶部拖拽指示条 */
-        .popup-indicator {
-            width: 36px;
-            height: 4px;
-            background: var(--gray-4);
-            border-radius: 2px;
-            margin: 0 auto var(--spacing-5);
-        }
-
-        .popup-header {
-            text-align: center;
-            margin-bottom: var(--spacing-6);
-        }
-
-        .popup-title {
-            font-size: var(--font-size-title-1);
-            font-weight: 600;
-            color: var(--gray-10);
-            margin-bottom: var(--spacing-1);
-        }
-
-        .popup-subtitle {
-            font-size: var(--font-size-body-1);
-            color: var(--gray-6);
-        }
-
-        /* ===== 工作台列表 ===== */
-        .workbench-list {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-3);
-        }
-
-        .workbench-item {
-            display: flex;
-            align-items: center;
-            padding: var(--spacing-4);
-            background: var(--gray-1);
-            border-radius: var(--border-radius-large);
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 1.5px solid transparent;
-        }
-
-        .workbench-item:active {
-            background: var(--arcoblue-1);
-            border-color: var(--arcoblue-6);
-            transform: scale(0.98);
-        }
-
-        .workbench-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: var(--border-radius-medium);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: var(--spacing-4);
-            font-size: 20px;
-            flex-shrink: 0;
-        }
-
-        .workbench-item.specialist .workbench-icon {
-            background: var(--arcoblue-1);
-            color: var(--arcoblue-6);
-        }
-
-        .workbench-item.public-health .workbench-icon {
-            background: #E8FFEA;
-            color: var(--green-6);
-        }
-
-        .workbench-item.operation .workbench-icon {
-            background: #FFF3E8;
-            color: var(--orange-6);
-        }
-
-        .workbench-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .workbench-name {
-            font-size: var(--font-size-body-3);
-            font-weight: 500;
-            color: var(--gray-10);
-            margin-bottom: 2px;
-        }
-
-        .workbench-desc {
-            font-size: var(--font-size-body-1);
-            color: var(--gray-6);
-        }
-
-        .workbench-arrow {
-            color: var(--gray-5);
-            font-size: 14px;
-            flex-shrink: 0;
-            margin-left: var(--spacing-2);
-        }
-
-        /* 弹窗取消按钮 */
-        .popup-cancel {
-            margin-top: var(--spacing-4);
-            width: 100%;
-            height: 44px;
-            background: transparent;
-            border: 1px solid var(--gray-3);
-            border-radius: var(--border-radius-medium);
-            font-size: var(--font-size-body-3);
-            color: var(--gray-8);
-            cursor: pointer;
-            font-family: var(--font-family);
-            transition: all 0.2s;
-        }
-
-        .popup-cancel:active {
-            background: var(--gray-1);
-        }
-
         /* ===== Arco Design 风格 Toast ===== */
         .arco-toast {
             position: fixed;
@@ -573,9 +415,6 @@
             .footer {
                 padding-bottom: calc(var(--spacing-8) + env(safe-area-inset-bottom));
             }
-            .popup-content {
-                padding-bottom: calc(var(--spacing-6) + env(safe-area-inset-bottom));
-            }
         }
 
         /* 首页风格统一覆盖 */
@@ -610,9 +449,7 @@
         }
 
         .logo,
-        .login-container,
-        .popup-content,
-        .workbench-item {
+        .login-container {
             background: rgba(255, 255, 255, 0.92) !important;
             border: 1px solid rgba(123, 147, 176, 0.14);
             box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12);
@@ -642,6 +479,8 @@
         }
     </style>
     <script src="../components/mobile/mobile-search.js"></script>
+    <script src="../components/mobile/mobile-modal.js"></script>
+    <script src="../modules/workbench-switcher-modal.js"></script>
 </head>
 <body>
     <!-- 背景装饰 -->
@@ -713,40 +552,6 @@
         <p>&copy; 2026 xxx平台 版权所有</p>
     </div>
 
-    <!-- 工作台选择弹窗 (Arco Design Popup 风格 - 底部弹出) -->
-    <div class="popup-overlay" id="workbenchPopup">
-        <div class="popup-content">
-            <div class="popup-indicator"></div>
-            <div class="popup-header">
-                <h3 class="popup-title">选择工作台</h3>
-                <p class="popup-subtitle">请选择您要进入的工作台</p>
-            </div>
-            <div class="workbench-list">
-                <div class="workbench-item specialist" onclick="selectWorkbench('specialist')">
-                    <div class="workbench-icon">
-                        <i class="fas fa-stethoscope"></i>
-                    </div>
-                    <div class="workbench-info">
-                        <div class="workbench-name">专科慢病</div>
-                        <!-- <div class="workbench-desc">专科医生慢病管理工作台</div> -->
-                    </div>
-                    <i class="fas fa-chevron-right workbench-arrow"></i>
-                </div>
-                <div class="workbench-item public-health" onclick="selectWorkbench('public-health')">
-                    <div class="workbench-icon">
-                        <i class="fas fa-hospital"></i>
-                    </div>
-                    <div class="workbench-info">
-                        <div class="workbench-name">公卫慢病</div>
-                        <!-- <div class="workbench-desc">基层公卫慢病管理工作台</div> -->
-                    </div>
-                    <i class="fas fa-chevron-right workbench-arrow"></i>
-                </div>
-            </div>
-            <button class="popup-cancel" onclick="closeWorkbenchPopup()">取消</button>
-        </div>
-    </div>
-
     <!-- Arco Design 风格 Toast -->
     <div class="arco-toast" id="arcoToast">
         <i class="toast-icon fas fa-check-circle"></i>
@@ -764,8 +569,13 @@
         const passwordError = document.getElementById('passwordError');
         const togglePassword = document.getElementById('togglePassword');
         const loginBtn = document.getElementById('loginBtn');
-        const workbenchPopup = document.getElementById('workbenchPopup');
         const arcoToast = document.getElementById('arcoToast');
+
+        WorkbenchSwitcherModal.init({
+            title: '选择工作台',
+            options: ['specialist', 'public-health'],
+            onSelect: selectWorkbench
+        });
 
         // 切换密码显示/隐藏
         togglePassword.addEventListener('click', () => {
@@ -828,14 +638,12 @@
 
         // 显示工作台选择弹窗
         function showWorkbenchPopup() {
-            workbenchPopup.classList.add('show');
-            document.body.style.overflow = 'hidden';
+            WorkbenchSwitcherModal.open();
         }
 
         // 关闭工作台选择弹窗
         function closeWorkbenchPopup() {
-            workbenchPopup.classList.remove('show');
-            document.body.style.overflow = '';
+            WorkbenchSwitcherModal.close();
         }
 
         // 选择工作台
@@ -850,6 +658,7 @@
             localStorage.setItem('selectedWorkbench', type);
             localStorage.setItem('workbenchName', workbenchNames[type]);
 
+            closeWorkbenchPopup();
             showToast(`正在进入${workbenchNames[type]}...`);
 
             // 延迟跳转到首页
@@ -857,13 +666,6 @@
                 window.location.href = 'medical-staff-home.html';
             }, 500);
         }
-
-        // 点击遮罩关闭弹窗
-        workbenchPopup.addEventListener('click', (e) => {
-            if (e.target === workbenchPopup) {
-                closeWorkbenchPopup();
-            }
-        });
 
         // Arco Design 风格 Toast 提示
         let toastTimer = null;

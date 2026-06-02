@@ -517,222 +517,6 @@
             background: linear-gradient(145deg, #a8b5c9, #8998ad);
         }
 
-        .tabbar {
-            position: fixed;
-            left: 50%;
-            bottom: 0;
-            transform: translateX(-50%);
-            z-index: 100;
-            width: 100%;
-            min-height: calc(72px + env(safe-area-inset-bottom, 0px));
-            padding: 8px 14px calc(8px + env(safe-area-inset-bottom, 0px));
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            background: rgba(255, 255, 255, 0.96);
-            border-top: 1px solid rgba(118, 140, 165, 0.16);
-            box-shadow: 0 -10px 28px rgba(55, 83, 116, 0.08);
-            backdrop-filter: blur(14px);
-        }
-
-        .tabbar-item {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            border: 0;
-            background: transparent;
-            color: #8c8f94;
-            font: 500 12px/1 var(--font-family);
-            cursor: pointer;
-        }
-
-        .tabbar-item i {
-            font-size: 20px;
-        }
-
-        .tabbar-item.active {
-            color: var(--primary);
-            font-weight: 700;
-        }
-
-        .tabbar-badge {
-            position: absolute;
-            top: 1px;
-            right: calc(50% - 26px);
-            min-width: 20px;
-            height: 20px;
-            border-radius: 999px;
-            background: #ff3749;
-            color: #fff;
-            border: 2px solid #fff;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 5px;
-            font-weight: 800;
-        }
-
-        .popup-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.45);
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.25s ease, visibility 0.25s ease;
-            z-index: 1000;
-        }
-
-        .popup-overlay.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .popup-content {
-            position: fixed;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.92);
-            border: 1px solid rgba(123, 147, 176, 0.14);
-            border-radius: 16px 16px 0 0;
-            box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 24px 24px calc(24px + env(safe-area-inset-bottom, 0px));
-            transform: translateY(100%);
-            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-            max-height: 70vh;
-            overflow-y: auto;
-            z-index: 1001;
-        }
-
-        .popup-overlay.show .popup-content {
-            transform: translateY(0);
-        }
-
-        .popup-indicator {
-            width: 36px;
-            height: 4px;
-            background: #c9cdd4;
-            border-radius: 2px;
-            margin: 0 auto 20px;
-        }
-
-        .popup-header {
-            text-align: center;
-            margin-bottom: 24px;
-        }
-
-        .popup-title {
-            font-size: 17px;
-            font-weight: 600;
-            color: var(--text-strong);
-            margin-bottom: 4px;
-        }
-
-        .popup-subtitle {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        .workbench-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .workbench-item {
-            width: 100%;
-            border: 1.5px solid transparent;
-            background: rgba(255, 255, 255, 0.92);
-            border-radius: 12px;
-            box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .workbench-item:active {
-            background: #e8f3ff;
-            border-color: #165dff;
-            transform: scale(0.98);
-        }
-
-        .workbench-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 16px;
-            font-size: 18px;
-            flex-shrink: 0;
-        }
-
-        .workbench-item.specialist .workbench-icon {
-            background: #e8f3ff;
-            color: #165dff;
-        }
-
-        .workbench-item.public-health .workbench-icon {
-            background: #e8ffea;
-            color: #00b42a;
-        }
-
-        .workbench-item.operation .workbench-icon {
-            background: #fff7e8;
-            color: #ff7d00;
-        }
-
-        .workbench-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .popup-content .workbench-name {
-            font-size: 15px;
-            font-weight: 500;
-            color: #1d2129;
-            margin-bottom: 2px;
-        }
-
-        .workbench-desc {
-            font-size: 13px;
-            color: #86909c;
-        }
-
-        .workbench-arrow {
-            color: #a9aeb8;
-            font-size: 14px;
-            flex-shrink: 0;
-            margin-left: 8px;
-        }
-
-        .popup-cancel {
-            margin-top: 16px;
-            width: 100%;
-            height: 44px;
-            background: transparent;
-            border: 1px solid #e5e6eb;
-            border-radius: 8px;
-            font: 400 15px/1 var(--font-family);
-            color: #4e5969;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .popup-cancel:active {
-            background: #f7f8fa;
-        }
-
         .toast {
             position: fixed;
             top: 50%;
@@ -805,6 +589,9 @@
         }
     </style>
     <script src="../components/mobile/mobile-search.js"></script>
+    <script src="../components/mobile/mobile-modal.js"></script>
+    <script src="../modules/medical-staff-tabbar.js" defer></script>
+    <script src="../modules/workbench-switcher-modal.js"></script>
 </head>
 
 <body>
@@ -918,68 +705,16 @@
         </section>
     </main>
 
-    <nav class="tabbar">
-        <button class="tabbar-item active" type="button" onclick="goToHome()">
-            <i class="fas fa-house"></i>
-            <span>首页</span>
-        </button>
-        <button class="tabbar-item" type="button" onclick="goToMessages()">
-            <i class="fas fa-comment-dots"></i>
-            <span>消息</span>
-            <span class="tabbar-badge">12</span>
-        </button>
-        <button class="tabbar-item" type="button" onclick="goToProfile()">
-            <i class="fas fa-user"></i>
-            <span>我的</span>
-        </button>
-    </nav>
-
-    <div class="popup-overlay" id="workbenchPopup">
-        <div class="popup-content">
-            <div class="popup-indicator"></div>
-            <div class="popup-header">
-                <h3 class="popup-title">切换工作台</h3>
-                <p class="popup-subtitle">请选择您要进入的工作台</p>
-            </div>
-            <div class="workbench-list">
-                <div class="workbench-item specialist" onclick="selectWorkbench('specialist')">
-                    <div class="workbench-icon">
-                        <i class="fas fa-stethoscope"></i>
-                    </div>
-                    <div class="workbench-info">
-                        <div class="workbench-name">专科慢病</div>
-                        <div class="workbench-desc">专科医生慢病管理工作台</div>
-                    </div>
-                    <i class="fas fa-chevron-right workbench-arrow"></i>
-                </div>
-                <div class="workbench-item public-health" onclick="selectWorkbench('public-health')">
-                    <div class="workbench-icon">
-                        <i class="fas fa-hospital"></i>
-                    </div>
-                    <div class="workbench-info">
-                        <div class="workbench-name">公卫慢病</div>
-                        <div class="workbench-desc">基层公卫慢病管理工作台</div>
-                    </div>
-                    <i class="fas fa-chevron-right workbench-arrow"></i>
-                </div>
-                <div class="workbench-item operation" onclick="selectWorkbench('operation')">
-                    <div class="workbench-icon">
-                        <i class="fas fa-headset"></i>
-                    </div>
-                    <div class="workbench-info">
-                        <div class="workbench-name">运营中心</div>
-                        <div class="workbench-desc">客户运营与档案跟进工作台</div>
-                    </div>
-                    <i class="fas fa-chevron-right workbench-arrow"></i>
-                </div>
-            </div>
-            <button class="popup-cancel" type="button" onclick="closeWorkbenchPopup()">取消</button>
-        </div>
-    </div>
+    <medical-staff-tabbar active="home" message-badge="12"></medical-staff-tabbar>
 
     <script>
-        const workbenchPopup = document.getElementById('workbenchPopup');
         const currentWorkbenchEl = document.getElementById('currentWorkbench');
+
+        WorkbenchSwitcherModal.init({
+            title: '切换工作台',
+            selectedType: localStorage.getItem('selectedWorkbench') || 'public-health',
+            onSelect: selectWorkbench
+        });
 
         window.addEventListener('load', () => {
             const savedWorkbench = localStorage.getItem('workbenchName');
@@ -989,13 +724,13 @@
         });
 
         function showWorkbenchPopup() {
-            workbenchPopup.classList.add('show');
-            document.body.style.overflow = 'hidden';
+            WorkbenchSwitcherModal.open({
+                selectedType: localStorage.getItem('selectedWorkbench') || 'public-health'
+            });
         }
 
         function closeWorkbenchPopup() {
-            workbenchPopup.classList.remove('show');
-            document.body.style.overflow = '';
+            WorkbenchSwitcherModal.close();
         }
 
         function selectWorkbench(type) {
@@ -1022,16 +757,6 @@
             toast.textContent = message;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 1500);
-        }
-
-        workbenchPopup.addEventListener('click', (e) => {
-            if (e.target === workbenchPopup) {
-                closeWorkbenchPopup();
-            }
-        });
-
-        function goToProfile() {
-            window.location.href = 'medical-staff-profile.html';
         }
 
         function goToMessages() {
@@ -1065,8 +790,6 @@
         function goToGuideline() {
             showToast('敬请期待');
         }
-
-        function goToHome() { }
 
         function goToPersonalInfo() {
             window.location.href = 'medical-staff-personal-info.html';

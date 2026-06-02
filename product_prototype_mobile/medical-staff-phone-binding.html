@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -14,591 +13,282 @@
         }
 
         :root {
-            --arcoblue-6: #165DFF;
-            --arcoblue-1: #E8F3FF;
-            --text-1: #1D2129;
-            --text-2: #4E5969;
-            --text-3: #86909C;
-            --text-4: #C9CDD4;
-            --bg-1: #F2F3F5;
-            --bg-2: #FFFFFF;
+            --primary: #2F6BFF;
+            --page-bg: #F8FAFC;
+            --card-bg: #FFFFFF;
             --border: #E5E6EB;
-            --radius-medium: 8px;
-            --radius-large: 12px;
-            --font-size-caption: 12px;
-            --font-size-body-1: 14px;
-            --font-size-title-1: 16px;
-            --font-size-title-2: 18px;
+            --divider: #ECEEF2;
+            --text-main: #1D2129;
+            --text-sub: #4E5969;
+            --text-light: #86909C;
+            --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.04);
+        }
+
+        html {
+            min-width: 320px;
+            background: var(--page-bg);
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif;
-            background: var(--bg-1);
             min-height: 100vh;
+            background: var(--page-bg);
+            color: var(--text-main);
+            font-family: system-ui, "PingFang SC", sans-serif;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* 导航栏 */
-        .navbar {
-            background: linear-gradient(135deg, var(--arcoblue-6) 0%, #4080FF 100%);
+        mobile-title-bar {
+            --mobile-title-bar-height: 48px;
+            --mobile-title-bar-bg: #FFFFFF;
+            --mobile-title-bar-color: #1D2129;
+            --mobile-title-bar-shadow: none;
+            --mobile-title-bar-border: #E5E6EB;
+            --mobile-title-bar-title-size: 18px;
+            padding-top: env(safe-area-inset-top, 0px) !important;
+            border-bottom: 1px solid var(--border) !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+
+        mobile-title-bar::before {
+            display: none !important;
+        }
+
+        mobile-title-bar .mobile-title-bar__title {
+            font-weight: 600 !important;
+        }
+
+        mobile-title-bar .mobile-title-bar__back {
+            color: var(--text-main) !important;
+        }
+
+        button,
+        input {
+            font-family: inherit;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .page {
+            width: 100%;
+            min-width: 320px;
+            max-width: 768px;
+            min-height: 100vh;
+            margin: 0 auto;
+            background: var(--page-bg);
+        }
+
+        .content {
+            width: 100%;
+            padding: 16px 16px 28px;
+        }
+
+        .tips {
+            margin-bottom: 12px;
+            padding: 0 4px;
+            color: var(--text-light);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .form-card {
+            width: 100%;
+            overflow: hidden;
+            border-radius: 16px;
+            background: var(--card-bg);
+            box-shadow: var(--shadow-card);
+        }
+
+        .input-host {
+            width: 100%;
+        }
+
+        .form-card .mobile-input-field {
+            min-height: 64px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
             padding: 8px 16px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            border-bottom: 0;
+            background: #FFFFFF;
+            color: var(--text-main);
+            font-family: system-ui, "PingFang SC", sans-serif;
         }
 
-        .navbar-content {
+        .input-host + .input-host .mobile-input-field {
+            border-top: 1px solid var(--divider);
+        }
+
+        .form-card .mobile-input-field__label {
+            width: 72px;
+            flex-shrink: 0;
+            color: var(--text-main);
+            font-size: 14px;
+            line-height: 1.45;
+            font-weight: 400;
+            padding-top: 0;
+        }
+
+        .form-card .mobile-input-field__content {
+            min-width: 0;
+            flex: 1;
+            text-align: left;
+        }
+
+        .form-card .mobile-input-inline {
             display: flex;
             align-items: center;
-            justify-content: center;
-            padding-bottom: 16px;
-            position: relative;
+            gap: 8px;
+            width: 100%;
         }
 
-        .navbar-title {
-            font-size: var(--font-size-title-2);
-            font-weight: 600;
-            color: white;
+        .form-card .mobile-input-control {
+            min-width: 0;
+            flex: 1;
+            width: 100%;
+            height: 48px;
+            border: 0;
+            border-radius: 0;
+            outline: none;
+            padding: 0;
+            background: #FFFFFF;
+            color: var(--text-main);
+            font-size: 14px;
+            line-height: 48px;
+            text-align: left;
         }
 
-        .back-btn {
-            position: absolute;
-            left: 0;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 20px;
+        .form-card .mobile-input-control::placeholder {
+            color: #C9CDD4;
+        }
+
+        .form-card .mobile-input-control:focus {
+            border-color: transparent;
+        }
+
+        .form-card .mobile-input-clear {
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
+            border: 0;
+            border-radius: 50%;
+            background: #C9CDD4;
+            color: #FFFFFF;
+            font-size: 14px;
+            line-height: 22px;
             cursor: pointer;
         }
 
-        /* 提示文本 */
-        .tips {
-            margin: 12px 16px 0;
-            padding: 12px 20px;
-            font-size: var(--font-size-caption);
-            color: var(--text-3);
-        }
-
-        /* 表单区域 */
-        .form-container {
-            margin: 12px 16px 0;
-            background: var(--bg-2);
-            border-radius: var(--radius-large);
-            overflow: hidden;
-        }
-
-        .form-item {
-            display: flex;
-            align-items: center;
-            padding: 16px 20px;
-        }
-
-        .form-item+.form-item {
-            border-top: 1px solid var(--border);
-        }
-
-        .form-label {
-            font-size: var(--font-size-body-1);
-            color: var(--text-1);
-            width: 80px;
-            flex-shrink: 0;
-        }
-
-        .form-input {
-            flex: 1;
-            border: none !important;
-            outline: none;
-            font-size: var(--font-size-body-1);
-            color: var(--text-1);
-            background: transparent !important;
-            box-shadow: none !important;
-        }
-
-        .form-input::placeholder {
-            color: var(--text-4);
+        .form-card .mobile-input-clear.is-hidden,
+        .form-card .is-hidden {
+            display: none;
         }
 
         .code-btn {
-            padding: 8px 16px;
-            background: var(--arcoblue-6);
-            color: white;
-            border: none;
-            border-radius: var(--radius-medium);
-            font-size: var(--font-size-caption);
+            min-width: 96px;
+            height: 40px;
+            flex-shrink: 0;
+            border: 0;
+            border-radius: 10px;
+            background: var(--primary);
+            color: #FFFFFF;
+            font-size: 13px;
+            font-weight: 500;
             cursor: pointer;
             white-space: nowrap;
         }
 
         .code-btn:disabled {
-            background: var(--text-4);
+            background: #C9CDD4;
+            cursor: default;
         }
 
-        /* 确认按钮 */
         .submit-btn {
-            margin: 32px 16px;
-            padding: 14px;
-            background: var(--arcoblue-6);
-            color: white;
-            border: none;
-            border-radius: var(--radius-large);
-            font-size: var(--font-size-body-1);
+            width: 100%;
+            height: 48px;
+            margin-top: 24px;
+            border: 0;
+            border-radius: 12px;
+            background: var(--primary);
+            color: #FFFFFF;
+            font-size: 16px;
+            line-height: 48px;
             font-weight: 500;
-            width: calc(100% - 32px);
             cursor: pointer;
         }
 
         .submit-btn:disabled {
-            background: var(--text-4);
+            background: #C9CDD4;
+            cursor: default;
         }
 
-        /* Toast 提示 */
+        .submit-btn:active,
+        .code-btn:active {
+            opacity: 0.86;
+        }
+
         .toast {
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 14px;
             z-index: 1000;
+            max-width: calc(100% - 64px);
+            padding: 10px 18px;
+            border-radius: 8px;
+            transform: translate(-50%, -50%);
+            background: rgba(29, 33, 41, 0.88);
+            color: #FFFFFF;
+            font-size: 14px;
+            line-height: 1.4;
             opacity: 0;
-            transition: opacity 0.3s;
             pointer-events: none;
+            transition: opacity 0.2s ease;
         }
 
         .toast.show {
             opacity: 1;
         }
 
-        /* 首页风格统一覆盖 */
-        body {
-            color: #0f1f33;
-            background:
-                radial-gradient(circle at 82% 2%, rgba(181, 213, 255, 0.8) 0 110px, transparent 220px),
-                linear-gradient(180deg, #d9ebff 0%, #f4faff 28%, #f7fbff 68%, #ffffff 100%) !important;
-            -webkit-font-smoothing: antialiased;
-        }
+        @media (max-width: 360px) {
+            .form-card .mobile-input-field {
+                gap: 8px;
+                padding-right: 12px;
+                padding-left: 12px;
+            }
 
-        .navbar {
-            position: sticky;
-            top: 0;
-            overflow: hidden;
-            background: rgba(217, 235, 255, 0.82) !important;
-            border-bottom: 1px solid rgba(118, 140, 165, 0.12);
-            box-shadow: 0 10px 26px rgba(60, 101, 145, 0.08);
-            backdrop-filter: blur(14px);
-        }
+            .form-card .mobile-input-field__label {
+                width: 64px;
+            }
 
-        .navbar::before {
-            content: "";
-            position: absolute;
-            top: -58px;
-            right: -34px;
-            width: 170px;
-            height: 150px;
-            border-radius: 34px;
-            background: linear-gradient(135deg, rgba(67, 142, 255, 0.2), rgba(255, 255, 255, 0.06));
-            transform: rotate(-12deg);
-            pointer-events: none;
-        }
-
-        .navbar-content,
-        .navbar-title,
-        .back-btn,
-        .search-btn,
-        .navbar-count {
-            position: relative;
-            z-index: 1;
-        }
-
-        .navbar-title,
-        .back-btn,
-        .search-btn,
-        .navbar-count {
-            color: #0f1f33 !important;
-        }
-
-        .navbar-title {
-            font-weight: 800 !important;
-        }
-
-        .tabs,
-        .search-section,
-        .stats-bar,
-        .page-container,
-        .session-list,
-        .system-list {
-            background: transparent !important;
-        }
-
-        .tab-item.active {
-            color: #2f7af6 !important;
-        }
-
-        .tab-item.active::after {
-            background: #2f7af6 !important;
-        }
-
-        .patient-card,
-        .user-card,
-        .org-card,
-        .menu-list,
-        .info-card,
-        .detail-card,
-        .record-card,
-        .task-card,
-        .anomaly-card,
-        .form-card,
-        .card,
-        .section-card,
-        .profile-card,
-        .health-card,
-        .content-card,
-        .result-item,
-        .empty-icon,
-        .modal-content {
-            background: rgba(255, 255, 255, 0.92) !important;
-            border: 1px solid rgba(123, 147, 176, 0.14) !important;
-            border-radius: 16px !important;
-            box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12) !important;
-            backdrop-filter: blur(12px);
-        }
-
-        .session-item,
-        .system-item,
-        .menu-item,
-        .list-item,
-        .record-item,
-        .info-row {
-            border-color: rgba(119, 140, 166, 0.18) !important;
-        }
-        input,
-        select,
-        textarea {
-            border-color: rgba(122, 150, 184, 0.13) !important;
-            box-shadow: inset 0 0 0 1px rgba(122, 150, 184, 0.08);
-        }
-
-        .action-btn.primary,
-        .submit-btn,
-        .filter-btn.confirm,
-        .modal-btn.confirm,
-        .login-btn,
-        .code-btn:not(:disabled) {
-            background: linear-gradient(145deg, #4b9bff, #2f7af6) !important;
-            color: #fff !important;
-            border: 0 !important;
-            box-shadow: 0 8px 16px rgba(45, 101, 170, 0.13);
-        }
-
-        .action-btn,
-        .filter-btn.reset,
-        .modal-btn.cancel,
-        .popup-option,
-        .phone-btn,
-        .call-btn {
-            border-color: rgba(123, 147, 176, 0.14) !important;
-        }
-
-        .toast,
-        .arco-toast {
-            background: rgba(12, 20, 34, 0.82) !important;
-            border-radius: 8px !important;
-        }
-
-        /* 首页风格补充覆盖 */
-        .info-section,
-        .info-list,
-        .app-section,
-        .form-section,
-        .form-item,
-        .filter-section,
-        .disease-card,
-        .indicator-item,
-        .quick-action-item {
-            background: rgba(255, 255, 255, 0.92) !important;
-            border: 1px solid rgba(123, 147, 176, 0.14) !important;
-            border-radius: 16px !important;
-            box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12) !important;
-            backdrop-filter: blur(12px);
-        }
-
-        .patient-list,
-        .task-list,
-        .record-list,
-        .search-results {
-            position: relative;
-            z-index: 1;
-        }
-
-        .action-btn,
-        .submit-btn,
-        .code-btn,
-        .filter-btn,
-        .modal-btn,
-        .phone-btn,
-        .call-btn {
-            border-radius: 10px !important;
-            font-weight: 700;
-        }
-
-        .navbar+.tabs,
-        .tabs {
-            border-bottom-color: rgba(118, 140, 165, 0.16) !important;
-            backdrop-filter: blur(10px);
-        }
-
-
-        /* 全局顶部与查询框统一 */
-        .navbar {
-            position: sticky !important;
-            top: 0 !important;
-            min-height: 52px;
-            padding: 8px 16px !important;
-            z-index: 100 !important;
-        }
-
-        .navbar-content {
-            position: relative !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            min-height: 36px;
-            padding-bottom: 0 !important;
-        }
-
-        .navbar-content .back-btn {
-            position: absolute !important;
-            left: 0 !important;
-            top: 50% !important;
-            transform: translateY(-50%) !important;
-            margin: 0 !important;
-            z-index: 2 !important;
-        }
-
-        .navbar>.back-btn {
-            position: absolute !important;
-            left: 16px !important;
-            bottom: 12px !important;
-            margin: 0 !important;
-            z-index: 2 !important;
-        }
-
-        .navbar-title,
-        .navbar-content .navbar-title,
-        .navbar>.navbar-title {
-            position: absolute !important;
-            left: 50% !important;
-            top: 50% !important;
-            transform: translate(-50%, -50%) !important;
-            width: calc(100% - 128px) !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            text-align: center !important;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            pointer-events: none;
-            z-index: 1 !important;
-        }
-
-        .navbar>.navbar-title {
-            top: auto !important;
-            bottom: 19px !important;
-            transform: translateX(-50%) !important;
-        }
-
-        .search-btn,
-        .navbar-count {
-            position: absolute !important;
-            right: 0 !important;
-            top: 50% !important;
-            transform: translateY(-50%) !important;
-            margin: 0 !important;
-            z-index: 2 !important;
-        }
-
-        .navbar>.search-btn,
-        .navbar>.navbar-count {
-            right: 16px !important;
-            top: auto !important;
-            bottom: 12px !important;
-            transform: none !important;
-        }
-
-        .search-section,
-        .filter-section,
-        .search-header {
-            background: transparent !important;
-        }
-
-        /* 绑定手机号页面专属样式 */
-        body {
-            padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px));
-        }
-
-        .tips {
-            position: relative;
-            margin: 18px 16px 10px !important;
-            padding: 11px 14px 11px 38px !important;
-            border-radius: 14px;
-            color: #506178 !important;
-            font-size: 13px !important;
-            line-height: 1.45;
-            background: rgba(255, 255, 255, 0.58);
-            border: 1px solid rgba(122, 150, 184, 0.13);
-            box-shadow: 0 8px 22px rgba(60, 101, 145, 0.08);
-            backdrop-filter: blur(10px);
-        }
-
-        .tips::before {
-            content: "\f05a";
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
-            color: #2f7af6;
-            font-size: 15px;
-        }
-
-        .form-container {
-            margin: 0 16px !important;
-            background: rgba(255, 255, 255, 0.94) !important;
-            border: 1px solid rgba(123, 147, 176, 0.14) !important;
-            border-radius: 0 !important;
-            box-shadow: none !important;
-            overflow: visible;
-            backdrop-filter: blur(12px);
-        }
-
-        .tips+.form-container {
-            margin-top: 12px !important;
-            border-radius: 16px 16px 0 0 !important;
-            box-shadow: 0 14px 34px rgba(60, 101, 145, 0.12) !important;
-        }
-
-        .form-container+.form-container {
-            border-top: 0 !important;
-            border-radius: 0 0 16px 16px !important;
-            box-shadow: 0 14px 34px rgba(60, 101, 145, 0.12) !important;
-        }
-
-        .form-item {
-            min-height: 62px;
-            padding: 0 18px !important;
-            gap: 12px;
-            background: transparent !important;
-            border: 0 !important;
-            border-radius: inherit !important;
-            box-shadow: none !important;
-        }
-
-        .form-container+.form-container .form-item {
-            border-top: 1px solid rgba(119, 140, 166, 0.18) !important;
-        }
-
-        .form-label {
-            width: 66px !important;
-            color: #1d2b3f !important;
-            font-size: 15px !important;
-            font-weight: 700;
-        }
-
-        .form-input {
-            min-width: 0;
-            height: 42px;
-            color: #203048 !important;
-            font-size: 16px !important;
-            line-height: 42px;
-            caret-color: #2f7af6;
-        }
-
-        .form-input::placeholder {
-            color: #a6afbb !important;
-        }
-
-        .code-btn {
-            min-width: 96px;
-            height: 36px;
-            padding: 0 13px !important;
-            border-radius: 18px !important;
-            font-size: 13px !important;
-            transition: transform 0.16s ease, box-shadow 0.16s ease, opacity 0.16s ease;
-        }
-
-        .code-btn:active,
-        .submit-btn:active {
-            transform: scale(0.98);
-        }
-
-        .code-btn:disabled {
-            background: #d7dde6 !important;
-            color: #ffffff !important;
-            box-shadow: none !important;
-            opacity: 1;
-        }
-
-        .submit-btn {
-            display: block;
-            height: 48px;
-            margin: 30px 16px 0 !important;
-            padding: 0 !important;
-            border-radius: 24px !important;
-            font-size: 16px !important;
-            font-weight: 800 !important;
-            letter-spacing: 0;
-            box-shadow: 0 14px 24px rgba(47, 122, 246, 0.22) !important;
-            transition: transform 0.16s ease, box-shadow 0.16s ease, opacity 0.16s ease;
-        }
-
-        .submit-btn:disabled {
-            background: #d7dde6 !important;
-            box-shadow: none !important;
+            .code-btn {
+                min-width: 88px;
+                padding: 0 10px;
+            }
         }
     </style>
     <script src="../components/mobile/mobile-title-bar.js" defer></script>
     <script src="../components/mobile/mobile-search.js"></script>
+    <script src="../components/mobile/input/index.js"></script>
 </head>
 
 <body>
-    <!-- Toast 容器 -->
-    <div class="toast" id="toast"></div>
+    <div class="page">
+        <div class="toast" id="toast"></div>
 
-    <!-- 导航栏 -->
-    <mobile-title-bar title="绑定手机号" back-action="goBack()"></mobile-title-bar>
+        <mobile-title-bar title="绑定手机号" back-action="goBack()"></mobile-title-bar>
 
-    <!-- 提示文本 -->
-    <div class="tips">请确保输入的手机号能正常收到短信</div>
+        <main class="content">
+            <div class="tips">请确保输入的手机号能正常收到短信</div>
 
-    <!-- 手机号输入 -->
-    <div class="form-container">
-        <div class="form-item">
-            <span class="form-label">手机号</span>
-            <input type="tel" class="form-input" id="phoneInput" placeholder="请输入手机号码" maxlength="11"
-                oninput="handlePhoneInput()">
-        </div>
+            <section class="form-card">
+                <div class="input-host" id="phoneField"></div>
+                <div class="input-host" id="codeField"></div>
+            </section>
+
+            <button class="submit-btn" id="submitBtn" type="button" onclick="confirmBind()">确认</button>
+        </main>
     </div>
-
-    <!-- 验证码输入 -->
-    <div class="form-container">
-        <div class="form-item">
-            <span class="form-label">验证码</span>
-            <input type="text" class="form-input" id="codeInput" placeholder="请输入验证码" maxlength="6">
-            <button class="code-btn" id="codeBtn" onclick="sendCode()">获取验证码</button>
-        </div>
-    </div>
-
-    <!-- 确认按钮 -->
-    <button class="submit-btn" id="submitBtn" onclick="confirmBind()">确认</button>
 
     <script>
-        // Toast 提示函数
         function showToast(message) {
             const toast = document.getElementById('toast');
             toast.textContent = message;
@@ -608,30 +298,72 @@
             }, 1500);
         }
 
-        // 返回上一页
         function goBack() {
             window.history.back();
         }
 
-        // 手机号输入处理
+        let phoneFieldNode = null;
+        let codeFieldNode = null;
+
+        function getPhoneValue() {
+            return phoneFieldNode ? phoneFieldNode.value : '';
+        }
+
+        function getCodeValue() {
+            return codeFieldNode ? codeFieldNode.value : '';
+        }
+
+        function renderInputs() {
+            if (!window.MobileInputComponents || !window.PhoneInput || !window.TextInput) return;
+
+            phoneFieldNode = window.PhoneInput.render(document.getElementById('phoneField'), {
+                label: '手机号',
+                placeholder: '请输入手机号码',
+                maxLength: 11,
+                autocomplete: 'tel'
+            });
+            phoneFieldNode.input.id = 'phoneInput';
+            phoneFieldNode.input.addEventListener('input', handlePhoneInput);
+
+            codeFieldNode = window.TextInput.render(document.getElementById('codeField'), {
+                label: '验证码',
+                placeholder: '请输入验证码',
+                maxLength: 6,
+                inputClass: 'code-input'
+            });
+            codeFieldNode.input.id = 'codeInput';
+            codeFieldNode.input.inputMode = 'numeric';
+            codeFieldNode.input.autocomplete = 'one-time-code';
+            codeFieldNode.input.addEventListener('input', () => {
+                codeFieldNode.input.value = codeFieldNode.input.value.replace(/\D/g, '').slice(0, 6);
+                codeFieldNode.value = codeFieldNode.input.value;
+            });
+
+            const codeBtn = document.createElement('button');
+            codeBtn.className = 'code-btn';
+            codeBtn.id = 'codeBtn';
+            codeBtn.type = 'button';
+            codeBtn.disabled = true;
+            codeBtn.textContent = '获取验证码';
+            codeBtn.addEventListener('click', sendCode);
+            codeFieldNode.querySelector('.mobile-input-inline').appendChild(codeBtn);
+        }
+
         function handlePhoneInput() {
-            const phone = document.getElementById('phoneInput').value;
+            const phone = getPhoneValue();
             const codeBtn = document.getElementById('codeBtn');
-            // 如果正在倒计时，不改变按钮状态
             if (codeBtn.dataset.counting === 'true') return;
 
             codeBtn.disabled = !isValidPhone(phone);
         }
 
-        // 验证手机号格式
         function isValidPhone(phone) {
             return /^1[3-9]\d{9}$/.test(phone);
         }
 
-        // 发送验证码
         let countdown = 0;
         function sendCode() {
-            const phone = document.getElementById('phoneInput').value;
+            const phone = getPhoneValue();
             if (!isValidPhone(phone)) {
                 showToast('请输入正确的手机号');
                 return;
@@ -650,7 +382,7 @@
                 if (countdown <= 0) {
                     clearInterval(timer);
                     codeBtn.textContent = '获取验证码';
-                    codeBtn.disabled = false;
+                    codeBtn.disabled = !isValidPhone(getPhoneValue());
                     codeBtn.dataset.counting = 'false';
                 } else {
                     codeBtn.textContent = `${countdown}s`;
@@ -658,10 +390,9 @@
             }, 1000);
         }
 
-        // 确认绑定
         function confirmBind() {
-            const phone = document.getElementById('phoneInput').value;
-            const code = document.getElementById('codeInput').value;
+            const phone = getPhoneValue();
+            const code = getCodeValue();
 
             if (!isValidPhone(phone)) {
                 showToast('请输入正确的手机号');
@@ -673,7 +404,6 @@
                 return;
             }
 
-            // 保存手机号到本地存储
             localStorage.setItem('userPhone', phone);
             showToast('绑定成功');
 
@@ -681,7 +411,10 @@
                 window.location.href = 'medical-staff-personal-info.html';
             }, 1000);
         }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            window.MobileInputComponents.ready.then(renderInputs);
+        });
     </script>
 </body>
-
 </html>

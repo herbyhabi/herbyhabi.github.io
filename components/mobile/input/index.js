@@ -15,6 +15,7 @@
         'date-range-picker.js',
         'location-input.js',
         'phone-input.js',
+        'display-field.js',
         'form-section.js'
     ];
 
