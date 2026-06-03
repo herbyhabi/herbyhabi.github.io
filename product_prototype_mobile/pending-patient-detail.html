@@ -176,7 +176,14 @@
 </head>
 <body>
     <!-- 导航栏 -->
-    <mobile-title-bar id="pageTitleBar" title="待管详情" back-action="goBack()"></mobile-title-bar>
+    <mobile-title-bar id="pageTitleBar" title="待管详情"></mobile-title-bar>
+    <script>
+        customElements.whenDefined('mobile-title-bar').then(function bindMobileTitleBar() {
+            const titleBar = document.querySelector('mobile-title-bar');
+            if (!titleBar) return;
+            titleBar.onBack = goBack;
+        });
+    </script>
 
     <!-- 待管信息卡 -->
     <div class="section-title" id="pendingInfoTitle">待管信息</div>

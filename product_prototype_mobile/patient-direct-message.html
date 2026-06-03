@@ -369,7 +369,14 @@
 </head>
 
 <body>
-    <mobile-title-bar title="患者消息" back-action="goBack()"></mobile-title-bar>
+    <mobile-title-bar title="患者消息"></mobile-title-bar>
+    <script>
+        customElements.whenDefined('mobile-title-bar').then(function bindMobileTitleBar() {
+            const titleBar = document.querySelector('mobile-title-bar');
+            if (!titleBar) return;
+            titleBar.onBack = goBack;
+        });
+    </script>
 
     <div class="content">
         <div class="placeholder-icon">

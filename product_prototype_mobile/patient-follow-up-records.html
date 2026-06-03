@@ -581,7 +581,14 @@ textarea {
 </head>
 <body>
     <!-- 导航栏 -->
-    <mobile-title-bar title="随访记录" back-action="goBack()"></mobile-title-bar>
+    <mobile-title-bar title="随访记录"></mobile-title-bar>
+    <script>
+        customElements.whenDefined('mobile-title-bar').then(function bindMobileTitleBar() {
+            const titleBar = document.querySelector('mobile-title-bar');
+            if (!titleBar) return;
+            titleBar.onBack = goBack;
+        });
+    </script>
 
     <!-- 记录列表 -->
     <div class="record-section-title" id="recordSectionTitle">随访记录</div>

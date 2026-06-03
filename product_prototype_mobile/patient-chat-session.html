@@ -509,7 +509,14 @@
 
 <body>
     <!-- 导航栏 -->
-    <mobile-title-bar id="chatTitle" title="患者姓名" back-action="goBack()"></mobile-title-bar>
+    <mobile-title-bar id="chatTitle" title="患者姓名"></mobile-title-bar>
+    <script>
+        customElements.whenDefined('mobile-title-bar').then(function bindMobileTitleBar() {
+            const titleBar = document.querySelector('mobile-title-bar');
+            if (!titleBar) return;
+            titleBar.onBack = goBack;
+        });
+    </script>
 
     <!-- 聊天消息区域 -->
     <div class="chat-container" id="chatContainer"></div>
@@ -582,7 +589,7 @@
             residentName = decodeURIComponent(urlParams.get('name') || '患者');
 
             // 设置标题
-            document.getElementById('chatTitle').textContent = residentName;
+            document.getElementById('chatTitle').title = residentName;
 
             // 渲染消息
             renderMessages();

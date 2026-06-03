@@ -11,8 +11,15 @@
 </head>
 
 <body class="min-h-screen bg-[#f4f4f8] text-[#333333] antialiased [font-family:-apple-system,BlinkMacSystemFont,'Segoe_UI','PingFang_SC','Hiragino_Sans_GB','Microsoft_YaHei',Arial,sans-serif]">
-    <mobile-title-bar title="客户信息" back-action="goBack()" right-text="保存" right-action="saveCustomerInfo()"
-        style="--mobile-title-bar-bg: rgba(244, 244, 248, 0.88); --mobile-title-bar-color: #111111; --mobile-title-bar-shadow: none; --mobile-title-bar-title-size: 18px;"></mobile-title-bar>
+    <mobile-title-bar id="pageTitleBar" title="客户信息" right-text="保存" background="#F4F4F8" border="false"></mobile-title-bar>
+    <script>
+        customElements.whenDefined('mobile-title-bar').then(function bindMobileTitleBar() {
+            const titleBar = document.querySelector('mobile-title-bar');
+            if (!titleBar) return;
+            titleBar.onBack = goBack;
+            titleBar.onRightClick = saveCustomerInfo;
+        });
+    </script>
 
     <main class="px-3.5 pb-[calc(32px+env(safe-area-inset-bottom,0px))] pt-[18px] max-[360px]:px-2.5">
         <!-- 基础资料卡片：承载姓名、备注、阶段和负责人员等核心客户信息。 -->

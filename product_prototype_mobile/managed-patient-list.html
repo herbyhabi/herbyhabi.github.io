@@ -591,7 +591,14 @@
     <div class="toast" id="toast"></div>
 
     <!-- 导航栏 -->
-    <mobile-title-bar title="我的患者" back-action="goBack()"></mobile-title-bar>
+    <mobile-title-bar title="我的患者"></mobile-title-bar>
+    <script>
+        customElements.whenDefined('mobile-title-bar').then(function bindMobileTitleBar() {
+            const titleBar = document.querySelector('mobile-title-bar');
+            if (!titleBar) return;
+            titleBar.onBack = goBack;
+        });
+    </script>
 
     <!-- 页签 -->
     <div class="tabs-section">

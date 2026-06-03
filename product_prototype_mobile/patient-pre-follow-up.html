@@ -365,7 +365,14 @@ textarea {
     <script src="../components/mobile/mobile-search.js"></script>
 </head>
 <body>
-    <mobile-title-bar title="预随访" back-action="goBack()"></mobile-title-bar>
+    <mobile-title-bar title="预随访"></mobile-title-bar>
+    <script>
+        customElements.whenDefined('mobile-title-bar').then(function bindMobileTitleBar() {
+            const titleBar = document.querySelector('mobile-title-bar');
+            if (!titleBar) return;
+            titleBar.onBack = goBack;
+        });
+    </script>
 
     <div class="content">
         <div class="placeholder-icon">

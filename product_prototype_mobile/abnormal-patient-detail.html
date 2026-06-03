@@ -486,7 +486,14 @@
 </head>
 
 <body>
-    <mobile-title-bar title="异常详情" back-action="goBack()"></mobile-title-bar>
+    <mobile-title-bar title="异常详情"></mobile-title-bar>
+    <script>
+        customElements.whenDefined('mobile-title-bar').then(function bindMobileTitleBar() {
+            const titleBar = document.querySelector('mobile-title-bar');
+            if (!titleBar) return;
+            titleBar.onBack = goBack;
+        });
+    </script>
 
     <div class="section-title" id="anomalySectionTitle">异常信息</div>
     <div id="anomalyGroups"></div>

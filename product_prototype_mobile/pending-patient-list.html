@@ -666,7 +666,14 @@ textarea {
 </head>
 <body>
     <!-- 导航栏 -->
-    <mobile-title-bar title="待管患者" back-action="goBack()"></mobile-title-bar>
+    <mobile-title-bar title="待管患者"></mobile-title-bar>
+    <script>
+        customElements.whenDefined('mobile-title-bar').then(function bindMobileTitleBar() {
+            const titleBar = document.querySelector('mobile-title-bar');
+            if (!titleBar) return;
+            titleBar.onBack = goBack;
+        });
+    </script>
 
     <!-- 搜索和筛选 -->
     <div class="quick-filter-section">

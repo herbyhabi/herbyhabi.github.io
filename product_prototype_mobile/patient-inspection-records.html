@@ -81,7 +81,14 @@
 </head>
 
 <body class="min-h-screen bg-slate-50 text-[#333333] antialiased">
-    <mobile-title-bar title="检验检查记录" back-action="goBack()"></mobile-title-bar>
+    <mobile-title-bar title="检验检查记录"></mobile-title-bar>
+    <script>
+        customElements.whenDefined('mobile-title-bar').then(function bindMobileTitleBar() {
+            const titleBar = document.querySelector('mobile-title-bar');
+            if (!titleBar) return;
+            titleBar.onBack = goBack;
+        });
+    </script>
 
     <main class="space-y-3 p-3 pb-24">
         <mobile-tabs id="inspectionTabs"></mobile-tabs>

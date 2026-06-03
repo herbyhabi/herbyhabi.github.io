@@ -45,31 +45,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        mobile-title-bar {
-            --mobile-title-bar-height: 48px;
-            --mobile-title-bar-bg: #FFFFFF;
-            --mobile-title-bar-color: #1D2129;
-            --mobile-title-bar-shadow: none;
-            --mobile-title-bar-border: #E5E6EB;
-            --mobile-title-bar-title-size: 18px;
-            padding-top: env(safe-area-inset-top, 0px) !important;
-            border-bottom: 1px solid var(--border) !important;
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-        }
-
-        mobile-title-bar::before {
-            display: none !important;
-        }
-
-        mobile-title-bar .mobile-title-bar__title {
-            font-weight: 600 !important;
-        }
-
-        mobile-title-bar .mobile-title-bar__back {
-            color: var(--text-main) !important;
-        }
-
         .page {
             width: 100%;
             min-width: 320px;
@@ -288,7 +263,7 @@
     <div class="page">
         <div class="toast" id="toast"></div>
 
-        <mobile-title-bar title="我的" back="false"></mobile-title-bar>
+        <mobile-title-bar title="我的" show-back="false"></mobile-title-bar>
 
         <main class="content">
             <button class="card user-card" type="button" onclick="goToPersonalInfo()">

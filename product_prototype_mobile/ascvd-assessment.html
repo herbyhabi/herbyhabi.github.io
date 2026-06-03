@@ -38,6 +38,15 @@
 </head>
 <body class="min-h-screen text-slate-900 antialiased">
     <mobile-title-bar title="ASCVD评估"></mobile-title-bar>
+    <script>
+        customElements.whenDefined('mobile-title-bar').then(function bindMobileTitleBar() {
+            const titleBar = document.querySelector('mobile-title-bar');
+            if (!titleBar) return;
+            titleBar.onBack = function () {
+                history.back();
+            };
+        });
+    </script>
 
     <main class="space-y-3 p-3 pb-28">
         <section class="page-card rounded-2xl p-4">
