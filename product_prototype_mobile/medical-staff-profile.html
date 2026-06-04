@@ -1,169 +1,53 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>我的</title>
+    <script src="../assets/vendor/tailwind-browser@4.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="../components/mobile/mobile-title-bar.js" defer></script>
+    <script src="../components/mobile/mobile-button.js"></script>
+    <script src="../modules/medical-staff-tabbar.js" defer></script>
     <style>
+        /* 页面基础重置：保持 H5 滚动模型与移动端点击体验 */
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #2F6BFF;
-            --success: #07C160;
-            --danger: #F53F3F;
-            --page-bg: #F8FAFC;
-            --card-bg: #FFFFFF;
-            --border: #E5E6EB;
-            --divider: #ECEEF2;
-            --text-main: #1D2129;
-            --text-sub: #4E5969;
-            --text-light: #86909C;
-            --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.04);
+            -webkit-tap-highlight-color: transparent;
         }
 
         html {
             min-width: 320px;
-            background: var(--page-bg);
+            background: #F8FAFC;
         }
 
         body {
             min-height: 100vh;
-            background: var(--page-bg);
-            color: var(--text-main);
+            margin: 0;
+            background: #F8FAFC;
+            color: #1D2129;
             font-family: system-ui, "PingFang SC", sans-serif;
             -webkit-font-smoothing: antialiased;
-            padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
         }
 
         button {
-            font-family: inherit;
-            -webkit-tap-highlight-color: transparent;
+            font: inherit;
         }
 
-        .page {
-            width: 100%;
-            min-width: 320px;
-            max-width: 768px;
-            min-height: 100vh;
-            margin: 0 auto;
-            background: var(--page-bg);
+        /* 头像浮层：参考图中头像压在个人信息面板上方的视觉层次 */
+        .profile-panel {
+            margin-top: 56px;
+            padding-top: 48px;
         }
 
-        .content {
-            width: 100%;
-            padding: 16px 16px 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
+        .profile-avatar {
+            top: -48px;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
-        .card {
-            width: 100%;
-            background: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: var(--shadow-card);
-        }
-
-        .user-card {
-            min-height: 120px;
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border: 0;
-            cursor: pointer;
-            text-align: left;
-            color: inherit;
-        }
-
-        .user-card:active,
-        .modal-btn:active {
-            opacity: 0.82;
-        }
-
-        .user-avatar {
-            width: 88px;
-            height: 88px;
-            border-radius: 50%;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #EAF1FF;
-            color: var(--primary);
-            font-size: 50px;
-        }
-
-        .user-info {
-            min-width: 0;
-            flex: 1;
-        }
-
-        .user-name-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-        }
-
-        .user-name {
-            color: var(--text-main);
-            font-size: 19px;
-            line-height: 1.3;
-            font-weight: 600;
-        }
-
-        .user-type {
-            min-height: 22px;
-            display: inline-flex;
-            align-items: center;
-            padding: 0 8px;
-            border-radius: 4px;
-            background: #EAF1FF;
-            color: var(--primary);
-            font-size: 12px;
-            line-height: 1;
-            font-weight: 500;
-        }
-
-        .user-org {
-            display: flex;
-            align-items: flex-start;
-            gap: 6px;
-            margin-bottom: 4px;
-            color: var(--text-sub);
-            font-size: 13px;
-            line-height: 1.45;
-        }
-
-        .user-org i {
-            flex-shrink: 0;
-            margin-top: 2px;
-            color: var(--primary);
-            font-size: 14px;
-        }
-
-        .user-account {
-            color: var(--text-light);
-            font-size: 13px;
-            line-height: 1.45;
-        }
-
-        .user-card-arrow {
-            flex-shrink: 0;
-            color: var(--text-light);
-            font-size: 14px;
-        }
-
-        .logout-section {
-            padding-top: 4px;
-        }
-
+        /* Toast 与确认弹层：仅保留必要反馈，不打断主流程结构 */
         .toast {
             position: fixed;
             top: 50%;
@@ -194,7 +78,7 @@
             align-items: center;
             justify-content: center;
             padding: 24px;
-            background: rgba(0, 0, 0, 0.45);
+            background: rgba(0, 0, 0, 0.42);
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.2s ease, visibility 0.2s ease;
@@ -204,116 +88,76 @@
             opacity: 1;
             visibility: visible;
         }
-
-        .modal-box {
-            width: 100%;
-            max-width: 300px;
-            overflow: hidden;
-            border-radius: 16px;
-            background: #FFFFFF;
-        }
-
-        .modal-title {
-            padding: 24px 24px 8px;
-            color: var(--text-main);
-            text-align: center;
-            font-size: 17px;
-            line-height: 1.35;
-            font-weight: 600;
-        }
-
-        .modal-msg {
-            padding: 0 24px 24px;
-            color: var(--text-sub);
-            text-align: center;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        .modal-actions {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            border-top: 1px solid var(--divider);
-        }
-
-        .modal-btn {
-            min-height: 48px;
-            border: 0;
-            background: #FFFFFF;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .modal-btn.cancel {
-            color: var(--text-sub);
-            border-right: 1px solid var(--divider);
-        }
-
-        .modal-btn.confirm {
-            color: var(--primary);
-        }
     </style>
-    <script src="../components/mobile/mobile-title-bar.js" defer></script>
-    <script src="../components/mobile/mobile-button.js"></script>
-    <script src="../components/mobile/mobile-search.js"></script>
-    <script src="../modules/medical-staff-tabbar.js" defer></script>
 </head>
+
 <body>
-    <div class="page">
+    <!-- 页面容器：遵循 390px 设计稿、最大 768px、纵向滚动与底部安全区 -->
+    <div class="mx-auto min-h-screen w-full min-w-[320px] max-w-[768px] bg-[#F8FAFC] pb-[calc(160px+env(safe-area-inset-bottom))]">
         <div class="toast" id="toast"></div>
 
-        <mobile-title-bar title="我的" show-back="false"></mobile-title-bar>
+        <!-- 顶部标题栏：复用移动端通用组件，保留浏览器滚动模型 -->
+        <mobile-title-bar title="我的主页" show-back="false" safe-area="true" theme="transparent"></mobile-title-bar>
 
-        <main class="content">
-            <button class="card user-card" type="button" onclick="goToPersonalInfo()">
-                <div class="user-avatar">
-                    <i class="fas fa-user-md"></i>
-                </div>
-                <div class="user-info">
-                    <div class="user-name-row">
-                        <span class="user-name">张大头</span>
-                        <span class="user-type">医生</span>
+        <!-- 主内容：参考图样式聚焦个人身份与资料入口，避免信息碎片化 -->
+        <main class="flex w-full flex-col gap-3 px-4 pb-4 pt-6">
+            <!-- 医生身份面板：头像居中，姓名与登录工号纵向展示 -->
+            <section class="profile-panel relative w-full rounded-[28px] bg-white px-4 pb-7 text-center shadow-[0_2px_8px_rgba(29,33,41,0.03)]">
+                <button class="profile-avatar absolute flex h-24 w-24 items-center justify-center rounded-full border-[6px] border-[#F8FAFC] bg-[#EAF1FF] text-[#2F6BFF] shadow-[0_2px_8px_rgba(29,33,41,0.04)] active:opacity-80" type="button" onclick="goToPersonalInfo()" aria-label="编辑个人资料">
+                    <i class="fas fa-user-md text-[46px]"></i>
+                </button>
+                <div class="mt-3 flex flex-col items-center gap-2">
+                    <div class="flex max-w-full items-center justify-center gap-3">
+                        <h1 class="min-w-0 truncate text-[22px] font-semibold leading-8 text-[#1D2129]">张梁平</h1>
                     </div>
-                    <div class="user-org">
-                        <i class="fas fa-hospital"></i>
-                        <span>浙江省杭州市西湖区社区卫生服务中心</span>
-                    </div>
-                    <div class="user-account">当前账号：623130</div>
+                    <p class="text-[15px] leading-6 text-[#86909C]">全科医学科 · 浙江省杭州市西湖区社区卫生服务中心</p>
                 </div>
-                <i class="fas fa-chevron-right user-card-arrow"></i>
+            </section>
+
+            <!-- 个人资料入口：对应参考图中的“我的健康画像”入口 -->
+            <button class="flex min-h-[64px] w-full items-center justify-between gap-3 rounded-[24px] bg-white px-5 text-left shadow-[0_2px_8px_rgba(29,33,41,0.03)] active:opacity-80" type="button" onclick="goToPersonalInfo()">
+                <span class="flex min-w-0 items-center gap-3">
+                    <i class="fas fa-id-card text-[18px] text-[#2F6BFF]"></i>
+                    <span class="truncate text-[17px] font-medium leading-6 text-[#1D2129]">个人资料</span>
+                </span>
+                <i class="fas fa-chevron-right shrink-0 text-base text-[#C9CDD4]"></i>
             </button>
-
-            <div class="logout-section">
-                <div id="logoutButton"></div>
-            </div>
         </main>
 
+        <!-- 固定退出按钮：位于底部导航栏上方，使用移动端通用按钮组件渲染 -->
+        <div class="fixed bottom-[calc(64px+env(safe-area-inset-bottom))] left-1/2 z-[90] w-full min-w-[320px] max-w-[768px] -translate-x-1/2 bg-[#F8FAFC]/95 px-4 py-3" style="backdrop-filter: blur(8px);">
+            <div id="logoutButton"></div>
+        </div>
+
+        <!-- 底部导航：固定区域已由组件处理 safe-area，页面底部预留滚动空间 -->
         <medical-staff-tabbar active="profile" message-badge="12"></medical-staff-tabbar>
 
+        <!-- 退出确认弹层：风险操作二次确认 -->
         <div class="modal-overlay" id="logoutModal" onclick="closeLogoutModal()">
-            <div class="modal-box" onclick="event.stopPropagation()">
-                <div class="modal-title">提示</div>
-                <div class="modal-msg">确定要退出登录吗？</div>
-                <div class="modal-actions">
-                    <button class="modal-btn cancel" type="button" onclick="closeLogoutModal()">取消</button>
-                    <button class="modal-btn confirm" type="button" onclick="confirmLogout()">确定</button>
+            <div class="w-full max-w-[300px] overflow-hidden rounded-xl bg-white" onclick="event.stopPropagation()">
+                <div class="px-6 pb-2 pt-6 text-center text-[17px] font-semibold leading-6 text-[#1D2129]">提示</div>
+                <div class="px-6 pb-6 text-center text-sm leading-6 text-[#4E5969]">确定要退出登录吗？</div>
+                <div class="grid grid-cols-2 border-t border-[#ECEEF2]">
+                    <button class="min-h-12 border-r border-[#ECEEF2] text-base font-medium text-[#4E5969] active:bg-[#F8FAFC]" type="button" onclick="closeLogoutModal()">取消</button>
+                    <button class="min-h-12 text-base font-medium text-[#2F6BFF] active:bg-[#F2F6FF]" type="button" onclick="confirmLogout()">确定</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // 固定退出按钮：使用通用按钮组件，保持项目按钮样式一致
         MobileButton.render('#logoutButton', {
             text: '退出登录',
             type: 'weak',
             size: 'large',
             block: true,
             round: true,
-            icon: 'fas fa-sign-out-alt',
+            icon: 'fas fa-right-from-bracket',
             onClick: logout
         });
 
+        // 轻提示：保留给后续操作反馈使用
         function showToast(message) {
             const toast = document.getElementById('toast');
             toast.textContent = message;
@@ -323,18 +167,22 @@
             }, 1500);
         }
 
+        // 个人资料入口：沿用原页面跳转路径
         function goToPersonalInfo() {
             window.location.href = 'medical-staff-personal-info.html';
         }
 
+        // 退出登录：先展示确认弹层，避免误触
         function logout() {
             document.getElementById('logoutModal').classList.add('show');
         }
 
+        // 关闭退出确认弹层
         function closeLogoutModal() {
             document.getElementById('logoutModal').classList.remove('show');
         }
 
+        // 确认退出：清理本地登录态并返回登录页
         function confirmLogout() {
             closeLogoutModal();
             localStorage.removeItem('userInfo');
@@ -344,4 +192,5 @@
         }
     </script>
 </body>
+
 </html>
