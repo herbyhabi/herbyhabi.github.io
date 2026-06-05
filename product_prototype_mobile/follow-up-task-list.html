@@ -7,511 +7,146 @@
     <script src="../assets/vendor/tailwind-browser@4.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/@arco-design/mobile-react/dist/arco.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+    <style type="text/tailwindcss">
+        @layer base {
+            * {
+                @apply box-border;
+            }
+
+            body {
+                @apply min-h-screen bg-[#F8FAFC] pb-[70px] font-sans text-[#1D2129] antialiased;
+            }
         }
 
-        :root {
-            --arcoblue-6: #165DFF;
-            --arcoblue-1: #E8F3FF;
-            --green-6: #00B42A;
-            --green-1: #E8FFEA;
-            --orange-6: #FF7D00;
-            --orange-1: #FFF7E8;
-            --red-6: #F53F3F;
-            --pink-6: #F5319D;
-            --pink-1: #FFE8F1;
-            --text-1: #1D2129;
-            --text-2: #4E5969;
-            --text-3: #86909C;
-            --text-4: #C9CDD4;
-            --bg-1: #F8FAFC;
-            --bg-2: #FFFFFF;
-            --border: #E5E6EB;
-            --radius-small: 4px;
-            --radius-medium: 8px;
-            --radius-large: 12px;
-            --radius-xlarge: 20px;
-            --font-size-caption: 12px;
-            --font-size-body-1: 14px;
-            --font-size-title-1: 16px;
-            --font-size-title-2: 18px;
+        @layer components {
+            /* 页面页签与查询区域 */
+            .tabs-section {
+                @apply px-4 pt-3;
+            }
+
+            .quick-filter-section {
+                @apply px-4 pt-3;
+            }
+
+            .filter-tags {
+                @apply mt-3 flex flex-wrap gap-2;
+            }
+
+            .filter-tag {
+                @apply flex cursor-pointer items-center gap-1 rounded-full border border-[#E5E6EB] bg-[#F8FAFC] px-3 py-1.5 text-xs text-[#4E5969] transition-colors;
+            }
+
+            .filter-tag.active {
+                @apply border-[#165DFF] bg-[#E8F3FF] text-[#165DFF];
+            }
+
+            .filter-tag i {
+                @apply text-[10px];
+            }
+
+            /* 任务列表与通用信息卡扩展 */
+            .task-list {
+                @apply grid gap-3 px-4 py-3;
+            }
+
+            .task-list .grouped-info-card {
+                @apply relative shadow-[0_2px_8px_rgb(29_33_41_/_0.03)];
+            }
+
+            .task-list .grouped-info-card__title {
+                @apply pl-[18px];
+            }
+
+            .task-card-body {
+                @apply px-4 pb-1 pt-3;
+            }
+
+            .task-card-items {
+                @apply grid gap-0.5;
+            }
+
+            .phone-btn {
+                @apply inline-flex h-7 w-7 cursor-pointer items-center justify-center gap-1 rounded-full border-0 bg-[#E8FFEA] p-0 text-sm text-[#00B42A] transition-colors active:bg-[#00B42A] active:text-white;
+            }
+
+            .task-call-btn {
+                @apply absolute right-3 top-3 z-[2] rounded-full;
+            }
+
+            .detail-item {
+                @apply flex items-start gap-1.5 text-sm;
+            }
+
+            .detail-label {
+                @apply shrink-0 basis-auto leading-[26px] text-[#86909C] min-w-[60px];
+            }
+
+            .detail-value {
+                @apply min-w-0 flex-1 break-all leading-[26px] text-[#4E5969];
+            }
+
+            /* 随访任务标签：左侧类型标签 + 右侧业务状态 */
+            .follow-tags {
+                @apply flex flex-wrap items-center gap-1.5 pt-0.5;
+            }
+
+            .follow-tag {
+                @apply inline-flex min-h-5 items-center rounded-full bg-[#F3F6FF] px-2 py-[3px] text-xs font-bold leading-none tracking-normal text-[#5A78D8];
+            }
+
+            .follow-tag.disease-hypertension {
+                @apply bg-[#FFE7EC] text-[#FF6F82];
+            }
+
+            .follow-tag.disease-diabetes {
+                @apply bg-[#EDE8FF] text-[#9B85DF];
+            }
+
+            .follow-tag.disease-heart {
+                @apply bg-[#E9F1FF] text-[#5A84FF];
+            }
+
+            .follow-tag.disease-risk {
+                @apply bg-[#FFF2E8] text-[#D25F00];
+            }
+
+            .follow-type {
+                @apply inline-flex h-[22px] items-center rounded-full bg-[#E8F3FF] px-2 text-xs font-bold leading-[22px] text-[#165DFF];
+            }
+
+            .follow-type.warning {
+                @apply bg-[#FFF7E8] text-[#D25F00];
+            }
+
+            .follow-type.danger {
+                @apply bg-[#FFECE8] text-[#C9352B];
+            }
+
+            /* Toast 与空状态 */
+            .toast {
+                @apply pointer-events-none fixed left-1/2 top-1/2 z-[9999] -translate-x-1/2 -translate-y-1/2 rounded-lg bg-[#1D2129]/90 px-6 py-3 text-sm text-white opacity-0 transition-opacity duration-300;
+            }
+
+            .toast.show {
+                @apply opacity-100;
+            }
+
+            .empty-state {
+                @apply flex flex-col items-center justify-center px-5 py-[60px] text-center;
+            }
+
+            .empty-icon {
+                @apply mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-[#F8FAFC];
+            }
+
+            .empty-icon i {
+                @apply text-4xl text-[#C9CDD4];
+            }
+
+            .empty-text {
+                @apply text-sm text-[#86909C];
+            }
         }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-            background-color: var(--bg-1);
-            color: var(--text-1);
-            min-height: 100vh;
-            padding-bottom: 70px;
-        }
-
-        /* 导航栏 */
-        .navbar {
-            background: linear-gradient(135deg, var(--arcoblue-6) 0%, #4080FF 100%);
-            padding: 8px 16px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .navbar-content {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .back-btn {
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-            border-radius: var(--radius-medium);
-            transition: background 0.2s;
-        }
-
-        .back-btn:active {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .navbar-title {
-            flex: 1;
-            font-size: var(--font-size-title-2);
-            font-weight: 600;
-            color: white;
-        }
-
-        /* 通用页签区域 */
-        .tabs-section {
-            padding: 12px 16px 0;
-        }
-
-        /* 搜索和筛选区域 */
-        .quick-filter-section {
-            padding: 12px 16px 0;
-        }
-
-        .filter-tags {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-top: 12px;
-        }
-
-        .filter-tag {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            padding: 6px 12px;
-            background: var(--bg-1);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-xlarge);
-            font-size: var(--font-size-caption);
-            color: var(--text-2);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .filter-tag.active {
-            background: var(--arcoblue-1);
-            border-color: var(--arcoblue-6);
-            color: var(--arcoblue-6);
-        }
-
-        .filter-tag i {
-            font-size: 10px;
-        }
-
-        /* 任务列表 */
-        .task-list {
-            padding: 12px 16px;
-            display: grid;
-            gap: 12px;
-        }
-
-        .task-list .grouped-info-card {
-            position: relative;
-        }
-
-        .task-list .grouped-info-card__title {
-            padding-left: 18px;
-        }
-
-        .task-card-body {
-            padding: 12px 16px 4px;
-        }
-
-        .task-card-items {
-            display: grid;
-            gap: 2px;
-        }
-
-        .phone-btn {
-            width: 28px;
-            height: 28px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            padding: 0;
-            background: var(--green-1);
-            color: var(--green-6);
-            border: none;
-            border-radius: 50%;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .task-call-btn {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            z-index: 2;
-            border-radius: 50% !important;
-        }
-
-        .phone-btn:active {
-            background: var(--green-6);
-            color: white;
-        }
-
-        .detail-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 6px;
-            font-size: var(--font-size-body-1);
-        }
-
-        .detail-label {
-            flex: 0 0 auto;
-            color: var(--text-3);
-            min-width: 60px;
-            line-height: 26px;
-        }
-
-        .detail-value {
-            min-width: 0;
-            flex: 1;
-            color: var(--text-2);
-            line-height: 26px;
-            word-break: break-all;
-        }
-
-        /* 随访任务标签：左侧类型标签 + 右侧业务状态 */
-        .follow-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            align-items: center;
-            padding-top: 2px;
-        }
-
-        .follow-tag {
-            display: inline-flex;
-            align-items: center;
-            min-height: 20px;
-            padding: 3px 8px;
-            border-radius: 999px;
-            background: #f3f6ff;
-            color: #5a78d8;
-            font-size: 12px;
-            font-weight: 700;
-            line-height: 1;
-            letter-spacing: 0;
-        }
-
-        .follow-tag.disease-hypertension {
-            background: #ffe7ec;
-            color: #ff6f82;
-        }
-
-        .follow-tag.disease-diabetes {
-            background: #ede8ff;
-            color: #9b85df;
-        }
-
-        .follow-tag.disease-heart {
-            background: #e9f1ff;
-            color: #5a84ff;
-        }
-
-        .follow-tag.disease-risk {
-            background: #fff2e8;
-            color: #d25f00;
-        }
-
-        .follow-type {
-            display: inline-flex;
-            align-items: center;
-            height: 22px;
-            padding: 0 8px;
-            border-radius: 999px;
-            background: #e8f3ff;
-            color: #165dff;
-            font-size: 12px;
-            font-weight: 700;
-            line-height: 22px;
-        }
-
-        .follow-type.warning {
-            background: #fff7e8;
-            color: #d25f00;
-        }
-
-        .follow-type.danger {
-            background: #ffece8;
-            color: #c9352b;
-        }
-
-        /* Toast */
-        .toast {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(29, 33, 41, 0.9);
-            color: white;
-            padding: 12px 24px;
-            border-radius: var(--radius-medium);
-            font-size: var(--font-size-body-1);
-            z-index: 9999;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-        }
-
-        .toast.show {
-            opacity: 1;
-        }
-
-        /* 空状态 */
-        .empty-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 60px 20px;
-            text-align: center;
-        }
-
-        .empty-icon {
-            width: 80px;
-            height: 80px;
-            background: var(--bg-1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 16px;
-        }
-
-        .empty-icon i {
-            font-size: 36px;
-            color: var(--text-4);
-        }
-
-        .empty-text {
-            font-size: var(--font-size-body-1);
-            color: var(--text-3);
-        }
-/* 首页风格统一覆盖 */
-body {
-    color: #333333;
-    background: #f8fafc !important;
-    -webkit-font-smoothing: antialiased;
-}
-
-.navbar {
-    position: sticky;
-    top: 0;
-    overflow: hidden;
-    background: rgba(217, 235, 255, 0.82) !important;
-    border-bottom: 1px solid rgba(118, 140, 165, 0.12);
-    box-shadow: 0 10px 26px rgba(60, 101, 145, 0.08);
-    backdrop-filter: blur(14px);
-}
-
-.navbar::before {
-    content: "";
-    position: absolute;
-    top: -58px;
-    right: -34px;
-    width: 170px;
-    height: 150px;
-    border-radius: 34px;
-    background: linear-gradient(135deg, rgba(67, 142, 255, 0.2), rgba(255, 255, 255, 0.06));
-    transform: rotate(-12deg);
-    pointer-events: none;
-}
-
-.navbar-content,
-.navbar-title,
-.back-btn,
-.search-btn,
-.navbar-count {
-    position: relative;
-    z-index: 1;
-}
-
-.navbar-title,
-.back-btn,
-.search-btn,
-.navbar-count {
-    color: #0f1f33 !important;
-}
-
-.navbar-title {
-    font-weight: 800 !important;
-}
-
-.search-section,
-.stats-bar,
-.page-container,
-.session-list,
-.system-list {
-    background: transparent !important;
-}
-
-.user-card,
-.org-card,
-.menu-list,
-.info-card,
-.detail-card,
-.record-card,
-.anomaly-card,
-.form-card,
-.card,
-.section-card,
-.profile-card,
-.health-card,
-.content-card,
-.result-item,
-.empty-icon,
-.modal-content {
-    background: rgba(255, 255, 255, 0.92) !important;
-    border: 1px solid rgba(123, 147, 176, 0.14) !important;
-    border-radius: 16px !important;
-    box-shadow: 0 12px 32px rgba(60, 101, 145, 0.12) !important;
-    backdrop-filter: blur(12px);
-}
-
-input,
-select,
-textarea {
-    border-color: rgba(122, 150, 184, 0.13) !important;
-    box-shadow: inset 0 0 0 1px rgba(122, 150, 184, 0.08);
-}
-
-.phone-btn {
-    border-color: rgba(123, 147, 176, 0.14) !important;
-}
-
-.toast {
-    background: rgba(12, 20, 34, 0.82) !important;
-    border-radius: 8px !important;
-}
-
-.task-list {
-    position: relative;
-    z-index: 1;
-}
-
-.phone-btn {
-    border-radius: 10px !important;
-    font-weight: 700;
-}
-
-/* 全局顶部与查询框统一 */
-.navbar {
-    position: sticky !important;
-    top: 0 !important;
-    min-height: 52px;
-    padding: 8px 16px !important;
-    z-index: 100 !important;
-}
-
-.navbar-content {
-    position: relative !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    min-height: 36px;
-    padding-bottom: 0 !important;
-}
-
-.navbar-content .back-btn {
-    position: absolute !important;
-    left: 0 !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    margin: 0 !important;
-    z-index: 2 !important;
-}
-
-.navbar > .back-btn {
-    position: absolute !important;
-    left: 16px !important;
-    bottom: 12px !important;
-    margin: 0 !important;
-    z-index: 2 !important;
-}
-
-.navbar-title,
-.navbar-content .navbar-title,
-.navbar > .navbar-title {
-    position: absolute !important;
-    left: 50% !important;
-    top: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    width: calc(100% - 128px) !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    text-align: center !important;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    pointer-events: none;
-    z-index: 1 !important;
-}
-
-.navbar > .navbar-title {
-    top: auto !important;
-    bottom: 19px !important;
-    transform: translateX(-50%) !important;
-}
-
-.search-btn,
-.navbar-count {
-    position: absolute !important;
-    right: 0 !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    margin: 0 !important;
-    z-index: 2 !important;
-}
-
-.navbar > .search-btn,
-.navbar > .navbar-count {
-    right: 16px !important;
-    top: auto !important;
-    bottom: 12px !important;
-    transform: none !important;
-}
-
-.search-section,
-.quick-filter-section,
-.search-header {
-    background: transparent !important;
-}
-
     </style>
     <script src="../components/mobile/mobile-title-bar.js" defer></script>
     <script src="../components/mobile/mobile-tabs.js"></script>
@@ -519,7 +154,7 @@ textarea {
     <script src="../components/shared/status-tag.js"></script>
     <script src="../components/mobile/grouped-info-card.js"></script>
 </head>
-<body>
+<body class="mx-auto min-h-screen w-full min-w-[320px] max-w-[768px] bg-[#F8FAFC] pb-24 pt-[env(safe-area-inset-top)]">
     <!-- 导航栏 -->
     <mobile-title-bar title="随访任务"></mobile-title-bar>
     <script>
@@ -542,6 +177,9 @@ textarea {
             <input type="text" id="searchInput" placeholder="搜索姓名、身份证、手机号" oninput="handleSearch()">
         </div>
         <div class="filter-tags">
+            <div class="filter-tag " data-date="all" onclick="selectDateFilter('all')">
+                <span>全部</span>
+            </div>
             <div class="filter-tag active" data-date="month" onclick="selectDateFilter('month')">
                 <span>本月</span>
             </div>
@@ -566,7 +204,7 @@ textarea {
         // 当前页签
         let currentTab = 'patient';
         // 当前日期筛选
-        let currentDateFilter = 'month';
+        let currentDateFilter = 'all';
         // 搜索关键词
         let searchKeyword = '';
 
@@ -826,7 +464,9 @@ textarea {
                 nextDate.setHours(0, 0, 0, 0);
 
                 let matchDate = true;
-                if (currentDateFilter === 'today') {
+                if (currentDateFilter === 'all') {
+                    matchDate = true;
+                } else if (currentDateFilter === 'today') {
                     matchDate = nextDate.getTime() === today.getTime();
                 } else if (currentDateFilter === 'week') {
                     const weekEnd = new Date(today);
