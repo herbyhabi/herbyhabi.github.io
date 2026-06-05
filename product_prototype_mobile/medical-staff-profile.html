@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="../components/mobile/mobile-title-bar.js" defer></script>
     <script src="../components/mobile/mobile-button.js"></script>
+    <script src="../components/shared/status-tag.js"></script>
     <script src="../modules/medical-staff-tabbar.js" defer></script>
     <style>
         /* 页面基础重置：保持 H5 滚动模型与移动端点击体验 */
@@ -107,17 +108,18 @@
                     <i class="fas fa-user-md text-[46px]"></i>
                 </button>
                 <div class="mt-3 flex flex-col items-center gap-2">
-                    <div class="flex max-w-full items-center justify-center gap-3">
+                    <div class="flex max-w-full items-center justify-center gap-2">
                         <h1 class="min-w-0 truncate text-[22px] font-semibold leading-8 text-[#1D2129]">张梁平</h1>
+                        <!-- 用户类型标识：复用通用状态标签组件，支持机构管理员、医生、护士等身份 -->
+                        <status-tag color="blue" size="medium" label="医生"></status-tag>
                     </div>
                     <p class="text-[15px] leading-6 text-[#86909C]">全科医学科 · 浙江省杭州市西湖区社区卫生服务中心</p>
                 </div>
             </section>
 
             <!-- 个人资料入口：对应参考图中的“我的健康画像”入口 -->
-            <button class="flex min-h-[64px] w-full items-center justify-between gap-3 rounded-[24px] bg-white px-5 text-left shadow-[0_2px_8px_rgba(29,33,41,0.03)] active:opacity-80" type="button" onclick="goToPersonalInfo()">
+            <button class="flex min-h-[50px] w-full items-center justify-between gap-3 rounded-[24px] bg-white px-5 text-left shadow-[0_2px_8px_rgba(29,33,41,0.03)] active:opacity-80" type="button" onclick="goToPersonalInfo()">
                 <span class="flex min-w-0 items-center gap-3">
-                    <i class="fas fa-id-card text-[18px] text-[#2F6BFF]"></i>
                     <span class="truncate text-[17px] font-medium leading-6 text-[#1D2129]">个人资料</span>
                 </span>
                 <i class="fas fa-chevron-right shrink-0 text-base text-[#C9CDD4]"></i>
